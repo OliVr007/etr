@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="hu">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="/css/index.css" />
+		<title>Elektronikus tanulmányi rendszer</title>
+	</head>
+	<body>
+		<div class="login-container">
+			<div class="logo">
+				<h1>ETR</h1>
+				<p>Elektronikus Tanulmányi Rendszer</p>
+			</div>
+
+			<div class="login-form">
+				<form action="/api/login" method="post">
+					<div class="form-group">
+						<label for="username">Felhasználónév</label>
+						<input type="text" id="username" name="username" placeholder="Írja be felhasználónevét" required />
+					</div>
+
+					<div class="form-group">
+						<label for="password">Jelszó</label>
+						<input type="password" id="password" name="password" placeholder="Írja be jelszavát" required />
+					</div>
+
+					<button type="submit" class="btn">Bejelentkezés</button>
+
+					<div class="forgot-password">
+						<a href="#">Elfelejtette jelszavát?</a>
+					</div>
+				</form>
+			</div>
+		</div>
+	</body>
+</html>
