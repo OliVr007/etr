@@ -35,6 +35,33 @@ app.get("/", async (req, res) => {
 	});
 });
 
+app.get("/courses", async (req, res) => {
+	if (!req.session.id) return res.redirect("/login");
+
+	res.render("courses.ejs", {
+		user_name: req.session.user_name,
+		full_name: req.session.full_name,
+	});
+});
+
+app.get("/tasks", async (req, res) => {
+	if (!req.session.id) return res.redirect("/login");
+
+	res.render("tasks.ejs", {
+		user_name: req.session.user_name,
+		full_name: req.session.full_name,
+	});
+});
+
+app.get("/messages", async (req, res) => {
+	if (!req.session.id) return res.redirect("/login");
+
+	res.render("messages.ejs", {
+		user_name: req.session.user_name,
+		full_name: req.session.full_name,
+	});
+});
+
 app.get("/login", async (req, res) => {
 	if (req.session.id) return res.redirect("/");
 	res.render("login");
@@ -53,6 +80,7 @@ app.post("/api/login", async (req, res) => {
 
 	if (await compare(req.body.password, data.password)) {
 		req.session.id = data.id;
+		req.session.full_name = data.full_name;
 		req.session.user_name = data.user_name;
 		await req.session.save();
 	}

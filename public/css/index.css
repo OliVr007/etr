@@ -5,11 +5,6 @@
 	font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
-html,
-body {
-	height: 100%;
-}
-
 body {
 	background-color: #fefcfb;
 	color: #0a1128;
@@ -25,7 +20,6 @@ body {
 	padding: 0 20px;
 }
 
-/* Header stílusok */
 header {
 	background-color: #0a1128;
 	color: #fefcfb;
@@ -47,7 +41,9 @@ header h1 {
 .user-info {
 	display: flex;
 	align-items: center;
-	gap: 10px;
+	gap: 15px;
+	padding: 12px;
+	justify-content: center;
 }
 
 .avatar {
@@ -115,177 +111,4 @@ main {
 
 .welcome-section p {
 	color: #034078;
-}
-
-/* Dashboard elrendezés */
-.dashboard {
-	display: flex;
-	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-	gap: 100px;
-}
-
-.card {
-	background-color: #fefcfb;
-	border-radius: 8px;
-	padding: 20px;
-	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-	border-top: 4px solid #1282a2;
-}
-
-.card h3 {
-	color: #0a1128;
-	margin-bottom: 15px;
-	padding-bottom: 10px;
-	border-bottom: 1px solid #eee;
-}
-
-/* Órarend stílusok */
-.schedule-item {
-	display: flex;
-	margin-bottom: 15px;
-	padding-bottom: 15px;
-	border-bottom: 1px solid #f0f0f0;
-}
-
-.schedule-item:last-child {
-	margin-bottom: 0;
-	padding-bottom: 0;
-	border-bottom: none;
-}
-
-.time {
-	min-width: 100px;
-	font-weight: bold;
-	color: #034078;
-}
-
-.subject h4 {
-	color: #0a1128;
-	margin-bottom: 5px;
-}
-
-.subject p {
-	color: #666;
-	font-size: 0.9rem;
-}
-
-/* Feladatok stílusok */
-.assignment-item {
-	margin-bottom: 15px;
-	padding: 10px;
-	border-radius: 5px;
-	background-color: #f9f9f9;
-}
-
-.assignment-item.urgent {
-	border-left: 4px solid #e74c3c;
-}
-
-.assignment-item h4 {
-	color: #0a1128;
-	margin-bottom: 5px;
-}
-
-.assignment-item p {
-	color: #666;
-	font-size: 0.9rem;
-}
-
-/* Értékelések stílusok */
-.grade-item {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	margin-bottom: 15px;
-	padding-bottom: 15px;
-	border-bottom: 1px solid #f0f0f0;
-}
-
-.grade-item:last-child {
-	margin-bottom: 0;
-	padding-bottom: 0;
-	border-bottom: none;
-}
-
-.grade-item h4 {
-	color: #0a1128;
-}
-
-.grade {
-	width: 30px;
-	height: 30px;
-	border-radius: 50%;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	font-weight: bold;
-	color: #fefcfb;
-}
-
-.grade.excellent {
-	background-color: #2ecc71;
-}
-
-.grade.good {
-	background-color: #3498db;
-}
-
-.grade.average {
-	background-color: #f39c12;
-}
-
-/* Gombok */
-button {
-	padding: 10px 15px;
-	border: none;
-	border-radius: 5px;
-	cursor: pointer;
-	font-weight: 600;
-	transition: background-color 0.3s;
-	width: 100%;
-	margin-top: 10px;
-}
-
-.btn-primary {
-	background-color: #1282a2;
-	color: #fefcfb;
-}
-
-.btn-primary:hover {
-	background-color: #0f6e8a;
-}
-
-.btn-secondary {
-	background-color: #034078;
-	color: #fefcfb;
-}
-
-.btn-secondary:hover {
-	background-color: #02315d;
-}
-
-/* Footer */
-footer {
-	background-color: #0a1128;
-	color: #fefcfb;
-	padding: 20px 0;
-	text-align: center;
-	margin-top: auto;
-}
-
-/* Reszponzív design */
-@media (max-width: 768px) {
-	.dashboard {
-		grid-template-columns: 1fr;
-	}
-
-	.nav-menu {
-		flex-direction: column;
-	}
-
-	.header-content {
-		flex-direction: column;
-		gap: 10px;
-		text-align: center;
-	}
 }
