@@ -10,6 +10,7 @@ datasource db {
 
 model users {
   id        Int    @id @default(autoincrement()) @db.UnsignedInt
+  full_name String @db.Char(50)
   user_name String @db.Char(8)
   password  String @db.Char(72)
 }

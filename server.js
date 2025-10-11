@@ -31,6 +31,7 @@ app.get("/", async (req, res) => {
 
 	res.render("index", {
 		user_name: req.session.user_name,
+		full_name: req.session.full_name,
 	});
 });
 
