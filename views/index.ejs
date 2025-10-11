@@ -3,9 +3,105 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="/css/index.css" />
 		<title>Elektronikus tanulmányi rendszer</title>
 	</head>
 	<body>
-		<h1>Szia, <%= user_name %>!</h1>
+		<header>
+			<div class="container">
+				<div class="header-content">
+					<h1>Tanulói Portál</h1>
+					<div class="user-info">
+						<span><%= user_name %></span>
+						<div class="avatar">GJ</div>
+					</div>
+				</div>
+			</div>
+		</header>
+
+		<nav>
+			<div class="container">
+				<ul class="nav-menu">
+					<li><a href="#" class="active">Áttekintés</a></li>
+					<li><a href="#">Kurzusaim</a></li>
+					<li><a href="#">Feladatok</a></li>
+					<li><a href="#">Értékelések</a></li>
+					<li><a href="#">Üzenetek</a></li>
+				</ul>
+			</div>
+		</nav>
+
+		<main class="container">
+			<section class="welcome-section">
+				<h2>Üdvözöljük, Kovács Anna!</h2>
+			</section>
+
+			<div class="dashboard">
+				<section class="card today-schedule">
+					<h3>Mai órarend</h3>
+					<div class="schedule-item">
+						<div class="time">8:00 - 9:30</div>
+						<div class="subject">
+							<h4>Matematika</h4>
+							<p>Gipsz Jakab</p>
+						</div>
+					</div>
+					<div class="schedule-item">
+						<div class="time">10:00 - 11:30</div>
+						<div class="subject">
+							<h4>Informatika</h4>
+							<p>Gipsz Jakab</p>
+						</div>
+					</div>
+					<div class="schedule-item">
+						<div class="time">12:00 - 13:30</div>
+						<div class="subject">
+							<h4>Fizika</h4>
+							<p>Gipsz Jakab</p>
+						</div>
+					</div>
+				</section>
+
+				<section class="card assignments">
+					<h3>Közelgő feladatok</h3>
+					<div class="assignment-item urgent">
+						<h4>Matematika házi feladat</h4>
+						<p>Határidő: Holnap</p>
+					</div>
+					<div class="assignment-item">
+						<h4>Informatika projekt</h4>
+						<p>Határidő: 3 nap</p>
+					</div>
+					<div class="assignment-item">
+						<h4>Fizika labor jegyzőkönyv</h4>
+						<p>Határidő: 5 nap</p>
+					</div>
+					<button class="btn-primary">Összes feladat megtekintése</button>
+				</section>
+
+				<section class="card grades">
+					<h3>Legújabb értékelések</h3>
+					<div class="grade-item">
+						<h4>Matematika dolgozat</h4>
+						<div class="grade excellent">5</div>
+					</div>
+					<div class="grade-item">
+						<h4>Informatika beadandó</h4>
+						<div class="grade good">4</div>
+					</div>
+					<div class="grade-item">
+						<h4>Fizika zh</h4>
+						<div class="grade average">3</div>
+					</div>
+					<button class="btn-secondary">Teljes értékelési kimutatás</button>
+				</section>
+			</div>
+		</main>
+
+		<footer>
+			<div class="container">
+				<p>&copy; 2023 Elektronikus Tanulmányi Rendszer. Minden jog fenntartva.</p>
+			</div>
+		</footer>
 	</body>
 </html>
