@@ -18,7 +18,7 @@ app.set("view engine", "ejs");
 app.use(express.static("public"));
 
 app.use(cookieParser());
-app.use(bodyParser.urlencoded());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(async (req, res, next) => {
 	req.session = await getIronSession(req, res, { password: SESSION_PASSWORD, cookieName: SESSION_COOKIE });
@@ -30,8 +30,7 @@ app.get("/", async (req, res) => {
 	if (!req.session.id) return res.redirect("/login");
 
 	res.render("index", {
-		user_name: req.session.user_name,
-		full_name: req.session.full_name,
+		username: req.session.username,
 	});
 });
 
@@ -39,8 +38,7 @@ app.get("/courses", async (req, res) => {
 	if (!req.session.id) return res.redirect("/login");
 
 	res.render("courses.ejs", {
-		user_name: req.session.user_name,
-		full_name: req.session.full_name,
+		username: req.session.username,
 	});
 });
 
@@ -48,8 +46,7 @@ app.get("/tasks", async (req, res) => {
 	if (!req.session.id) return res.redirect("/login");
 
 	res.render("tasks.ejs", {
-		user_name: req.session.user_name,
-		full_name: req.session.full_name,
+		username: req.session.username,
 	});
 });
 
@@ -57,8 +54,19 @@ app.get("/messages", async (req, res) => {
 	if (!req.session.id) return res.redirect("/login");
 
 	res.render("messages.ejs", {
-		user_name: req.session.user_name,
-		full_name: req.session.full_name,
+		username: req.session.username,
+	});
+});
+
+app.get("/teacherui", async (req, res) => {
+	if (!req.session.id) return res.redirect("/login");
+
+	if (req.session.role !== "teacher") {
+		return res.redirect("/");
+	}
+
+	res.render("teacherui.ejs", {
+		username: req.session.username,
 	});
 });
 
@@ -72,20 +80,26 @@ app.post("/api/login", async (req, res) => {
 
 	const data = await db.users.findFirst({
 		where: {
-			user_name: req.body.username,
+			username: req.body.username,
 		},
 	});
 
-	if (!data) return redirect("/login");
+	if (!data) return res.redirect("/login");
 
-	if (await compare(req.body.password, data.password)) {
+	if (await compare(req.body.password, data.password_hash)) {
 		req.session.id = data.id;
-		req.session.full_name = data.full_name;
-		req.session.user_name = data.user_name;
+		req.session.username = data.username;
+		req.session.role = data.role;
 		await req.session.save();
+
+		if (data.role === "teacher") {
+			return res.redirect("/teacherui");
+		} else {
+			return res.redirect("/");
+		}
 	}
 
-	return res.redirect("/");
+	return res.redirect("/login");
 });
 
 app.get("/logout", async (req, res) => {

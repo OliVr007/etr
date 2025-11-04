@@ -9,8 +9,157 @@ datasource db {
 }
 
 model users {
-  id        Int    @id @default(autoincrement()) @db.UnsignedInt
-  full_name String @db.Char(50)
-  user_name String @db.Char(8)
-  password  String @db.Char(72)
+  id                                  Int                @id @default(autoincrement())
+  username                            String             @unique(map: "username") @db.VarChar(50)
+  email                               String             @unique(map: "email") @db.VarChar(100)
+  password_hash                       String             @db.VarChar(255)
+  first_name                          String             @db.VarChar(50)
+  last_name                           String             @db.VarChar(50)
+  role                                users_role
+  is_active                           Boolean?           @default(true)
+  created_at                          DateTime?          @default(now()) @db.DateTime(0)
+  last_login                          DateTime?          @db.DateTime(0)
+  profile_image                       String?            @db.VarChar(255)
+  phone                               String?            @db.VarChar(20)
+  date_of_birth                       DateTime?          @db.Date
+  absences_absences_student_idTousers absences[]         @relation("absences_student_idTousers")
+  absences_absences_teacher_idTousers absences[]         @relation("absences_teacher_idTousers")
+  classes                             classes[]
+  grades_grades_student_idTousers     grades[]           @relation("grades_student_idTousers")
+  grades_grades_teacher_idTousers     grades[]           @relation("grades_teacher_idTousers")
+  student_classes                     student_classes[]
+  teacher_subjects                    teacher_subjects[]
+  timetable                           timetable[]
+}
+
+model absences {
+  id                               Int       @id @default(autoincrement())
+  student_id                       Int
+  subject_id                       Int
+  teacher_id                       Int
+  absence_date                     DateTime  @db.Date
+  lesson_number                    Int
+  is_excused                       Boolean?  @default(false)
+  excuse_note                      String?   @db.Text
+  created_at                       DateTime? @default(now()) @db.DateTime(0)
+  users_absences_student_idTousers users     @relation("absences_student_idTousers", fields: [student_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "absences_ibfk_1")
+  subjects                         subjects  @relation(fields: [subject_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "absences_ibfk_2")
+  users_absences_teacher_idTousers users     @relation("absences_teacher_idTousers", fields: [teacher_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "absences_ibfk_3")
+
+  @@index([student_id], map: "student_id")
+  @@index([subject_id], map: "subject_id")
+  @@index([teacher_id], map: "teacher_id")
+}
+
+model classes {
+  id               Int                @id @default(autoincrement())
+  class_name       String             @db.VarChar(20)
+  class_teacher_id Int?
+  academic_year    String             @db.VarChar(9)
+  room_number      String?            @db.VarChar(10)
+  created_at       DateTime?          @default(now()) @db.DateTime(0)
+  users            users?             @relation(fields: [class_teacher_id], references: [id], onUpdate: Restrict, map: "classes_ibfk_1")
+  student_classes  student_classes[]
+  teacher_subjects teacher_subjects[]
+  timetable        timetable[]
+
+  @@index([class_teacher_id], map: "class_teacher_id")
+}
+
+model grades {
+  id                             Int               @id @default(autoincrement())
+  student_id                     Int
+  subject_id                     Int
+  teacher_id                     Int
+  grade_value                    Decimal           @db.Decimal(3, 1)
+  grade_type                     grades_grade_type
+  description                    String?           @db.VarChar(200)
+  grade_date                     DateTime          @db.Date
+  created_at                     DateTime?         @default(now()) @db.DateTime(0)
+  weight                         Int?              @default(1)
+  is_final                       Boolean?          @default(false)
+  users_grades_student_idTousers users             @relation("grades_student_idTousers", fields: [student_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "grades_ibfk_1")
+  subjects                       subjects          @relation(fields: [subject_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "grades_ibfk_2")
+  users_grades_teacher_idTousers users             @relation("grades_teacher_idTousers", fields: [teacher_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "grades_ibfk_3")
+
+  @@index([student_id], map: "student_id")
+  @@index([subject_id], map: "subject_id")
+  @@index([teacher_id], map: "teacher_id")
+}
+
+model student_classes {
+  id              Int      @id @default(autoincrement())
+  student_id      Int
+  class_id        Int
+  academic_year   String   @db.VarChar(9)
+  enrollment_date DateTime @db.Date
+  is_active       Boolean? @default(true)
+  users           users    @relation(fields: [student_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "student_classes_ibfk_1")
+  classes         classes  @relation(fields: [class_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "student_classes_ibfk_2")
+
+  @@index([class_id], map: "class_id")
+  @@index([student_id], map: "student_id")
+}
+
+model subjects {
+  id               Int                @id @default(autoincrement())
+  subject_code     String             @unique(map: "subject_code") @db.VarChar(10)
+  subject_name     String             @db.VarChar(100)
+  description      String?            @db.Text
+  credits          Int?               @default(1)
+  is_active        Boolean?           @default(true)
+  created_at       DateTime?          @default(now()) @db.DateTime(0)
+  absences         absences[]
+  grades           grades[]
+  teacher_subjects teacher_subjects[]
+  timetable        timetable[]
+}
+
+model teacher_subjects {
+  id            Int       @id @default(autoincrement())
+  teacher_id    Int
+  subject_id    Int
+  class_id      Int
+  academic_year String    @db.VarChar(9)
+  created_at    DateTime? @default(now()) @db.DateTime(0)
+  users         users     @relation(fields: [teacher_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "teacher_subjects_ibfk_1")
+  subjects      subjects  @relation(fields: [subject_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "teacher_subjects_ibfk_2")
+  classes       classes   @relation(fields: [class_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "teacher_subjects_ibfk_3")
+
+  @@index([class_id], map: "class_id")
+  @@index([subject_id], map: "subject_id")
+  @@index([teacher_id], map: "teacher_id")
+}
+
+model timetable {
+  id            Int       @id @default(autoincrement())
+  class_id      Int
+  subject_id    Int
+  teacher_id    Int
+  day_of_week   Int       @db.TinyInt
+  lesson_number Int
+  room_number   String?   @db.VarChar(10)
+  academic_year String    @db.VarChar(9)
+  valid_from    DateTime  @db.Date
+  valid_to      DateTime? @db.Date
+  classes       classes   @relation(fields: [class_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "timetable_ibfk_1")
+  subjects      subjects  @relation(fields: [subject_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "timetable_ibfk_2")
+  users         users     @relation(fields: [teacher_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "timetable_ibfk_3")
+
+  @@index([class_id], map: "class_id")
+  @@index([subject_id], map: "subject_id")
+  @@index([teacher_id], map: "teacher_id")
+}
+
+enum grades_grade_type {
+  dolgozat
+  felelet
+  h_zi     @map("házi")
+  projekt
+}
+
+enum users_role {
+  admin
+  teacher
+  student
 }

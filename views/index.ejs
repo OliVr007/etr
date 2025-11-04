@@ -10,9 +10,13 @@
 		<header>
 			<div class="container">
 				<div class="header-content">
-					<img src="/icons/icon-128.webp" alt="" />
+					<div class="logo-section">
+						<img src="/icons/icon-128.webp" alt="Iskola logo" />
+					</div>
 					<div class="user-info">
-						<a href="/logout"><img src="/icons/logouticon.svg" alt="Kijelentkezés gomb" title="Kijelentkezés" /></a>
+						<a href="/logout" class="logout-btn">
+							<img src="/icons/logouticon.svg" alt="Kijelentkezés" title="Kijelentkezés" />
+						</a>
 					</div>
 				</div>
 			</div>
@@ -31,86 +35,144 @@
 
 		<main class="container">
 			<section class="welcome-section">
-				<center><h2>Üdvözöllek <%= full_name %>!</h2></center>
+				<h2>Üdvözöllek!</h2>
+				<p>Ma: 2023. október 12., szerda</p>
 			</section>
+
 			<div class="dashboard-grid">
-				<div class="grid-elem">
-					<h3>Legutóbbi értékelés</h3>
-					<div class="elem-tartalom">
-						<div class="ertekeles-elem">
-							<div class="ertekeles-cim">Matematika ZH</div>
-							<div class="ertekeles-jegy">85%</div>
-							<div class="ertekeles-datum">2023. október 12.</div>
+				<!-- Legutóbbi értékelés -->
+				<div class="grid-card">
+					<div class="card-header">
+						<h3>Legutóbbi értékelés</h3>
+						<div class="card-badge">3 db</div>
+					</div>
+					<div class="card-content">
+						<div class="card-item">
+							<div class="item-main">
+								<div class="item-title">Matematika ZH</div>
+								<div class="item-date">2023. október 12.</div>
+							</div>
+							<div class="item-value">85%</div>
 						</div>
-						<div class="ertekeles-elem">
-							<div class="ertekeles-cim">Programozás beadandó</div>
-							<div class="ertekeles-jegy">92%</div>
-							<div class="ertekeles-datum">2023. október 8.</div>
+						<div class="card-item">
+							<div class="item-main">
+								<div class="item-title">Programozás beadandó</div>
+								<div class="item-date">2023. október 8.</div>
+							</div>
+							<div class="item-value">92%</div>
 						</div>
-						<div class="ertekeles-elem">
-							<div class="ertekeles-cim">Adatbázisok teszt</div>
-							<div class="ertekeles-jegy">78%</div>
-							<div class="ertekeles-datum">2023. október 5.</div>
+						<div class="card-item">
+							<div class="item-main">
+								<div class="item-title">Adatbázisok teszt</div>
+								<div class="item-date">2023. október 5.</div>
+							</div>
+							<div class="item-value">78%</div>
 						</div>
 					</div>
-				</div>
-				<div class="grid-elem">
-					<h3>Legutóbbi mulasztás</h3>
-					<div class="elem-tartalom">
-						<div class="mulasztas-elem">
-							<div class="mulasztas-kurzus">Adatbázisok előadás</div>
-							<div class="mulasztas-datum">2023. október 10.</div>
-							<div class="mulasztas-szam">1 óra</div>
-						</div>
-						<div class="mulasztas-elem">
-							<div class="mulasztas-kurzus">Programozás gyakorlat</div>
-							<div class="mulasztas-datum">2023. október 5.</div>
-							<div class="mulasztas-szam">2 óra</div>
-						</div>
-						<div class="mulasztas-elem">
-							<div class="mulasztas-kurzus">Hálózatok előadás</div>
-							<div class="mulasztas-datum">2023. szeptember 28.</div>
-							<div class="mulasztas-szam">1 óra</div>
-						</div>
+					<div class="card-footer">
+						<a href="#" class="view-all">Összes értékelés →</a>
 					</div>
 				</div>
-				<div class="grid-elem">
-					<h3>Legutóbbi feljegyzések</h3>
-					<div class="elem-tartalom">
-						<div class="feljegyzes-elem">
-							<div class="feljegyzes-cim">Matematika - javítás</div>
-							<div class="feljegyzes-tartalom">ZH eredménye felülvizsgálatra került, új értékelés: 85%</div>
+
+				<!-- Legutóbbi mulasztás -->
+				<div class="grid-card">
+					<div class="card-header">
+						<h3>Legutóbbi mulasztás</h3>
+						<div class="card-badge warning">4 óra</div>
+					</div>
+					<div class="card-content">
+						<div class="card-item">
+							<div class="item-main">
+								<div class="item-title">Adatbázisok előadás</div>
+								<div class="item-date">2023. október 10.</div>
+							</div>
+							<div class="item-value">1 óra</div>
 						</div>
-						<div class="feljegyzes-elem">
-							<div class="feljegyzes-cim">Programozás - dicséret</div>
-							<div class="feljegyzes-tartalom">Kiemelkedő teljesítmény a legutóbbi projektben</div>
+						<div class="card-item">
+							<div class="item-main">
+								<div class="item-title">Programozás gyakorlat</div>
+								<div class="item-date">2023. október 5.</div>
+							</div>
+							<div class="item-value">2 óra</div>
 						</div>
-						<div class="feljegyzes-elem">
-							<div class="feljegyzes-cim">Figyelmeztetés</div>
-							<div class="feljegyzes-tartalom">További mulasztások esetén vizsgajogosultság veszélybe kerül</div>
+						<div class="card-item">
+							<div class="item-main">
+								<div class="item-title">Hálózatok előadás</div>
+								<div class="item-date">2023. szeptember 28.</div>
+							</div>
+							<div class="item-value">1 óra</div>
 						</div>
+					</div>
+					<div class="card-footer">
+						<a href="#" class="view-all">Összes mulasztás →</a>
+					</div>
+				</div>
+
+				<!-- Legutóbbi feljegyzések -->
+				<div class="grid-card">
+					<div class="card-header">
+						<h3>Legutóbbi feljegyzések</h3>
+						<div class="card-badge">3 db</div>
+					</div>
+					<div class="card-content">
+						<div class="card-item">
+							<div class="item-main">
+								<div class="item-title">Matematika - javítás</div>
+								<div class="item-date">2023. október 12.</div>
+							</div>
+							<div class="item-desc">ZH eredménye felülvizsgálatra került, új értékelés: 85%</div>
+						</div>
+						<div class="card-item">
+							<div class="item-main">
+								<div class="item-title">Programozás - dicséret</div>
+								<div class="item-date">2023. október 8.</div>
+							</div>
+							<div class="item-desc">Kiemelkedő teljesítmény a legutóbbi projektben</div>
+						</div>
+						<div class="card-item">
+							<div class="item-main">
+								<div class="item-title">Figyelmeztetés</div>
+								<div class="item-date">2023. október 5.</div>
+							</div>
+							<div class="item-desc">További mulasztások esetén vizsgajogosultság veszélybe kerül</div>
+						</div>
+					</div>
+					<div class="card-footer">
+						<a href="#" class="view-all">Összes feljegyzés →</a>
 					</div>
 				</div>
 
 				<!-- Következő bejelentett dolgozatok -->
-				<div class="grid-elem">
-					<h3>Következő bejelentett dolgozatok</h3>
-					<div class="elem-tartalom">
-						<div class="dolgozat-elem">
-							<div class="dolgozat-kurzus">Operációs rendszerek</div>
-							<div class="dolgozat-tipus">Zárthelyi dolgozat</div>
-							<div class="dolgozat-datum">2023. október 25.</div>
+				<div class="grid-card">
+					<div class="card-header">
+						<h3>Következő dolgozatok</h3>
+						<div class="card-badge urgent">3 db</div>
+					</div>
+					<div class="card-content">
+						<div class="card-item">
+							<div class="item-main">
+								<div class="item-title">Operációs rendszerek</div>
+								<div class="item-date">2023. október 25.</div>
+							</div>
+							<div class="item-type">Zárthelyi dolgozat</div>
 						</div>
-						<div class="dolgozat-elem">
-							<div class="dolgozat-kurzus">Mesterséges intelligencia</div>
-							<div class="dolgozat-tipus">Beadandó feladat</div>
-							<div class="dolgozat-datum">2023. október 30.</div>
+						<div class="card-item">
+							<div class="item-main">
+								<div class="item-title">Mesterséges intelligencia</div>
+								<div class="item-date">2023. október 30.</div>
+							</div>
+							<div class="item-type">Beadandó feladat</div>
 						</div>
-						<div class="dolgozat-elem">
-							<div class="dolgozat-kurzus">Adatbázisok</div>
-							<div class="dolgozat-tipus">Gyakorlati vizsga</div>
-							<div class="dolgozat-datum">2023. november 5.</div>
+						<div class="card-item">
+							<div class="item-main">
+								<div class="item-title">Adatbázisok</div>
+								<div class="item-date">2023. november 5.</div>
+							</div>
+							<div class="item-type">Gyakorlati vizsga</div>
 						</div>
+					</div>
+					<div class="card-footer">
+						<a href="#" class="view-all">Összes dolgozat →</a>
 					</div>
 				</div>
 			</div>
