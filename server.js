@@ -102,6 +102,33 @@ app.post("/api/login", async (req, res) => {
 	return res.redirect("/login");
 });
 
+app.get("/api/messages", async (req, res) => {
+	if (!req.session.id)
+		return res.status(401).json({
+			error: "unauthorized",
+		});
+
+	return res.status(200).json({
+		messages: [
+			{
+				from: 1,
+				title: "Uzenet Cime",
+				content: "Teszt üzenet.",
+			},
+			{
+				from: 1,
+				title: "2. Uzenet Cime",
+				content: "2. Teszt üzenet.",
+			},
+			{
+				from: 1,
+				title: "3. Uzenet Cime",
+				content: "3. Teszt üzenet.",
+			},
+		],
+	});
+});
+
 app.get("/logout", async (req, res) => {
 	await req.session.destroy();
 

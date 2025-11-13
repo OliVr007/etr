@@ -28,5 +28,60 @@
 				</ul>
 			</div>
 		</nav>
+
+		<h1>uzenet teszt</h1>
+
+		<style>
+			#messages {
+				background-color: red;
+				width: 75%;
+				min-height: 300px;
+			}
+
+			.message {
+				background-color: blue;
+			}
+
+			.message-title,
+			.message-content {
+				color: yellow;
+			}
+		</style>
+
+		<div id="messages"></div>
+
+		<script>
+			async function loadMessages() {
+				const resp = await fetch("/api/messages");
+				const json = await resp.json();
+				const messages = json["messages"];
+
+				const messagesContainer = document.getElementById("messages");
+
+				messagesContainer.innerHTML = "";
+
+				messages.forEach((msg) => {
+					const msgContainer = document.createElement("div");
+					msgContainer.classList.add("message");
+
+					const msgTitle = document.createElement("h1");
+					msgTitle.classList.add("message-title");
+					msgTitle.innerText = msg.title;
+
+					const msgContent = document.createElement("p");
+					msgContent.classList.add("message-content");
+					msgContent.innerText = msg.content;
+
+					msgContainer.appendChild(msgTitle);
+					msgContainer.appendChild(msgContent);
+
+					messagesContainer.appendChild(msgContainer);
+				});
+			}
+
+			loadMessages();
+
+			setInterval(loadMessages, 5000);
+		</script>
 	</body>
 </html>
