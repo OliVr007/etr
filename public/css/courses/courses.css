@@ -1,0 +1,183 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+	background-color: #fefcfb;
+	color: #0a1128;
+	line-height: 1.6;
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+	overflow-y: hidden;
+	display: flex;
+	flex-direction: column;
+}
+
+.container {
+	max-width: 1400px;
+	margin: 0 auto;
+	padding: 0 20px;
+}
+
+/* Header stílusok */
+header {
+	background: linear-gradient(135deg, #0a1128 0%, #001f54 100%);
+	color: #fefcfb;
+	padding: 15px 0;
+	box-shadow: 0 4px 12px rgba(10, 17, 40, 0.15);
+}
+
+.header-content {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.logo-section {
+	display: flex;
+	align-items: center;
+	gap: 15px;
+}
+
+.logo-section h1 {
+	font-size: 1.8rem;
+	font-weight: 600;
+	color: #fefcfb;
+}
+
+.user-info {
+	display: flex;
+	align-items: center;
+	gap: 20px;
+}
+
+.user-info span {
+	font-weight: 500;
+	color: #fefcfb;
+}
+
+.logout-btn {
+	padding: 8px;
+	border-radius: 6px;
+	transition: background-color 0.3s;
+}
+
+.logout-btn:hover {
+	background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Navigáció */
+nav {
+	background: linear-gradient(135deg, #034078 0%, #001f54 100%);
+	padding: 0;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.nav-menu {
+	display: flex;
+	list-style: none;
+	justify-content: center;
+}
+
+.nav-menu li {
+	margin: 0;
+}
+
+.nav-menu a {
+	display: block;
+	padding: 18px 25px;
+	color: #fefcfb;
+	text-decoration: none;
+	transition: all 0.3s ease;
+	font-weight: 500;
+	position: relative;
+}
+
+.nav-menu a:hover {
+	background-color: rgba(255, 255, 255, 0.1);
+	transform: translateY(-2px);
+}
+
+.nav-menu a.active {
+	background-color: #1282a2;
+	font-weight: 600;
+}
+
+.nav-menu a.active::after {
+	content: "";
+	position: absolute;
+	bottom: 0;
+	left: 20%;
+	width: 60%;
+	height: 3px;
+	background-color: #fefcfb;
+	border-radius: 2px;
+}
+.timetable {
+	display: grid;
+	grid-template-columns: repeat(5, 1fr);
+	background: #ffffff;
+	border-radius: 14px;
+	overflow: hidden;
+	box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+.timetable div {
+	border-bottom: 1px solid #eee;
+	border-right: 1px solid #eee;
+	padding: 12px;
+}
+
+.timetable div:last-child {
+	border-right: none;
+}
+
+.timetable-header {
+	background: #034078;
+	color: #fff;
+	text-align: center;
+	font-weight: 600;
+	font-size: 1.1rem;
+}
+
+.time-slot {
+	background: #f7fafc;
+	font-weight: 500;
+	color: #001f54;
+}
+
+.lesson {
+	background: #e8f4fa;
+	border-radius: 8px;
+	padding: 10px;
+	min-height: 50px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	gap: 5px;
+}
+
+.lesson strong {
+	color: #034078;
+	font-size: 1rem;
+}
+
+.lesson span {
+	font-size: 0.9rem;
+	color: #0a1128;
+}
+.timetable-container {
+	max-width: 900px;
+	margin: 20px auto;
+	padding: 10px;
+}
+
+@media (max-width: 768px) {
+	.timetable {
+		grid-template-columns: 80px repeat(5, 1fr);
+	}
+}
