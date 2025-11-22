@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link rel="stylesheet" href="/css/index.css" />
+		<link rel="stylesheet" href="/css/messages/messages.css" />
 		<title>Elektronikus tanulmányi rendszer</title>
 	</head>
 	<body>
@@ -32,26 +32,32 @@
 				</ul>
 			</div>
 		</nav>
-		<h1>uzenet teszt</h1>
+		<main class="container messages-container">
+			<div class="messages-header">
+				<h1>Üzenetek</h1>
+				<button class="new-message-btn">Új üzenet</button>
+			</div>
 
-		<style>
-			#messages {
-				background-color: red;
-				width: 75%;
-				min-height: 300px;
-			}
+			<div class="messages-tabs">
+				<a href="#" class="tab active">Beérkező</a>
+				<a href="#" class="tab">Elküldött</a>
+				<a href="#" class="tab">Törölt</a>
+			</div>
 
-			.message {
-				background-color: blue;
-			}
+			<div class="messages-list">
+				<div class="message-card">
+					<h2>Tanár üzenete</h2>
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi.</p>
+					<span class="date">2025.02.12</span>
+				</div>
 
-			.message-title,
-			.message-content {
-				color: yellow;
-			}
-		</style>
-
-		<div id="messages"></div>
+				<div class="message-card">
+					<h2>Rendszerüzenet</h2>
+					<p>Holnap karbantartás miatt az oldal 2 órára nem lesz elérhető.</p>
+					<span class="date">2025.02.10</span>
+				</div>
+			</div>
+		</main>
 
 		<script>
 			async function loadMessages() {
