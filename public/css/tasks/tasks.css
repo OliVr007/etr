@@ -1,0 +1,196 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+body {
+	background-color: #fefcfb;
+	color: #0a1128;
+	line-height: 1.6;
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+	overflow-y: hidden;
+	display: flex;
+	flex-direction: column;
+}
+.container {
+	max-width: 1400px;
+	margin: 0 auto;
+	padding: 0 20px;
+}
+header {
+	background: linear-gradient(135deg, #0a1128 0%, #001f54 100%);
+	color: #fefcfb;
+	padding: 15px 0;
+	box-shadow: 0 4px 12px rgba(10, 17, 40, 0.15);
+}
+.header-content {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+.logo-section {
+	display: flex;
+	align-items: center;
+	gap: 15px;
+}
+.logo-section h1 {
+	font-size: 1.8rem;
+	font-weight: 600;
+	color: #fefcfb;
+}
+.user-info {
+	display: flex;
+	align-items: center;
+	gap: 20px;
+}
+.user-info span {
+	font-weight: 500;
+	color: #fefcfb;
+}
+.logout-btn {
+	padding: 8px;
+	border-radius: 6px;
+	transition: background-color 0.3s;
+}
+.logout-btn:hover {
+	background-color: rgba(255, 255, 255, 0.1);
+} /* Navigáció */
+nav {
+	background: linear-gradient(135deg, #034078 0%, #001f54 100%);
+	padding: 0;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+.nav-menu {
+	display: flex;
+	list-style: none;
+	justify-content: center;
+}
+.nav-menu li {
+	margin: 0;
+}
+.nav-menu a {
+	display: block;
+	padding: 18px 25px;
+	color: #fefcfb;
+	text-decoration: none;
+	transition: all 0.3s ease;
+	font-weight: 500;
+	position: relative;
+}
+.nav-menu a:hover {
+	background-color: rgba(255, 255, 255, 0.1);
+	transform: translateY(-2px);
+}
+.nav-menu a.active {
+	background-color: #1282a2;
+	font-weight: 600;
+}
+.nav-menu a.active::after {
+	content: "";
+	position: absolute;
+	bottom: 0;
+	left: 20%;
+	width: 60%;
+	height: 3px;
+	background-color: #fefcfb;
+	border-radius: 2px;
+}
+
+main {
+	padding: 30px 0;
+	flex-grow: 1;
+}
+
+.tasks-container h1 {
+	text-align: center;
+	font-size: 2rem;
+	margin-bottom: 25px;
+	color: #001f54;
+	font-weight: 600;
+}
+
+/* Feladat lista */
+.task-list {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+	gap: 25px;
+}
+
+.task-card {
+	background: #ffffff;
+	padding: 20px;
+	border-radius: 12px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+	transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.task-card:hover {
+	transform: translateY(-4px);
+	box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+.task-card h2 {
+	font-size: 1.2rem;
+	margin-bottom: 10px;
+	color: #034078;
+}
+
+.task-card p {
+	margin-bottom: 8px;
+}
+
+/* Gombok */
+.done-btn {
+	padding: 10px 16px;
+	background-color: #1282a2;
+	color: #fefcfb;
+	border: none;
+	border-radius: 8px;
+	cursor: pointer;
+	font-weight: 500;
+	transition: background-color 0.25s, transform 0.2s;
+	margin-left: 1rem;
+	margin-right: 8rem;
+}
+
+.done-btn:hover {
+	background-color: #0f6b84;
+	transform: translateY(-2px);
+}
+.done-btn img {
+	width: 18px;
+	height: 18px;
+}
+.delete-btn {
+	padding: 10px 16px;
+	background-color: #d9534f;
+	color: #fff;
+	border: none;
+	border-radius: 8px;
+	cursor: pointer;
+	font-weight: 500;
+	transition: background-color 0.25s, transform 0.2s;
+}
+
+.delete-btn:hover {
+	background-color: #c9302c;
+	transform: translateY(-2px);
+}
+
+.delete-btn img {
+	width: 18px;
+	height: 18px;
+}
+
+/* Állapot színek */
+.task-card.pending {
+	border-left: 6px solid #1282a2;
+}
+
+.task-card.completed {
+	border-left: 6px solid #2ecc71;
+	background-color: #e9f9ef;
+}
