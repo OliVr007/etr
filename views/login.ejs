@@ -23,11 +23,26 @@
 					<div class="form-group">
 						<label for="password">Jelszó</label>
 						<input type="password" id="password" name="password" placeholder="Írja be jelszavát" required />
+						<% if (typeof error !== 'undefined' && error) { %>
+						<div id="error-message" class="error-message">
+							<span class="error-icon">✕</span>
+							<span class="error-text"><%= error %></span>
+						</div>
+						<% } %>
 					</div>
-
 					<button type="submit" class="btn">Bejelentkezés</button>
 				</form>
 			</div>
 		</div>
+		<script>
+			document.addEventListener("DOMContentLoaded", function () {
+				const errorMessage = document.getElementById("error-message");
+				const urlParams = new URLSearchParams(window.location.search);
+				if (urlParams.has("error")) {
+					const newUrl = window.location.pathname;
+					window.history.replaceState({}, document.title, newUrl);
+				}
+			});
+		</script>
 	</body>
 </html>

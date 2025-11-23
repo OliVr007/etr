@@ -72,34 +72,44 @@ app.get("/teacherui", async (req, res) => {
 
 app.get("/login", async (req, res) => {
 	if (req.session.id) return res.redirect("/");
-	res.render("login");
+
+	// Hibaüzenet átadása, ha van
+	const error = req.query.error || null;
+	res.render("login", { error });
 });
 
 app.post("/api/login", async (req, res) => {
 	console.log(req.body);
-
 	const data = await db.users.findFirst({
 		where: {
 			username: req.body.username,
 		},
 	});
 
-	if (!data) return res.redirect("/login");
+	let errorMessage = null;
 
-	if (await compare(req.body.password, data.password_hash)) {
-		req.session.id = data.id;
-		req.session.username = data.username;
-		req.session.role = data.role;
-		await req.session.save();
-
-		if (data.role === "teacher") {
-			return res.redirect("/teacherui");
-		} else {
-			return res.redirect("/");
-		}
+	if (!data) {
+		errorMessage = "Hibás felhasználónév vagy jelszó!";
+	} else if (!(await compare(req.body.password, data.password_hash))) {
+		errorMessage = "Hibás felhasználónév vagy jelszó!";
 	}
 
-	return res.redirect("/login");
+	if (errorMessage) {
+		// Hiba esetén visszairányítjuk a login oldalra hibaüzenettel
+		return res.redirect(`/login?error=${encodeURIComponent(errorMessage)}`);
+	}
+
+	// Sikeres bejelentkezés
+	req.session.id = data.id;
+	req.session.username = data.username;
+	req.session.role = data.role;
+	await req.session.save();
+
+	if (data.role === "teacher") {
+		return res.redirect("/teacherui");
+	} else {
+		return res.redirect("/");
+	}
 });
 
 app.get("/api/messages", async (req, res) => {
