@@ -114,3 +114,74 @@ nav {
 	background-color: #fefcfb;
 	border-radius: 2px;
 }
+.grades-table-container {
+	max-width: 1400px;
+	margin: 40px auto;
+	padding: 20px;
+}
+
+.grades-table-container h2 {
+	text-align: center;
+	font-size: 2.2rem;
+	margin-bottom: 40px;
+	color: #001f54;
+}
+
+.grades-table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 1rem;
+	background: #fff;
+	border-radius: 10px;
+	overflow: hidden;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.grades-table thead {
+	background: #034078;
+	color: #fff;
+}
+
+.grades-table th {
+	padding: 12px 10px;
+	text-align: center;
+	font-weight: 600;
+	border-right: 1px solid rgba(255, 255, 255, 0.1);
+	border: 1px solid #00325c; /* halványabb kontrasztkeret fejléchez */
+}
+
+.grades-table td {
+	padding: 14px;
+	border-bottom: 1px solid #8aa4bd;
+	border: 1px solid #6e8aa5; /* még erősebb kontraszt */
+	background: #d3e7ff; /* erősebb halvány kék háttér */
+	text-align: center;
+	font-weight: 600; /* félkövér tartalom */
+}
+
+.grades-table tbody tr:nth-child(even) {
+	background: #c4dcf7; /* erősebb váltószín */
+}
+
+/* Jegy színezések */
+.g5 {
+	color: #1e8e3e;
+	font-weight: 700;
+}
+.g4 {
+	color: #c9a20b;
+	font-weight: 700;
+}
+.g3 {
+	color: #d35400;
+	font-weight: 700;
+}
+.g2 {
+	color: #c0392b;
+	font-weight: 700;
+}
+
+.grades-table td:first-child,
+.grades-table td:nth-child(2) {
+	text-align: left;
+}
