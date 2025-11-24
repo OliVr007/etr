@@ -145,6 +145,14 @@ app.get("/logout", async (req, res) => {
 	return res.redirect("/login");
 });
 
+app.get("/grades", async (req, res) => {
+	if (!req.session.id) return res.redirect("/login");
+
+	res.render("grades.ejs", {
+		username: req.session.username,
+	});
+});
+
 app.listen(port, () => {
 	console.log(`Example app listening on port ${port}`);
 });
