@@ -308,7 +308,6 @@ main {
 	min-width: 80px;
 }
 
-/* Carousel vezérlők */
 .carousel-controls {
 	display: flex;
 	justify-content: center;

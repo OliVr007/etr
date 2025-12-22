@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="hu">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="/css/teacher-index.css" />
+		<title>Tanári felület - Elektronikus tanulmányi rendszer</title>
+	</head>
+	<body>
+		<header>
+			<div class="container">
+				<div class="header-content">
+					<div class="logo-section">
+						<img src="/icons/icon-128.webp" alt="Iskola logo" />
+					</div>
+					<div class="user-info">
+						<a href="/logout" class="logout-btn">
+							<img src="/icons/logouticon.svg" alt="Kijelentkezés" title="Kijelentkezés" />
+						</a>
+					</div>
+				</div>
+			</div>
+		</header>
+
+		<nav>
+			<div class="container">
+				<ul class="nav-menu">
+					<li><a href="/teacher" class="active">Áttekintés</a></li>
+					<li><a href="/teacher/classes">Osztályok</a></li>
+					<li><a href="/teacher/grading">Értékelések</a></li>
+					<li><a href="/teacher/schedule">Órarend</a></li>
+					<li><a href="/teacher/messages">Üzenetek</a></li>
+				</ul>
+			</div>
+		</nav>
+
+		<main class="container">
+			<section class="welcome-section">
+				<h2>Üdvözöllek <%= username %>!</h2>
+				<p>Ma: 2025. december 22., vasárnap</p>
+			</section>
+
+			<div class="carousel-container">
+				<div class="carousel-track">
+					<!-- 1. Mai órák -->
+					<div class="carousel-slide">
+						<div class="carousel-card">
+							<div class="card-header">
+								<h3>Mai órák</h3>
+								<div class="card-badge">4 db</div>
+							</div>
+							<div class="card-content">
+								<div class="card-item">
+									<div class="item-main">
+										<div class="item-title">Matematika - 9.A</div>
+										<div class="item-date">8:00 - 8:45 • 102-es terem</div>
+									</div>
+									<div class="item-value">Hamarosan</div>
+								</div>
+								<div class="card-item">
+									<div class="item-main">
+										<div class="item-title">Fizika - 10.B</div>
+										<div class="item-date">9:00 - 9:45 • 110-es terem</div>
+									</div>
+									<div class="item-value">Következő</div>
+								</div>
+								<div class="card-item">
+									<div class="item-main">
+										<div class="item-title">Matematika - 11.C</div>
+										<div class="item-date">11:00 - 11:45 • 102-es terem</div>
+									</div>
+									<div class="item-value">Délelőtt</div>
+								</div>
+								<div class="card-item">
+									<div class="item-main">
+										<div class="item-title">Fizika - 9.A</div>
+										<div class="item-date">13:00 - 13:45 • 110-es terem</div>
+									</div>
+									<div class="item-value">Délután</div>
+								</div>
+							</div>
+							<div class="card-footer">
+								<a href="/teacher/schedule" class="view-all">Teljes órarend →</a>
+							</div>
+						</div>
+					</div>
+
+					<!-- 2. Értékelendő feladatok -->
+					<div class="carousel-slide">
+						<div class="carousel-card">
+							<div class="card-header">
+								<h3>Értékelendő feladatok</h3>
+								<div class="card-badge warning">12 db</div>
+							</div>
+							<div class="card-content">
+								<div class="card-item">
+									<div class="item-main">
+										<div class="item-title">Matematika ZH - 9.A</div>
+										<div class="item-date">Beadva: 2025. dec. 20.</div>
+									</div>
+									<div class="item-type">28 diák</div>
+								</div>
+								<div class="card-item">
+									<div class="item-main">
+										<div class="item-title">Fizika házi feladat - 10.B</div>
+										<div class="item-date">Határidő: 2025. dec. 18.</div>
+									</div>
+									<div class="item-type">25 diák</div>
+								</div>
+								<div class="card-item">
+									<div class="item-main">
+										<div class="item-title">Projektmunka - 11.C</div>
+										<div class="item-date">Beadva: 2025. dec. 19.</div>
+									</div>
+									<div class="item-type">22 diák</div>
+								</div>
+								<div class="card-item">
+									<div class="item-main">
+										<div class="item-title">Matematika dolgozat - 10.A</div>
+										<div class="item-date">Beadva: 2025. dec. 15.</div>
+									</div>
+									<div class="item-type">30 diák</div>
+								</div>
+							</div>
+							<div class="card-footer">
+								<a href="/teacher/grading" class="view-all">Összes feladat →</a>
+							</div>
+						</div>
+					</div>
+
+					<!-- 3. Osztályok áttekintése -->
+					<div class="carousel-slide">
+						<div class="carousel-card">
+							<div class="card-header">
+								<h3>Osztályok áttekintése</h3>
+								<div class="card-badge">5 osztály</div>
+							</div>
+							<div class="card-content">
+								<div class="card-item">
+									<div class="item-main">
+										<div class="item-title">9.A osztály - Matematika</div>
+										<div class="item-date">28 tanuló • Átlag: 3.85</div>
+									</div>
+									<div class="item-value">Jó</div>
+								</div>
+								<div class="card-item">
+									<div class="item-main">
+										<div class="item-title">10.B osztály - Fizika</div>
+										<div class="item-date">25 tanuló • Átlag: 4.12</div>
+									</div>
+									<div class="item-value">Kiváló</div>
+								</div>
+								<div class="card-item">
+									<div class="item-main">
+										<div class="item-title">11.C osztály - Matematika</div>
+										<div class="item-date">22 tanuló • Átlag: 3.64</div>
+									</div>
+									<div class="item-value">Közepes</div>
+								</div>
+								<div class="card-item">
+									<div class="item-main">
+										<div class="item-title">9.A osztály - Fizika</div>
+										<div class="item-date">28 tanuló • Átlag: 3.92</div>
+									</div>
+									<div class="item-value">Jó</div>
+								</div>
+								<div class="card-item">
+									<div class="item-main">
+										<div class="item-title">10.A osztály - Matematika</div>
+										<div class="item-date">30 tanuló • Átlag: 4.25</div>
+									</div>
+									<div class="item-value">Kiváló</div>
+								</div>
+							</div>
+							<div class="card-footer">
+								<a href="/teacher/classes" class="view-all">Összes osztály →</a>
+							</div>
+						</div>
+					</div>
+
+					<!-- 4. Hiányzások és késések -->
+					<div class="carousel-slide">
+						<div class="carousel-card">
+							<div class="card-header">
+								<h3>Mai hiányzások</h3>
+								<div class="card-badge urgent">8 db</div>
+							</div>
+							<div class="card-content">
+								<div class="card-item">
+									<div class="item-main">
+										<div class="item-title">Kovács János - 9.A</div>
+										<div class="item-date">1. óra - Igazolatlan</div>
+									</div>
+									<div class="item-type">Hiányzás</div>
+								</div>
+								<div class="card-item">
+									<div class="item-main">
+										<div class="item-title">Nagy Emma - 10.B</div>
+										<div class="item-date">1-2. óra - Igazolt</div>
+									</div>
+									<div class="item-type">Hiányzás</div>
+								</div>
+								<div class="card-item">
+									<div class="item-main">
+										<div class="item-title">Szabó Péter - 11.C</div>
+										<div class="item-date">1. óra - 15 perc</div>
+									</div>
+									<div class="item-type">Késés</div>
+								</div>
+								<div class="card-item">
+									<div class="item-main">
+										<div class="item-title">Tóth Anna - 9.A</div>
+										<div class="item-date">1. óra - Igazolatlan</div>
+									</div>
+									<div class="item-type">Hiányzás</div>
+								</div>
+								<div class="card-item">
+									<div class="item-main">
+										<div class="item-title">Kiss Márton - 10.A</div>
+										<div class="item-date">1. óra - 10 perc</div>
+									</div>
+									<div class="item-type">Késés</div>
+								</div>
+							</div>
+							<div class="card-footer">
+								<a href="/teacher/attendance" class="view-all">Jelenlét kezelése →</a>
+							</div>
+						</div>
+					</div>
+
+					<!-- 5. Legutóbbi üzenetek -->
+					<div class="carousel-slide">
+						<div class="carousel-card">
+							<div class="card-header">
+								<h3>Legutóbbi üzenetek</h3>
+								<div class="card-badge">6 db</div>
+							</div>
+							<div class="card-content">
+								<div class="card-item">
+									<div class="item-main">
+										<div class="item-title">Kovács János (9.A)</div>
+										<div class="item-date">2025. dec. 21.</div>
+										<div class="item-desc">Kérdés a házi feladattal kapcsolatban...</div>
+									</div>
+								</div>
+								<div class="card-item">
+									<div class="item-main">
+										<div class="item-title">Nagy Emma szülője</div>
+										<div class="item-date">2025. dec. 20.</div>
+										<div class="item-desc">Hiányzás igazolása melléklettel...</div>
+									</div>
+								</div>
+								<div class="card-item">
+									<div class="item-main">
+										<div class="item-title">Tanulmányi osztály</div>
+										<div class="item-date">2025. dec. 19.</div>
+										<div class="item-desc">Félévi értékelések határideje: jan. 10.</div>
+									</div>
+								</div>
+								<div class="card-item">
+									<div class="item-main">
+										<div class="item-title">Szabó Péter (11.C)</div>
+										<div class="item-date">2025. dec. 18.</div>
+										<div class="item-desc">Pótdolgozat időpont egyeztetés...</div>
+									</div>
+								</div>
+							</div>
+							<div class="card-footer">
+								<a href="/teacher/messages" class="view-all">Összes üzenet →</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="carousel-controls">
+				<button class="carousel-btn prev-btn">←</button>
+				<div class="carousel-indicators">
+					<div class="carousel-indicator active" data-index="0"></div>
+					<div class="carousel-indicator" data-index="1"></div>
+					<div class="carousel-indicator" data-index="2"></div>
+					<div class="carousel-indicator" data-index="3"></div>
+					<div class="carousel-indicator" data-index="4"></div>
+				</div>
+				<button class="carousel-btn next-btn">→</button>
+			</div>
+		</main>
+
+		<script>
+			document.addEventListener("DOMContentLoaded", function () {
+				const track = document.querySelector(".carousel-track");
+				const slides = Array.from(track.children);
+				const nextButton = document.querySelector(".next-btn");
+				const prevButton = document.querySelector(".prev-btn");
+				const indicators = document.querySelectorAll(".carousel-indicator");
+
+				const slideWidth = track.clientWidth;
+				let currentIndex = 0;
+
+				// Kártya pozícionálása
+				const setSlidePosition = (slide, index) => {
+					slide.style.left = slideWidth * index + "px";
+				};
+				slides.forEach(setSlidePosition);
+
+				// Mozgás a következő kártyára
+				const moveToSlide = (track, currentSlide, targetSlide) => {
+					track.style.transform = "translateX(-" + targetSlide.style.left + ")";
+					currentSlide = targetSlide;
+					return currentSlide;
+				};
+
+				// Frissíti az indikátorokat
+				const updateIndicators = (currentIndex) => {
+					indicators.forEach((indicator, index) => {
+						if (index === currentIndex) {
+							indicator.classList.add("active");
+						} else {
+							indicator.classList.remove("active");
+						}
+					});
+				};
+
+				// Következő gomb eseménykezelő
+				nextButton.addEventListener("click", (e) => {
+					const nextIndex = currentIndex < slides.length - 1 ? currentIndex + 1 : 0;
+					const targetSlide = slides[nextIndex];
+
+					moveToSlide(track, slides[currentIndex], targetSlide);
+					currentIndex = nextIndex;
+					updateIndicators(currentIndex);
+				});
+
+				// Előző gomb eseménykezelő
+				prevButton.addEventListener("click", (e) => {
+					const prevIndex = currentIndex > 0 ? currentIndex - 1 : slides.length - 1;
+					const targetSlide = slides[prevIndex];
+
+					moveToSlide(track, slides[currentIndex], targetSlide);
+					currentIndex = prevIndex;
+					updateIndicators(currentIndex);
+				});
+
+				// Indikátor eseménykezelők
+				indicators.forEach((indicator) => {
+					indicator.addEventListener("click", (e) => {
+						const targetIndex = parseInt(e.target.getAttribute("data-index"));
+						const targetSlide = slides[targetIndex];
+
+						moveToSlide(track, slides[currentIndex], targetSlide);
+						currentIndex = targetIndex;
+						updateIndicators(currentIndex);
+					});
+				});
+
+				// Automatikus lapozás
+				let autoSlideInterval = setInterval(() => {
+					const nextIndex = currentIndex < slides.length - 1 ? currentIndex + 1 : 0;
+					const targetSlide = slides[nextIndex];
+
+					moveToSlide(track, slides[currentIndex], targetSlide);
+					currentIndex = nextIndex;
+					updateIndicators(currentIndex);
+				}, 5000);
+
+				// Automatikus lapozás szüneteltetése, ha a felhasználó interaktál
+				track.addEventListener("mouseenter", () => {
+					clearInterval(autoSlideInterval);
+				});
+
+				track.addEventListener("mouseleave", () => {
+					autoSlideInterval = setInterval(() => {
+						const nextIndex = currentIndex < slides.length - 1 ? currentIndex + 1 : 0;
+						const targetSlide = slides[nextIndex];
+
+						moveToSlide(track, slides[currentIndex], targetSlide);
+						currentIndex = nextIndex;
+						updateIndicators(currentIndex);
+					}, 5000);
+				});
+			});
+		</script>
+	</body>
+</html>

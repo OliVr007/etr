@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="hu">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="/css/messages/messages-new.css" />
+		<title>Új üzenet</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+	</head>
+	<body>
+		<main class="container messages-container">
+			<section class="new-message-wrapper">
+				<a href="/messages" class="back-link"> ← Vissza az üzenetekhez </a>
+				<header class="new-message-header">
+					<h2>Új üzenet írása</h2>
+					<p>Küldj üzenetet hallgatónak vagy oktatónak</p>
+				</header>
+
+				<form class="new-message-form">
+					<div class="form-group">
+						<label for="recipient">Címzett</label>
+						<select id="recipient" required>
+							<option value="">— Válassz címzettet —</option>
+							<option>Dr. Kovács Péter (oktató)</option>
+							<option>Nagy Anna (hallgató)</option>
+						</select>
+					</div>
+
+					<div class="form-group">
+						<label for="subject">Tárgy</label>
+						<input type="text" id="subject" placeholder="Pl. ZH időpont" required />
+					</div>
+
+					<div class="form-group">
+						<label for="content">Üzenet</label>
+						<textarea id="content" rows="7" placeholder="Írd le részletesen az üzeneted…" required></textarea>
+					</div>
+
+					<div class="form-actions">
+						<button type="button" class="secondary-btn" onclick="window.close()">Mégse</button>
+						<button type="submit" class="primary-btn">Üzenet küldése</button>
+					</div>
+				</form>
+			</section>
+		</main>
+	</body>
+</html>

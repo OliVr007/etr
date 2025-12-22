@@ -57,20 +57,6 @@ header {
 	color: #fefcfb;
 }
 
-.avatar {
-	width: 45px;
-	height: 45px;
-	border-radius: 50%;
-	background: linear-gradient(135deg, #1282a2 0%, #034078 100%);
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	font-weight: bold;
-	color: #fefcfb;
-	font-size: 1.1rem;
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-}
-
 .logout-btn {
 	padding: 8px;
 	border-radius: 6px;
@@ -158,40 +144,33 @@ main {
 	font-weight: 500;
 }
 
-/* Carousel konténer */
+/* Carousel stílusok */
 .carousel-container {
 	position: relative;
-	margin: 0 auto 40px;
-	max-width: 1300px;
+	max-width: 1000px;
+	margin: 0 auto;
 	overflow: hidden;
-	padding: 40px 0;
+	border-radius: 20px;
+	box-shadow: 0 8px 32px rgba(0, 31, 84, 0.12);
 }
 
 .carousel-track {
 	display: flex;
-	transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-	gap: 30px;
-	padding: 20px 80px;
+	transition: transform 0.5s ease-in-out;
 }
 
-/* Carousel kártyák */
+.carousel-slide {
+	min-width: 100%;
+	padding: 0;
+	position: relative;
+}
+
 .carousel-card {
-	flex: 0 0 380px;
-	min-width: 380px;
 	background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
 	border-radius: 20px;
-	box-shadow: 0 8px 32px rgba(0, 31, 84, 0.12);
-	border: 1px solid #e2e8f0;
 	overflow: hidden;
-	transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 	position: relative;
-	opacity: 0.9;
-	transform: scale(0.95);
-}
-
-.carousel-card.active {
-	opacity: 1;
-	transform: scale(1);
+	height: 100%;
 }
 
 .carousel-card::before {
@@ -201,12 +180,6 @@ main {
 	left: 0;
 	right: 0;
 	height: 4px;
-	background: linear-gradient(90deg, #1282a2, #034078);
-}
-
-.carousel-card:hover {
-	transform: translateY(-8px) scale(1.02);
-	box-shadow: 0 16px 48px rgba(0, 31, 84, 0.18);
 }
 
 .card-header {
@@ -233,12 +206,12 @@ main {
 	font-weight: 600;
 }
 
-.card-badge.urgent {
-	background: linear-gradient(135deg, #e63946 0%, #c1121f 100%);
-}
-
 .card-badge.warning {
 	background: linear-gradient(135deg, #ff9e00 0%, #e85d04 100%);
+}
+
+.card-badge.urgent {
+	background: linear-gradient(135deg, #e63946 0%, #c1121f 100%);
 }
 
 .card-content {
@@ -283,13 +256,8 @@ main {
 	color: #1282a2;
 }
 
-/* Elem stílusok - kompakt elrendezés */
-.ora-elem,
-.helyettesites-elem,
-.dolgozat-elem,
-.ertekeles-elem,
-.figyelmeztetes-elem,
-.ertekezlet-elem {
+/* Kártya elemek */
+.card-item {
 	padding: 16px 0;
 	border-bottom: 1px solid #f1f5f9;
 	display: flex;
@@ -298,209 +266,97 @@ main {
 	gap: 15px;
 }
 
-.ora-elem:last-child,
-.helyettesites-elem:last-child,
-.dolgozat-elem:last-child,
-.ertekeles-elem:last-child,
-.figyelmeztetes-elem:last-child,
-.ertekezlet-elem:last-child {
+.card-item:last-child {
 	border-bottom: none;
 }
 
-.ora-info,
-.helyettesites-info,
-.dolgozat-info,
-.ertekeles-info,
-.figyelmeztetes-info,
-.ertekezlet-info {
+.item-main {
 	flex: 1;
 }
 
-.ora-cim,
-.helyettesites-cim,
-.dolgozat-cim,
-.ertekeles-cim,
-.figyelmeztetes-cim,
-.ertekezlet-cim {
+.item-title {
 	font-weight: 600;
 	color: #0a1128;
 	margin-bottom: 4px;
 	font-size: 0.95rem;
 }
 
-.ora-idopont,
-.helyettesites-datum,
-.dolgozat-hatarido,
-.ertekeles-datum,
-.figyelmeztetes-datum,
-.ertekezlet-datum {
+.item-date {
 	color: #1282a2;
 	font-weight: 600;
 	font-size: 0.85rem;
 }
 
-.ora-terem,
-.helyettesites-osztaly,
-.dolgozat-details,
-.ertekeles-atlag,
-.figyelmeztetes-leiras,
-.ertekezlet-hely {
+.item-value {
+	color: #1282a2;
+	font-weight: bold;
+	font-size: 1.1rem;
+	min-width: 80px;
+	text-align: right;
+}
+
+.item-desc {
 	color: #475569;
+	font-size: 0.85rem;
+	line-height: 1.4;
+	margin-top: 4px;
+}
+
+.item-type {
+	color: #666;
 	font-size: 0.85rem;
 	text-align: right;
 	min-width: 80px;
 }
 
-.dolgozat-details {
+.carousel-controls {
 	display: flex;
-	flex-direction: column;
-	gap: 2px;
+	justify-content: center;
+	align-items: center;
+	margin-top: 25px;
+	gap: 15px;
 }
 
-.dolgozat-hianyzo {
-	color: #e63946;
-	font-weight: 600;
-}
-
-/* Carousel vezérlők - kilógó nyilak */
 .carousel-btn {
-	position: absolute;
-	top: 50%;
-	transform: translateY(-50%);
 	background: linear-gradient(135deg, #034078 0%, #001f54 100%);
+	color: white;
 	border: none;
-	width: 60px;
-	height: 60px;
+	width: 50px;
+	height: 50px;
 	border-radius: 50%;
-	color: #fefcfb;
+	font-size: 1.2rem;
 	cursor: pointer;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	box-shadow: 0 6px 20px rgba(0, 31, 84, 0.4);
-	transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-	z-index: 20;
-	border: 3px solid #fefcfb;
+	transition: all 0.3s ease;
+	box-shadow: 0 4px 12px rgba(0, 31, 84, 0.2);
 }
 
 .carousel-btn:hover {
-	transform: translateY(-50%) scale(1.15);
-	box-shadow: 0 8px 25px rgba(0, 31, 84, 0.6);
-	background: linear-gradient(135deg, #1282a2 0%, #034078 100%);
+	transform: translateY(-3px);
+	box-shadow: 0 6px 16px rgba(0, 31, 84, 0.3);
 }
 
 .carousel-btn:active {
-	transform: translateY(-50%) scale(1.05);
+	transform: translateY(-1px);
 }
 
-.carousel-btn:disabled {
-	opacity: 0.4;
-	cursor: not-allowed;
-	transform: translateY(-50%) scale(1);
+.carousel-indicators {
+	display: flex;
+	gap: 10px;
 }
 
-.prev-btn {
-	left: -30px;
+.carousel-indicator {
+	width: 12px;
+	height: 12px;
+	border-radius: 50%;
+	background-color: #cbd5e1;
+	cursor: pointer;
+	transition: all 0.3s ease;
 }
 
-.next-btn {
-	right: -30px;
-}
-
-/* Reszponzív design */
-@media (max-width: 1200px) {
-	.carousel-card {
-		flex: 0 0 350px;
-		min-width: 350px;
-	}
-
-	.carousel-track {
-		padding: 20px 60px;
-	}
-}
-
-@media (max-width: 768px) {
-	.carousel-container {
-		padding: 30px 0;
-	}
-
-	.carousel-card {
-		flex: 0 0 320px;
-		min-width: 320px;
-	}
-
-	.carousel-track {
-		gap: 20px;
-		padding: 20px 50px;
-	}
-
-	.carousel-btn {
-		width: 50px;
-		height: 50px;
-	}
-
-	.prev-btn {
-		left: -20px;
-	}
-
-	.next-btn {
-		right: -20px;
-	}
-
-	.nav-menu {
-		flex-wrap: wrap;
-	}
-
-	.header-content {
-		flex-direction: column;
-		gap: 15px;
-		text-align: center;
-	}
-
-	.welcome-section h2 {
-		font-size: 1.8rem;
-	}
-}
-
-@media (max-width: 480px) {
-	.carousel-container {
-		padding: 20px 0;
-	}
-
-	.carousel-card {
-		flex: 0 0 280px;
-		min-width: 280px;
-	}
-
-	.carousel-track {
-		padding: 20px 40px;
-	}
-
-	.carousel-btn {
-		width: 45px;
-		height: 45px;
-	}
-
-	.prev-btn {
-		left: -15px;
-	}
-
-	.next-btn {
-		right: -15px;
-	}
-
-	.card-header {
-		padding: 20px 20px 12px;
-		flex-direction: column;
-		gap: 10px;
-		align-items: flex-start;
-	}
-
-	.card-content {
-		padding: 15px 20px;
-	}
-
-	.card-footer {
-		padding: 15px 20px;
-	}
+.carousel-indicator.active {
+	background: linear-gradient(135deg, #034078 0%, #001f54 100%);
+	transform: scale(1.2);
 }

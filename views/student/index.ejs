@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="hu">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="/css/index/index.css" />
+		<title>Elektronikus tanulmányi rendszer</title>
+	</head>
+	<body>
+		<header>
+			<div class="container">
+				<div class="header-content">
+					<div class="logo-section">
+						<img src="/icons/icon-128.webp" alt="Iskola logo" />
+					</div>
+					<div class="user-info">
+						<a href="/logout" class="logout-btn">
+							<img src="/icons/logouticon.svg" alt="Kijelentkezés" title="Kijelentkezés" />
+						</a>
+					</div>
+				</div>
+			</div>
+		</header>
+
+		<nav>
+			<div class="container">
+				<ul class="nav-menu">
+					<li><a href="/" class="active">Áttekintés</a></li>
+					<li><a href="/grades">Értékelések</a></li>
+					<li><a href="/courses">Órarend</a></li>
+					<li><a href="/tasks">Házi feladatok</a></li>
+					<li><a href="/messages">Üzenetek</a></li>
+				</ul>
+			</div>
+		</nav>
+
+		<main class="container">
+			<section class="welcome-section">
+				<h2>Üdvözöllek <%= username %>!</h2>
+				<p>Ma: 2025. november 12., szerda</p>
+			</section>
+
+			<div class="carousel-container">
+				<div class="carousel-track">
+					<!-- 1. Legutóbbi értékelés -->
+					<div class="carousel-slide">
+						<div class="carousel-card">
+							<div class="card-header">
+								<h3>Legutóbbi értékelés</h3>
+								<div class="card-badge">3 db</div>
+							</div>
+							<div class="card-content">
+								<div class="card-item">
+									<div class="item-main">
+										<div class="item-title">Matematika ZH</div>
+										<div class="item-date">2023. október 12.</div>
+									</div>
+									<div class="item-value">85%</div>
+								</div>
+								<div class="card-item">
+									<div class="item-main">
+										<div class="item-title">Programozás beadandó</div>
+										<div class="item-date">2023. október 8.</div>
+									</div>
+									<div class="item-value">92%</div>
+								</div>
+								<div class="card-item">
+									<div class="item-main">
+										<div class="item-title">Adatbázisok teszt</div>
+										<div class="item-date">2023. október 5.</div>
+									</div>
+									<div class="item-value">78%</div>
+								</div>
+							</div>
+							<div class="card-footer">
+								<a href="#" class="view-all">Összes értékelés →</a>
+							</div>
+						</div>
+					</div>
+
+					<!-- 2. Házi feladatok -->
+					<div class="carousel-slide">
+						<div class="carousel-card">
+							<div class="card-header">
+								<h3>Házi feladatok</h3>
+								<div class="card-badge">3 db</div>
+							</div>
+							<div class="card-content">
+								<div class="card-item">
+									<div class="item-main">
+										<div class="item-title">Programozás – REST API</div>
+										<div class="item-date">Határidő: 2023. október 18.</div>
+									</div>
+									<div class="item-value">Beadva</div>
+								</div>
+								<div class="card-item">
+									<div class="item-main">
+										<div class="item-title">Adatbázisok – SQL</div>
+										<div class="item-date">Határidő: 2023. október 20.</div>
+									</div>
+									<div class="item-value">Folyamatban</div>
+								</div>
+								<div class="card-item">
+									<div class="item-main">
+										<div class="item-title">MI – esszé</div>
+										<div class="item-date">Határidő: 2023. október 22.</div>
+									</div>
+									<div class="item-value">Nincs beadva</div>
+								</div>
+							</div>
+							<div class="card-footer">
+								<a href="/tasks" class="view-all">Összes házi feladat →</a>
+							</div>
+						</div>
+					</div>
+
+					<!-- 3. Legutóbbi üzenetek -->
+					<div class="carousel-slide">
+						<div class="carousel-card">
+							<div class="card-header">
+								<h3>Legutóbbi üzenetek</h3>
+								<div class="card-badge">3 db</div>
+							</div>
+							<div class="card-content">
+								<div class="card-item">
+									<div class="item-main">
+										<div class="item-title">Programozás oktató</div>
+										<div class="item-date">2023. október 12.</div>
+									</div>
+									<div class="item-desc">A beadandó értékelése elkészült.</div>
+								</div>
+								<div class="card-item">
+									<div class="item-main">
+										<div class="item-title">Tanulmányi osztály</div>
+										<div class="item-date">2023. október 9.</div>
+									</div>
+									<div class="item-desc">Tárgyfelvétel hamarosan indul.</div>
+								</div>
+								<div class="card-item">
+									<div class="item-main">
+										<div class="item-title">Adatbázisok oktató</div>
+										<div class="item-date">2023. október 6.</div>
+									</div>
+									<div class="item-desc">A jövő heti gyakorlat elmarad.</div>
+								</div>
+							</div>
+							<div class="card-footer">
+								<a href="/messages" class="view-all">Összes üzenet →</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="carousel-controls">
+				<button class="carousel-btn prev-btn">←</button>
+				<div class="carousel-indicators">
+					<div class="carousel-indicator active" data-index="0"></div>
+					<div class="carousel-indicator" data-index="1"></div>
+					<div class="carousel-indicator" data-index="2"></div>
+				</div>
+				<button class="carousel-btn next-btn">→</button>
+			</div>
+		</main>
+
+		<script>
+			document.addEventListener("DOMContentLoaded", function () {
+				const track = document.querySelector(".carousel-track");
+				const slides = Array.from(track.children);
+				const nextButton = document.querySelector(".next-btn");
+				const prevButton = document.querySelector(".prev-btn");
+				const indicators = document.querySelectorAll(".carousel-indicator");
+
+				const slideWidth = track.clientWidth;
+				let currentIndex = 0;
+
+				// Kártya pozícionálása
+				const setSlidePosition = (slide, index) => {
+					slide.style.left = slideWidth * index + "px";
+				};
+				slides.forEach(setSlidePosition);
+
+				// Mozgás a következő kártyára
+				const moveToSlide = (track, currentSlide, targetSlide) => {
+					track.style.transform = "translateX(-" + targetSlide.style.left + ")";
+					currentSlide = targetSlide;
+					return currentSlide;
+				};
+
+				// Frissíti az indikátorokat
+				const updateIndicators = (currentIndex) => {
+					indicators.forEach((indicator, index) => {
+						if (index === currentIndex) {
+							indicator.classList.add("active");
+						} else {
+							indicator.classList.remove("active");
+						}
+					});
+				};
+
+				// Következő gomb eseménykezelő
+				nextButton.addEventListener("click", (e) => {
+					const nextIndex = currentIndex < slides.length - 1 ? currentIndex + 1 : 0;
+					const targetSlide = slides[nextIndex];
+
+					moveToSlide(track, slides[currentIndex], targetSlide);
+					currentIndex = nextIndex;
+					updateIndicators(currentIndex);
+				});
+
+				// Előző gomb eseménykezelő
+				prevButton.addEventListener("click", (e) => {
+					const prevIndex = currentIndex > 0 ? currentIndex - 1 : slides.length - 1;
+					const targetSlide = slides[prevIndex];
+
+					moveToSlide(track, slides[currentIndex], targetSlide);
+					currentIndex = prevIndex;
+					updateIndicators(currentIndex);
+				});
+
+				// Indikátor eseménykezelők
+				indicators.forEach((indicator) => {
+					indicator.addEventListener("click", (e) => {
+						const targetIndex = parseInt(e.target.getAttribute("data-index"));
+						const targetSlide = slides[targetIndex];
+
+						moveToSlide(track, slides[currentIndex], targetSlide);
+						currentIndex = targetIndex;
+						updateIndicators(currentIndex);
+					});
+				});
+
+				// Automatikus lapozás (opcionális)
+				let autoSlideInterval = setInterval(() => {
+					const nextIndex = currentIndex < slides.length - 1 ? currentIndex + 1 : 0;
+					const targetSlide = slides[nextIndex];
+
+					moveToSlide(track, slides[currentIndex], targetSlide);
+					currentIndex = nextIndex;
+					updateIndicators(currentIndex);
+				}, 3000);
+
+				// Automatikus lapozás szüneteltetése, ha a felhasználó interaktál
+				track.addEventListener("mouseenter", () => {
+					clearInterval(autoSlideInterval);
+				});
+
+				track.addEventListener("mouseleave", () => {
+					autoSlideInterval = setInterval(() => {
+						const nextIndex = currentIndex < slides.length - 1 ? currentIndex + 1 : 0;
+						const targetSlide = slides[nextIndex];
+
+						moveToSlide(track, slides[currentIndex], targetSlide);
+						currentIndex = nextIndex;
+						updateIndicators(currentIndex);
+					}, 10000);
+				});
+			});
+		</script>
+	</body>
+</html>

@@ -29,7 +29,7 @@ app.use(async (req, res, next) => {
 app.get("/", async (req, res) => {
 	if (!req.session.id) return res.redirect("/login");
 
-	res.render("index", {
+	res.render("student/index", {
 		username: req.session.username,
 	});
 });
@@ -37,7 +37,7 @@ app.get("/", async (req, res) => {
 app.get("/courses", async (req, res) => {
 	if (!req.session.id) return res.redirect("/login");
 
-	res.render("courses.ejs", {
+	res.render("student/courses.ejs", {
 		username: req.session.username,
 	});
 });
@@ -45,7 +45,7 @@ app.get("/courses", async (req, res) => {
 app.get("/tasks", async (req, res) => {
 	if (!req.session.id) return res.redirect("/login");
 
-	res.render("tasks.ejs", {
+	res.render("student/tasks.ejs", {
 		username: req.session.username,
 	});
 });
@@ -53,7 +53,7 @@ app.get("/tasks", async (req, res) => {
 app.get("/messages", async (req, res) => {
 	if (!req.session.id) return res.redirect("/login");
 
-	res.render("messages.ejs", {
+	res.render("student/messages.ejs", {
 		username: req.session.username,
 	});
 });
@@ -65,7 +65,7 @@ app.get("/teacherui", async (req, res) => {
 		return res.redirect("/");
 	}
 
-	res.render("teacherui.ejs", {
+	res.render("teacher/teacher-index.ejs", {
 		username: req.session.username,
 	});
 });
@@ -139,6 +139,22 @@ app.get("/api/messages", async (req, res) => {
 	});
 });
 
+app.get("/messages/sent", async (req, res) => {
+	if (!req.session.id) return res.redirect("/login");
+
+	res.render("student/messages-sent.ejs", {
+		username: req.session.username,
+	});
+});
+
+app.get("/messages/new", async (req, res) => {
+	if (!req.session.id) return res.redirect("/login");
+
+	res.render("student/messages-new.ejs", {
+		username: req.session.username,
+	});
+});
+
 app.get("/logout", async (req, res) => {
 	await req.session.destroy();
 
@@ -148,7 +164,7 @@ app.get("/logout", async (req, res) => {
 app.get("/grades", async (req, res) => {
 	if (!req.session.id) return res.redirect("/login");
 
-	res.render("grades.ejs", {
+	res.render("student/grades.ejs", {
 		username: req.session.username,
 	});
 });
