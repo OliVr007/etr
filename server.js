@@ -1,9 +1,9 @@
-const express = require("express");
-const cookieParser = require("cookie-parser");
-const bodyParser = require("body-parser");
-const getIronSession = require("iron-session").getIronSession;
-const { PrismaClient } = require("./generated/prisma");
-const { compare } = require("bcrypt");
+const express = require('express');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const { getIronSession } = require('iron-session');
+const { PrismaClient } = require('./generated/prisma');
+const { compare } = require('bcrypt');
 
 const app = express();
 const port = 3000;
