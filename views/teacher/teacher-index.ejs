@@ -36,7 +36,7 @@
 
 		<main class="container">
 			<section class="welcome-section">
-				<h2>Üdvözöllek <%= username %>!</h2>
+				<h2>Üdvözöllek <%= first_name %>!</h2>
 				<p>Ma: 2025. december 22., vasárnap</p>
 			</section>
 
@@ -85,50 +85,7 @@
 						</div>
 					</div>
 
-					<!-- 2. Értékelendő feladatok -->
-					<div class="carousel-slide">
-						<div class="carousel-card">
-							<div class="card-header">
-								<h3>Értékelendő feladatok</h3>
-								<div class="card-badge warning">12 db</div>
-							</div>
-							<div class="card-content">
-								<div class="card-item">
-									<div class="item-main">
-										<div class="item-title">Matematika ZH - 9.A</div>
-										<div class="item-date">Beadva: 2025. dec. 20.</div>
-									</div>
-									<div class="item-type">28 diák</div>
-								</div>
-								<div class="card-item">
-									<div class="item-main">
-										<div class="item-title">Fizika házi feladat - 10.B</div>
-										<div class="item-date">Határidő: 2025. dec. 18.</div>
-									</div>
-									<div class="item-type">25 diák</div>
-								</div>
-								<div class="card-item">
-									<div class="item-main">
-										<div class="item-title">Projektmunka - 11.C</div>
-										<div class="item-date">Beadva: 2025. dec. 19.</div>
-									</div>
-									<div class="item-type">22 diák</div>
-								</div>
-								<div class="card-item">
-									<div class="item-main">
-										<div class="item-title">Matematika dolgozat - 10.A</div>
-										<div class="item-date">Beadva: 2025. dec. 15.</div>
-									</div>
-									<div class="item-type">30 diák</div>
-								</div>
-							</div>
-							<div class="card-footer">
-								<a href="/teacher/grading" class="view-all">Összes feladat →</a>
-							</div>
-						</div>
-					</div>
-
-					<!-- 3. Osztályok áttekintése -->
+					<!-- 2. Osztályok áttekintése -->
 					<div class="carousel-slide">
 						<div class="carousel-card">
 							<div class="card-header">
@@ -178,76 +135,26 @@
 						</div>
 					</div>
 
-					<!-- 4. Hiányzások és késések -->
-					<div class="carousel-slide">
-						<div class="carousel-card">
-							<div class="card-header">
-								<h3>Mai hiányzások</h3>
-								<div class="card-badge urgent">8 db</div>
-							</div>
-							<div class="card-content">
-								<div class="card-item">
-									<div class="item-main">
-										<div class="item-title">Kovács János - 9.A</div>
-										<div class="item-date">1. óra - Igazolatlan</div>
-									</div>
-									<div class="item-type">Hiányzás</div>
-								</div>
-								<div class="card-item">
-									<div class="item-main">
-										<div class="item-title">Nagy Emma - 10.B</div>
-										<div class="item-date">1-2. óra - Igazolt</div>
-									</div>
-									<div class="item-type">Hiányzás</div>
-								</div>
-								<div class="card-item">
-									<div class="item-main">
-										<div class="item-title">Szabó Péter - 11.C</div>
-										<div class="item-date">1. óra - 15 perc</div>
-									</div>
-									<div class="item-type">Késés</div>
-								</div>
-								<div class="card-item">
-									<div class="item-main">
-										<div class="item-title">Tóth Anna - 9.A</div>
-										<div class="item-date">1. óra - Igazolatlan</div>
-									</div>
-									<div class="item-type">Hiányzás</div>
-								</div>
-								<div class="card-item">
-									<div class="item-main">
-										<div class="item-title">Kiss Márton - 10.A</div>
-										<div class="item-date">1. óra - 10 perc</div>
-									</div>
-									<div class="item-type">Késés</div>
-								</div>
-							</div>
-							<div class="card-footer">
-								<a href="/teacher/attendance" class="view-all">Jelenlét kezelése →</a>
-							</div>
-						</div>
-					</div>
-
-					<!-- 5. Legutóbbi üzenetek -->
+					<!-- 3. Legutóbbi üzenetek -->
 					<div class="carousel-slide">
 						<div class="carousel-card">
 							<div class="card-header">
 								<h3>Legutóbbi üzenetek</h3>
-								<div class="card-badge">6 db</div>
+								<div class="card-badge">4 db</div>
 							</div>
 							<div class="card-content">
 								<div class="card-item">
 									<div class="item-main">
 										<div class="item-title">Kovács János (9.A)</div>
 										<div class="item-date">2025. dec. 21.</div>
-										<div class="item-desc">Kérdés a házi feladattal kapcsolatban...</div>
+										<div class="item-desc">Kérdés a házi feladattal kapcsolatban…</div>
 									</div>
 								</div>
 								<div class="card-item">
 									<div class="item-main">
 										<div class="item-title">Nagy Emma szülője</div>
 										<div class="item-date">2025. dec. 20.</div>
-										<div class="item-desc">Hiányzás igazolása melléklettel...</div>
+										<div class="item-desc">Hiányzás igazolása melléklettel…</div>
 									</div>
 								</div>
 								<div class="card-item">
@@ -255,13 +162,6 @@
 										<div class="item-title">Tanulmányi osztály</div>
 										<div class="item-date">2025. dec. 19.</div>
 										<div class="item-desc">Félévi értékelések határideje: jan. 10.</div>
-									</div>
-								</div>
-								<div class="card-item">
-									<div class="item-main">
-										<div class="item-title">Szabó Péter (11.C)</div>
-										<div class="item-date">2025. dec. 18.</div>
-										<div class="item-desc">Pótdolgozat időpont egyeztetés...</div>
 									</div>
 								</div>
 							</div>
@@ -279,8 +179,6 @@
 					<div class="carousel-indicator active" data-index="0"></div>
 					<div class="carousel-indicator" data-index="1"></div>
 					<div class="carousel-indicator" data-index="2"></div>
-					<div class="carousel-indicator" data-index="3"></div>
-					<div class="carousel-indicator" data-index="4"></div>
 				</div>
 				<button class="carousel-btn next-btn">→</button>
 			</div>
@@ -296,12 +194,6 @@
 
 				const slideWidth = track.clientWidth;
 				let currentIndex = 0;
-
-				// Kártya pozícionálása
-				const setSlidePosition = (slide, index) => {
-					slide.style.left = slideWidth * index + "px";
-				};
-				slides.forEach(setSlidePosition);
 
 				// Mozgás a következő kártyára
 				const moveToSlide = (track, currentSlide, targetSlide) => {

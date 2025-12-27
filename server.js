@@ -1,9 +1,9 @@
-const express = require('express');
-const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
-const { getIronSession } = require('iron-session');
-const { PrismaClient } = require('./generated/prisma');
-const { compare } = require('bcrypt');
+const express = require("express");
+const cookieParser = require("cookie-parser");
+const bodyParser = require("body-parser");
+const { getIronSession } = require("iron-session");
+const { PrismaClient } = require("./generated/prisma");
+const { compare } = require("bcrypt");
 
 const app = express();
 const port = 3000;
@@ -29,17 +29,110 @@ app.use(async (req, res, next) => {
 app.get("/", async (req, res) => {
 	if (!req.session.id) return res.redirect("/login");
 
-	res.render("student/index", {
-		username: req.session.username,
-	});
+	try {
+		// Legutóbbi jegyek (top 3)
+		const recentGrades = await db.grades.findMany({
+			where: {
+				student_id: req.session.id,
+			},
+			include: {
+				subjects: true,
+			},
+			orderBy: {
+				grade_date: "desc",
+			},
+			take: 3,
+		});
+
+		// Üzenetek (később implementálható, most üres tömb)
+		const recentMessages = [];
+
+		// Statisztika - jegyek száma
+		const totalGrades = await db.grades.count({
+			where: {
+				student_id: req.session.id,
+			},
+		});
+
+		res.render("student/index", {
+			username: req.session.username,
+			first_name: req.session.first_name || req.session.username,
+			recentGrades: recentGrades,
+			recentMessages: recentMessages,
+			totalGrades: totalGrades,
+		});
+	} catch (error) {
+		console.error("Hiba az adatok lekérésekor:", error);
+		res.render("student/index", {
+			username: req.session.username,
+			first_name: req.session.first_name || req.session.username,
+			recentGrades: [],
+			recentMessages: [],
+			totalGrades: 0,
+		});
+	}
 });
 
 app.get("/courses", async (req, res) => {
 	if (!req.session.id) return res.redirect("/login");
 
-	res.render("student/courses.ejs", {
-		username: req.session.username,
-	});
+	try {
+		console.log("User ID:", req.session.id);
+
+		// Diák osztályának lekérése
+		const studentClass = await db.student_classes.findFirst({
+			where: {
+				student_id: req.session.id,
+				is_active: true, // ← VÁLTOZOTT: 1 helyett true
+			},
+			include: {
+				classes: true,
+			},
+		});
+
+		console.log("Student class:", studentClass);
+
+		if (!studentClass) {
+			console.log("HIBA: Nincs osztály hozzárendelve!");
+			return res.render("student/courses", {
+				username: req.session.username,
+				timetable: [],
+				className: null,
+			});
+		}
+
+		// Órarend lekérése
+		const timetable = await db.timetable.findMany({
+			where: {
+				class_id: studentClass.class_id,
+			},
+			include: {
+				subjects: true,
+				users_timetable_teacher_idTousers: {
+					select: {
+						first_name: true,
+						last_name: true,
+					},
+				},
+			},
+			orderBy: [{ day_of_week: "asc" }, { lesson_number: "asc" }],
+		});
+
+		console.log("Timetable count:", timetable.length);
+
+		res.render("student/courses", {
+			username: req.session.username,
+			timetable: timetable,
+			className: studentClass.classes.class_name,
+		});
+	} catch (error) {
+		console.error("Hiba az órarend lekérésekor:", error);
+		res.render("student/courses", {
+			username: req.session.username,
+			timetable: [],
+			className: null,
+		});
+	}
 });
 
 app.get("/tasks", async (req, res) => {
@@ -67,6 +160,7 @@ app.get("/teacherui", async (req, res) => {
 
 	res.render("teacher/teacher-index.ejs", {
 		username: req.session.username,
+		first_name: req.session.first_name,
 	});
 });
 
@@ -102,7 +196,10 @@ app.post("/api/login", async (req, res) => {
 	// Sikeres bejelentkezés
 	req.session.id = data.id;
 	req.session.username = data.username;
+	req.session.first_name = data.first_name; // ÚJ SOR
+	req.session.last_name = data.last_name; // ÚJ SOR (opcionális)
 	req.session.role = data.role;
+
 	await req.session.save();
 
 	if (data.role === "teacher") {
@@ -164,9 +261,45 @@ app.get("/logout", async (req, res) => {
 app.get("/grades", async (req, res) => {
 	if (!req.session.id) return res.redirect("/login");
 
-	res.render("student/grades.ejs", {
-		username: req.session.username,
-	});
+	try {
+		// Diák összes jegye tantárgyak szerint csoportosítva
+		const grades = await db.grades.findMany({
+			where: {
+				student_id: req.session.id,
+			},
+			include: {
+				subjects: true,
+				users_grades_teacher_idTousers: {
+					select: {
+						first_name: true,
+						last_name: true,
+					},
+				},
+			},
+			orderBy: [{ subjects: { subject_name: "asc" } }, { grade_date: "asc" }],
+		});
+
+		// Csoportosítás tantárgyak szerint
+		const gradesBySubject = {};
+		grades.forEach((grade) => {
+			const subjectName = grade.subjects.subject_name;
+			if (!gradesBySubject[subjectName]) {
+				gradesBySubject[subjectName] = [];
+			}
+			gradesBySubject[subjectName].push(grade);
+		});
+
+		res.render("student/grades", {
+			username: req.session.username,
+			gradesBySubject: gradesBySubject,
+		});
+	} catch (error) {
+		console.error("Hiba a jegyek lekérésekor:", error);
+		res.render("student/grades", {
+			username: req.session.username,
+			gradesBySubject: {},
+		});
+	}
 });
 
 app.listen(port, () => {

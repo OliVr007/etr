@@ -33,104 +33,43 @@
 				</ul>
 			</div>
 		</nav>
+
 		<div class="timetable-container">
-			<h1 id="current-date" style="text-align: center; margin-bottom: 35px">Dátum</h1>
+			<% if (className) { %>
+			<h1 style="text-align: center; margin-bottom: 10px"><%= className %> osztály órarendje</h1>
+			<% } %>
+			<p id="current-date" style="text-align: center; margin-bottom: 35px; color: #666"></p>
+
+			<% if (timetable.length === 0) { %>
+			<div style="text-align: center; padding: 3rem; color: #666">
+				<p>Még nincs órarend beállítva ehhez az osztályhoz.</p>
+			</div>
+			<% } else { %> <% const days = ['Hétfő', 'Kedd', 'Szerda', 'Csütörtök', 'Péntek']; const schedule = {}; for (let day = 1; day <= 5; day++) { schedule[day] = {}; } timetable.forEach(item => { if (!schedule[item.day_of_week]) { schedule[item.day_of_week] = {}; } schedule[item.day_of_week][item.lesson_number] = item; }); let maxLessons = 0; Object.values(schedule).forEach(day => { const lessons = Object.keys(day).map(Number); if (lessons.length > 0) { maxLessons = Math.max(maxLessons, Math.max(...lessons)); } }); function getLessonTime(lessonNumber) { const startHour = 7 + lessonNumber; const startMinute = (lessonNumber - 1) * 5; const endMinute = startMinute + 45; const startTime = String(startHour) + ':' + String(startMinute).padStart(2, '0'); const endTime = String(startHour) + ':' + String(endMinute).padStart(2, '0'); return startTime + '–' + endTime; } %>
 
 			<div class="timetable">
-				<div class="timetable-header">Hétfő</div>
-				<div class="timetable-header">Kedd</div>
-				<div class="timetable-header">Szerda</div>
-				<div class="timetable-header">Csütörtök</div>
-				<div class="timetable-header">Péntek</div>
-
-				<!-- 1. óra -->
+				<% days.forEach(day => { %>
+				<div class="timetable-header"><%= day %></div>
+				<% }); %> <% for (let lesson = 1; lesson <= maxLessons; lesson++) { %> <% for (let day = 1; day <= 5; day++) { %>
 				<div>
-					<div class="lesson"><strong>Matematika</strong><span>102 • 8:00–8:45</span></div>
+					<% if (schedule[day] && schedule[day][lesson]) { %> <% const item = schedule[day][lesson]; %>
+					<div class="lesson">
+						<strong><%= item.subjects.subject_name %></strong>
+						<span><%= item.room_number %> • <%= getLessonTime(lesson) %></span>
+					</div>
+					<% } else { %>
+					<div class="lesson empty">
+						<span style="color: #ccc">—</span>
+					</div>
+					<% } %>
 				</div>
-				<div>
-					<div class="lesson"><strong>Angol</strong><span>204 • 8:00–8:45</span></div>
-				</div>
-				<div>
-					<div class="lesson"><strong>Kémia</strong><span>301 • 8:00–8:45</span></div>
-				</div>
-				<div>
-					<div class="lesson"><strong>Testnevelés</strong><span>Tornaterem • 11:00–11:45</span></div>
-				</div>
-				<div>
-					<div class="lesson"><strong>Történelem</strong><span>210 • 8:00–8:45</span></div>
-				</div>
-
-				<!-- 2. óra -->
-				<div>
-					<div class="lesson"><strong>Fizika</strong><span>110 • 9:00–9:45</span></div>
-				</div>
-				<div>
-					<div class="lesson"><strong>Fizika</strong><span>110 • 9:00–9:45</span></div>
-				</div>
-				<div>
-					<div class="lesson"><strong>Matematika</strong><span>102 • 9:00–9:45</span></div>
-				</div>
-				<div>
-					<div class="lesson"><strong>Angol</strong><span>204 • 11:00–11:45</span></div>
-				</div>
-				<div>
-					<div class="lesson"><strong>Biológia</strong><span>305 • 11:00–11:45</span></div>
-				</div>
-				<div>
-					<div class="lesson"><strong>Informatika</strong><span>Lab 1 • 11:00–11:45</span></div>
-				</div>
-
-				<!-- 3. óra -->
-				<div>
-					<div class="lesson"><strong>Irodalom</strong><span>203 • 11:00–11:45</span></div>
-				</div>
-				<div>
-					<div class="lesson"><strong>Irodalom</strong><span>203 • 11:00–11:45</span></div>
-				</div>
-				<div>
-					<div class="lesson"><strong>Történelem</strong><span>210 • 10:00–10:45</span></div>
-				</div>
-				<div>
-					<div class="lesson"><strong>Történelem</strong><span>210 • 10:00–10:45</span></div>
-				</div>
-				<div>
-					<div class="lesson"><strong>Matematika</strong><span>102 • 9:00–9:45</span></div>
-				</div>
-				<div>
-					<div class="lesson"><strong>Kémia</strong><span>301 • 10:00–10:45</span></div>
-				</div>
-
-				<!-- 4. óra -->
-				<div>
-					<div class="lesson"><strong>Irodalom</strong><span>203 • 10:00–10:45</span></div>
-				</div>
-				<div>
-					<div class="lesson"><strong>Irodalom</strong><span>203 • 10:00–10:45</span></div>
-				</div>
-				<div>
-					<div class="lesson"><strong>Irodalom</strong><span>203 • 10:00–10:45</span></div>
-				</div>
-				<div>
-					<div class="lesson"><strong>Angol</strong><span>204 • 9:00–9:45</span></div>
-				</div>
-				<div>
-					<div class="lesson"><strong>Informatika</strong><span>Lab 1</span></div>
-				</div>
-				<div>
-					<div class="lesson"><strong>Testnevelés</strong><span>Tornaterem</span></div>
-				</div>
-				<div>
-					<div class="lesson"><strong>Matematika</strong><span>102 • 9:00–9:45</span></div>
-				</div>
-				<div>
-					<div class="lesson"><strong>Angol</strong><span>204 • 9:00–9:45</span></div>
-				</div>
+				<% } %> <% } %>
 			</div>
+			<% } %>
 		</div>
 		<script>
 			const dateElem = document.getElementById("current-date");
 			const now = new Date();
-			const options = { year: "numeric", month: "long", day: "numeric" };
+			const options = { year: "numeric", month: "long", day: "numeric", weekday: "long" };
 			dateElem.textContent = now.toLocaleDateString("hu-HU", options);
 		</script>
 	</body>
