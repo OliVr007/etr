@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="hu">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="/css/admin/admin-index.css" />
+		<title>Admin Felület - Elektronikus tanulmányi rendszer</title>
+	</head>
+	<body>
+		<header>
+			<div class="container">
+				<div class="header-content">
+					<div class="logo-section">
+						<img src="/icons/icon-128.webp" alt="Iskola logo" />
+						<h1>Admin Felület</h1>
+					</div>
+					<div class="user-info">
+						<span>Bejelentkezve: <%= first_name %> (Admin)</span>
+						<a href="/logout" class="logout-btn">
+							<img src="/icons/logouticon.svg" alt="Kijelentkezés" title="Kijelentkezés" />
+						</a>
+					</div>
+				</div>
+			</div>
+		</header>
+
+		<main class="container">
+			<section class="stats-section">
+				<h2>Statisztikák</h2>
+				<div class="stats-grid">
+					<div class="stat-card">
+						<div class="stat-icon">👥</div>
+						<div class="stat-info">
+							<h3><%= stats.totalUsers %></h3>
+							<p>Összes felhasználó</p>
+						</div>
+					</div>
+					<div class="stat-card">
+						<div class="stat-icon">🎓</div>
+						<div class="stat-info">
+							<h3><%= stats.students %></h3>
+							<p>Diákok</p>
+						</div>
+					</div>
+					<div class="stat-card">
+						<div class="stat-icon">👨‍🏫</div>
+						<div class="stat-info">
+							<h3><%= stats.teachers %></h3>
+							<p>Tanárok</p>
+						</div>
+					</div>
+					<div class="stat-card">
+						<div class="stat-icon">⚙️</div>
+						<div class="stat-info">
+							<h3><%= stats.admins %></h3>
+							<p>Adminisztrátorok</p>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<section class="users-section">
+				<div class="section-header">
+					<h2>Felhasználó kezelés</h2>
+					<button class="btn-primary" onclick="openAddUserModal()">
+						<span>➕</span> Új felhasználó
+					</button>
+				</div>
+
+				<div class="table-container">
+					<table class="users-table">
+						<thead>
+							<tr>
+								<th>ID</th>
+								<th>Felhasználónév</th>
+								<th>Név</th>
+								<th>Email</th>
+								<th>Szerepkör</th>
+								<th>Műveletek</th>
+							</tr>
+						</thead>
+						<tbody>
+							<% users.forEach(user => { %>
+							<tr>
+								<td><%= user.id %></td>
+								<td><%= user.username %></td>
+								<td><%= user.last_name %> <%= user.first_name %></td>
+								<td><%= user.email || '-' %></td>
+								<td>
+									<span class="role-badge role-<%= user.role %>">
+										<% if (user.role === 'student') { %>
+											🎓 Diák
+										<% } else if (user.role === 'teacher') { %>
+											👨‍🏫 Tanár
+										<% } else if (user.role === 'admin') { %>
+											⚙️ Admin
+										<% } %>
+									</span>
+								</td>
+								<td class="action-buttons">
+									<button class="btn-edit" onclick="openEditUserModal(<%= user.id %>)" title="Szerkesztés">
+										✏️
+									</button>
+									<button class="btn-delete" onclick="deleteUser(<%= user.id %>, '<%= user.username %>')" title="Törlés">
+										🗑️
+									</button>
+								</td>
+							</tr>
+							<% }); %>
+						</tbody>
+					</table>
+				</div>
+			</section>
+		</main>
+
+		<div id="addUserModal" class="modal">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3>Új felhasználó hozzáadása</h3>
+					<button class="close-btn" onclick="closeAddUserModal()">&times;</button>
+				</div>
+				<form id="addUserForm" onsubmit="addUser(event)">
+					<div class="form-group">
+						<label for="add_username">Felhasználónév *</label>
+						<input type="text" id="add_username" name="username" required />
+					</div>
+					<div class="form-group">
+						<label for="add_password">Jelszó *</label>
+						<input type="password" id="add_password" name="password" required />
+					</div>
+					<div class="form-row">
+						<div class="form-group">
+							<label for="add_first_name">Keresztnév *</label>
+							<input type="text" id="add_first_name" name="first_name" required />
+						</div>
+						<div class="form-group">
+							<label for="add_last_name">Vezetéknév *</label>
+							<input type="text" id="add_last_name" name="last_name" required />
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="add_email">Email</label>
+						<input type="email" id="add_email" name="email" />
+					</div>
+					<div class="form-group">
+						<label for="add_role">Szerepkör *</label>
+						<select id="add_role" name="role" required>
+							<option value="">Válassz...</option>
+							<option value="student">Diák</option>
+							<option value="teacher">Tanár</option>
+							<option value="admin">Admin</option>
+						</select>
+					</div>
+					<div class="form-actions">
+						<button type="button" class="btn-secondary" onclick="closeAddUserModal()">Mégse</button>
+						<button type="submit" class="btn-primary">Létrehozás</button>
+					</div>
+				</form>
+			</div>
+		</div>
+
+		<div id="editUserModal" class="modal">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3>Felhasználó szerkesztése</h3>
+					<button class="close-btn" onclick="closeEditUserModal()">&times;</button>
+				</div>
+				<form id="editUserForm" onsubmit="updateUser(event)">
+					<input type="hidden" id="edit_user_id" />
+					<div class="form-group">
+						<label for="edit_username">Felhasználónév *</label>
+						<input type="text" id="edit_username" name="username" required />
+					</div>
+					<div class="form-group">
+						<label for="edit_password">Új jelszó (üresen hagyva nem változik)</label>
+						<input type="password" id="edit_password" name="password" />
+					</div>
+					<div class="form-row">
+						<div class="form-group">
+							<label for="edit_first_name">Keresztnév *</label>
+							<input type="text" id="edit_first_name" name="first_name" required />
+						</div>
+						<div class="form-group">
+							<label for="edit_last_name">Vezetéknév *</label>
+							<input type="text" id="edit_last_name" name="last_name" required />
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="edit_email">Email</label>
+						<input type="email" id="edit_email" name="email" />
+					</div>
+					<div class="form-group">
+						<label for="edit_role">Szerepkör *</label>
+						<select id="edit_role" name="role" required>
+							<option value="student">Diák</option>
+							<option value="teacher">Tanár</option>
+							<option value="admin">Admin</option>
+						</select>
+					</div>
+					<div class="form-actions">
+						<button type="button" class="btn-secondary" onclick="closeEditUserModal()">Mégse</button>
+						<button type="submit" class="btn-primary">Mentés</button>
+					</div>
+				</form>
+			</div>
+		</div>
+
+		<script>
+			function openAddUserModal() {
+				document.getElementById('addUserModal').style.display = 'flex';
+			}
+
+			function closeAddUserModal() {
+				document.getElementById('addUserModal').style.display = 'none';
+				document.getElementById('addUserForm').reset();
+			}
+
+			async function openEditUserModal(userId) {
+				try {
+					const response = await fetch(`/api/admin/users/${userId}`);
+					const user = await response.json();
+
+					if (response.ok) {
+						document.getElementById('edit_user_id').value = user.id;
+						document.getElementById('edit_username').value = user.username;
+						document.getElementById('edit_first_name').value = user.first_name;
+						document.getElementById('edit_last_name').value = user.last_name;
+						document.getElementById('edit_email').value = user.email || '';
+						document.getElementById('edit_role').value = user.role;
+						document.getElementById('edit_password').value = '';
+						document.getElementById('editUserModal').style.display = 'flex';
+					} else {
+						alert('Hiba történt a felhasználó betöltésekor');
+					}
+				} catch (error) {
+					console.error('Hiba:', error);
+					alert('Hiba történt a felhasználó betöltésekor');
+				}
+			}
+
+			function closeEditUserModal() {
+				document.getElementById('editUserModal').style.display = 'none';
+				document.getElementById('editUserForm').reset();
+			}
+
+			async function addUser(event) {
+				event.preventDefault();
+				const formData = new FormData(event.target);
+				const data = Object.fromEntries(formData);
+
+				try {
+					const response = await fetch('/api/admin/users', {
+						method: 'POST',
+						headers: { 'Content-Type': 'application/json' },
+						body: JSON.stringify(data),
+					});
+
+					const result = await response.json();
+
+					if (response.ok) {
+						alert('Felhasználó sikeresen létrehozva!');
+						closeAddUserModal();
+						location.reload();
+					} else {
+						alert(result.error || 'Hiba történt a felhasználó létrehozásakor');
+					}
+				} catch (error) {
+					console.error('Hiba:', error);
+					alert('Hiba történt a felhasználó létrehozásakor');
+				}
+			}
+
+			async function updateUser(event) {
+				event.preventDefault();
+				const userId = document.getElementById('edit_user_id').value;
+				const formData = new FormData(event.target);
+				const data = Object.fromEntries(formData);
+
+				try {
+					const response = await fetch(`/api/admin/users/${userId}`, {
+						method: 'PUT',
+						headers: { 'Content-Type': 'application/json' },
+						body: JSON.stringify(data),
+					});
+
+					const result = await response.json();
+
+					if (response.ok) {
+						alert('Felhasználó sikeresen frissítve!');
+						closeEditUserModal();
+						location.reload();
+					} else {
+						alert(result.error || 'Hiba történt a felhasználó frissítésekor');
+					}
+				} catch (error) {
+					console.error('Hiba:', error);
+					alert('Hiba történt a felhasználó frissítésekor');
+				}
+			}
+
+			async function deleteUser(userId, username) {
+				if (!confirm(`Biztosan törölni szeretnéd ezt a felhasználót: ${username}?`)) {
+					return;
+				}
+
+				try {
+					const response = await fetch(`/api/admin/users/${userId}`, {
+						method: 'DELETE',
+					});
+
+					const result = await response.json();
+
+					if (response.ok) {
+						alert('Felhasználó sikeresen törölve!');
+						location.reload();
+					} else {
+						alert(result.error || 'Hiba történt a felhasználó törlésekor');
+					}
+				} catch (error) {
+					console.error('Hiba:', error);
+					alert('Hiba történt a felhasználó törlésekor');
+				}
+			}
+
+			window.onclick = function(event) {
+				const addModal = document.getElementById('addUserModal');
+				const editModal = document.getElementById('editUserModal');
+				if (event.target === addModal) closeAddUserModal();
+				if (event.target === editModal) closeEditUserModal();
+			}
+		</script>
+	</body>
+</html>
