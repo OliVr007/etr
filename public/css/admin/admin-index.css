@@ -29,6 +29,8 @@ header {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	flex-wrap: wrap;
+	gap: 15px;
 }
 
 .logo-section {
@@ -64,6 +66,11 @@ header {
 	border-radius: 6px;
 	transition: background-color 0.3s;
 	cursor: pointer;
+	min-width: 44px;
+	min-height: 44px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .logout-btn:hover {
@@ -122,6 +129,7 @@ main {
 	justify-content: center;
 	background: linear-gradient(135deg, #1282a2 0%, #034078 100%);
 	border-radius: 12px;
+	flex-shrink: 0;
 }
 
 .stat-info h3 {
@@ -148,6 +156,8 @@ main {
 	justify-content: space-between;
 	align-items: center;
 	margin-bottom: 25px;
+	flex-wrap: wrap;
+	gap: 15px;
 }
 
 .section-header h2 {
@@ -168,6 +178,8 @@ main {
 	align-items: center;
 	gap: 8px;
 	transition: transform 0.3s, box-shadow 0.3s;
+	min-height: 44px;
+	white-space: nowrap;
 }
 
 .btn-primary:hover {
@@ -185,6 +197,7 @@ main {
 	font-weight: 600;
 	cursor: pointer;
 	transition: background-color 0.3s;
+	min-height: 44px;
 }
 
 .btn-secondary:hover {
@@ -195,11 +208,16 @@ main {
 	background-color: #1282a2;
 	color: white;
 	border: none;
-	padding: 8px 12px;
+	padding: 10px 14px;
 	border-radius: 6px;
 	cursor: pointer;
-	font-size: 1rem;
+	font-size: 1.2rem;
 	transition: background-color 0.3s;
+	min-width: 44px;
+	min-height: 44px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .btn-edit:hover {
@@ -210,11 +228,16 @@ main {
 	background-color: #e63946;
 	color: white;
 	border: none;
-	padding: 8px 12px;
+	padding: 10px 14px;
 	border-radius: 6px;
 	cursor: pointer;
-	font-size: 1rem;
+	font-size: 1.2rem;
 	transition: background-color 0.3s;
+	min-width: 44px;
+	min-height: 44px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .btn-delete:hover {
@@ -223,12 +246,14 @@ main {
 
 .table-container {
 	overflow-x: auto;
+	-webkit-overflow-scrolling: touch;
 }
 
 .users-table {
 	width: 100%;
 	border-collapse: collapse;
 	margin-top: 20px;
+	min-width: 600px;
 }
 
 .users-table thead {
@@ -267,6 +292,7 @@ main {
 	border-radius: 20px;
 	font-size: 0.85rem;
 	font-weight: 600;
+	white-space: nowrap;
 }
 
 .role-student {
@@ -295,17 +321,20 @@ main {
 	background-color: rgba(0, 0, 0, 0.5);
 	align-items: center;
 	justify-content: center;
+	padding: 20px;
+	overflow-y: auto;
 }
 
 .modal-content {
 	background: white;
 	border-radius: 16px;
-	width: 90%;
+	width: 100%;
 	max-width: 600px;
 	max-height: 90vh;
 	overflow-y: auto;
 	box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
 	animation: slideIn 0.3s ease;
+	margin: auto;
 }
 
 @keyframes slideIn {
@@ -323,7 +352,7 @@ main {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	padding: 25px 30px;
+	padding: 20px 25px;
 	border-bottom: 1px solid #e2e8f0;
 }
 
@@ -341,6 +370,11 @@ main {
 	cursor: pointer;
 	transition: color 0.3s;
 	line-height: 1;
+	min-width: 44px;
+	min-height: 44px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .close-btn:hover {
@@ -348,7 +382,7 @@ main {
 }
 
 form {
-	padding: 30px;
+	padding: 25px;
 }
 
 .form-group {
@@ -377,6 +411,7 @@ form {
 	border-radius: 8px;
 	font-size: 1rem;
 	transition: border-color 0.3s, box-shadow 0.3s;
+	min-height: 44px;
 }
 
 .form-group input:focus,
@@ -391,25 +426,81 @@ form {
 	justify-content: flex-end;
 	gap: 15px;
 	margin-top: 30px;
+	flex-wrap: wrap;
 }
 
+/* Mobile Styles */
 @media (max-width: 768px) {
+	.container {
+		padding: 0 15px;
+	}
+
+	.logo-section h1 {
+		font-size: 1.3rem;
+	}
+
+	.logo-section img {
+		width: 40px;
+		height: 40px;
+	}
+
+	.user-info span {
+		font-size: 0.9rem;
+	}
+
+	main {
+		padding: 20px 0;
+	}
+
+	.stats-section h2 {
+		font-size: 1.5rem;
+	}
+
 	.stats-grid {
 		grid-template-columns: 1fr;
+		gap: 15px;
+	}
+
+	.stat-card {
+		padding: 20px;
+	}
+
+	.stat-icon {
+		width: 60px;
+		height: 60px;
+		font-size: 2.5rem;
+	}
+
+	.stat-info h3 {
+		font-size: 2rem;
+	}
+
+	.stat-info p {
+		font-size: 0.9rem;
+	}
+
+	.users-section {
+		padding: 20px;
+		border-radius: 12px;
 	}
 
 	.section-header {
 		flex-direction: column;
-		gap: 15px;
 		align-items: stretch;
+	}
+
+	.section-header h2 {
+		font-size: 1.5rem;
 	}
 
 	.btn-primary {
 		justify-content: center;
+		width: 100%;
 	}
 
-	.form-row {
-		grid-template-columns: 1fr;
+	.table-container {
+		margin: 0 -20px;
+		padding: 0 20px;
 	}
 
 	.users-table {
@@ -422,6 +513,124 @@ form {
 	}
 
 	.action-buttons {
-		flex-direction: column;
+		flex-direction: row;
+		gap: 8px;
+	}
+
+	.modal {
+		padding: 10px;
+	}
+
+	.modal-content {
+		max-height: 95vh;
+		border-radius: 12px;
+	}
+
+	.modal-header {
+		padding: 15px 20px;
+	}
+
+	.modal-header h3 {
+		font-size: 1.3rem;
+	}
+
+	form {
+		padding: 20px;
+	}
+
+	.form-row {
+		grid-template-columns: 1fr;
+		gap: 0;
+	}
+
+	.form-actions {
+		flex-direction: column-reverse;
+	}
+
+	.form-actions button {
+		width: 100%;
+		justify-content: center;
+	}
+}
+
+@media (max-width: 480px) {
+	.header-content {
+		gap: 10px;
+	}
+
+	.logo-section h1 {
+		font-size: 1.1rem;
+	}
+
+	.user-info span {
+		display: none;
+	}
+
+	.stats-section h2 {
+		font-size: 1.3rem;
+	}
+
+	.stat-icon {
+		width: 50px;
+		height: 50px;
+		font-size: 2rem;
+	}
+
+	.stat-info h3 {
+		font-size: 1.8rem;
+	}
+
+	.users-section {
+		padding: 15px;
+	}
+
+	.section-header h2 {
+		font-size: 1.3rem;
+	}
+
+	.users-table {
+		font-size: 0.8rem;
+	}
+
+	.users-table th,
+	.users-table td {
+		padding: 8px 6px;
+	}
+
+	.role-badge {
+		font-size: 0.75rem;
+		padding: 4px 8px;
+	}
+
+	.modal-header h3 {
+		font-size: 1.2rem;
+	}
+}
+
+/* Touch device improvements */
+@media (hover: none) and (pointer: coarse) {
+	.btn-primary:hover,
+	.btn-secondary:hover,
+	.btn-edit:hover,
+	.btn-delete:hover,
+	.logout-btn:hover,
+	.close-btn:hover {
+		transform: none;
+	}
+
+	.btn-primary:active {
+		transform: scale(0.98);
+	}
+
+	.btn-secondary:active {
+		transform: scale(0.98);
+	}
+
+	.stat-card:hover {
+		transform: none;
+	}
+
+	.stat-card:active {
+		transform: scale(0.98);
 	}
 }
