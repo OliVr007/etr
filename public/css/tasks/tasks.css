@@ -51,13 +51,29 @@ header {
 	color: #fefcfb;
 }
 .logout-btn {
-	padding: 8px;
-	border-radius: 6px;
-	transition: background-color 0.3s;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 10px 16px;
+	border-radius: 8px;
+	transition: all 0.3s ease;
+	text-decoration: none;
+	color: #fefcfb;
+	font-weight: 500;
+	font-size: 1.05rem;
 }
+
 .logout-btn:hover {
-	background-color: rgba(255, 255, 255, 0.1);
-} /* Navigáció */
+	background-color: rgba(255, 255, 255, 0.15);
+	transform: translateY(-1px);
+}
+
+.logout-btn img {
+	width: 20px;
+	height: 20px;
+	filter: brightness(0) invert(1);
+}
+/* Navigáció */
 nav {
 	background: linear-gradient(135deg, #034078 0%, #001f54 100%);
 	padding: 0;
