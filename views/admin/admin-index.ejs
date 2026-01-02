@@ -12,10 +12,9 @@
 				<div class="header-content">
 					<div class="logo-section">
 						<img src="/icons/icon-128.webp" alt="Iskola logo" />
-						<h1>Admin Felület</h1>
 					</div>
 					<div class="user-info">
-						<span>Bejelentkezve: <%= first_name %> (Admin)</span>
+						<span>Bejelentkezve: <%= first_name %> </span>
 						<a href="/logout" class="logout-btn">
 							<img src="/icons/logouticon.svg" alt="Kijelentkezés" title="Kijelentkezés" />
 						</a>
@@ -62,9 +61,7 @@
 			<section class="users-section">
 				<div class="section-header">
 					<h2>Felhasználó kezelés</h2>
-					<button class="btn-primary" onclick="openAddUserModal()">
-						<span>➕</span> Új felhasználó
-					</button>
+					<button class="btn-primary" onclick="openAddUserModal()"><span>➕</span> Új felhasználó</button>
 				</div>
 
 				<div class="table-container">
@@ -87,23 +84,11 @@
 								<td><%= user.last_name %> <%= user.first_name %></td>
 								<td><%= user.email || '-' %></td>
 								<td>
-									<span class="role-badge role-<%= user.role %>">
-										<% if (user.role === 'student') { %>
-											🎓 Diák
-										<% } else if (user.role === 'teacher') { %>
-											👨‍🏫 Tanár
-										<% } else if (user.role === 'admin') { %>
-											⚙️ Admin
-										<% } %>
-									</span>
+									<span class="role-badge role-<%= user.role %>"> <% if (user.role === 'student') { %> 🎓 Diák <% } else if (user.role === 'teacher') { %> 👨‍🏫 Tanár <% } else if (user.role === 'admin') { %> ⚙️ Admin <% } %> </span>
 								</td>
 								<td class="action-buttons">
-									<button class="btn-edit" onclick="openEditUserModal(<%= user.id %>)" title="Szerkesztés">
-										✏️
-									</button>
-									<button class="btn-delete" onclick="deleteUser(<%= user.id %>, '<%= user.username %>')" title="Törlés">
-										🗑️
-									</button>
+									<button class="btn-edit" onclick="openEditUserModal(<%= user.id %>)" title="Szerkesztés">✏️</button>
+									<button class="btn-delete" onclick="deleteUser(<%= user.id %>, '<%= user.username %>')" title="Törlés">🗑️</button>
 								</td>
 							</tr>
 							<% }); %>
@@ -207,12 +192,12 @@
 
 		<script>
 			function openAddUserModal() {
-				document.getElementById('addUserModal').style.display = 'flex';
+				document.getElementById("addUserModal").style.display = "flex";
 			}
 
 			function closeAddUserModal() {
-				document.getElementById('addUserModal').style.display = 'none';
-				document.getElementById('addUserForm').reset();
+				document.getElementById("addUserModal").style.display = "none";
+				document.getElementById("addUserForm").reset();
 			}
 
 			async function openEditUserModal(userId) {
@@ -221,26 +206,26 @@
 					const user = await response.json();
 
 					if (response.ok) {
-						document.getElementById('edit_user_id').value = user.id;
-						document.getElementById('edit_username').value = user.username;
-						document.getElementById('edit_first_name').value = user.first_name;
-						document.getElementById('edit_last_name').value = user.last_name;
-						document.getElementById('edit_email').value = user.email || '';
-						document.getElementById('edit_role').value = user.role;
-						document.getElementById('edit_password').value = '';
-						document.getElementById('editUserModal').style.display = 'flex';
+						document.getElementById("edit_user_id").value = user.id;
+						document.getElementById("edit_username").value = user.username;
+						document.getElementById("edit_first_name").value = user.first_name;
+						document.getElementById("edit_last_name").value = user.last_name;
+						document.getElementById("edit_email").value = user.email || "";
+						document.getElementById("edit_role").value = user.role;
+						document.getElementById("edit_password").value = "";
+						document.getElementById("editUserModal").style.display = "flex";
 					} else {
-						alert('Hiba történt a felhasználó betöltésekor');
+						alert("Hiba történt a felhasználó betöltésekor");
 					}
 				} catch (error) {
-					console.error('Hiba:', error);
-					alert('Hiba történt a felhasználó betöltésekor');
+					console.error("Hiba:", error);
+					alert("Hiba történt a felhasználó betöltésekor");
 				}
 			}
 
 			function closeEditUserModal() {
-				document.getElementById('editUserModal').style.display = 'none';
-				document.getElementById('editUserForm').reset();
+				document.getElementById("editUserModal").style.display = "none";
+				document.getElementById("editUserForm").reset();
 			}
 
 			async function addUser(event) {
@@ -249,52 +234,52 @@
 				const data = Object.fromEntries(formData);
 
 				try {
-					const response = await fetch('/api/admin/users', {
-						method: 'POST',
-						headers: { 'Content-Type': 'application/json' },
+					const response = await fetch("/api/admin/users", {
+						method: "POST",
+						headers: { "Content-Type": "application/json" },
 						body: JSON.stringify(data),
 					});
 
 					const result = await response.json();
 
 					if (response.ok) {
-						alert('Felhasználó sikeresen létrehozva!');
+						alert("Felhasználó sikeresen létrehozva!");
 						closeAddUserModal();
 						location.reload();
 					} else {
-						alert(result.error || 'Hiba történt a felhasználó létrehozásakor');
+						alert(result.error || "Hiba történt a felhasználó létrehozásakor");
 					}
 				} catch (error) {
-					console.error('Hiba:', error);
-					alert('Hiba történt a felhasználó létrehozásakor');
+					console.error("Hiba:", error);
+					alert("Hiba történt a felhasználó létrehozásakor");
 				}
 			}
 
 			async function updateUser(event) {
 				event.preventDefault();
-				const userId = document.getElementById('edit_user_id').value;
+				const userId = document.getElementById("edit_user_id").value;
 				const formData = new FormData(event.target);
 				const data = Object.fromEntries(formData);
 
 				try {
 					const response = await fetch(`/api/admin/users/${userId}`, {
-						method: 'PUT',
-						headers: { 'Content-Type': 'application/json' },
+						method: "PUT",
+						headers: { "Content-Type": "application/json" },
 						body: JSON.stringify(data),
 					});
 
 					const result = await response.json();
 
 					if (response.ok) {
-						alert('Felhasználó sikeresen frissítve!');
+						alert("Felhasználó sikeresen frissítve!");
 						closeEditUserModal();
 						location.reload();
 					} else {
-						alert(result.error || 'Hiba történt a felhasználó frissítésekor');
+						alert(result.error || "Hiba történt a felhasználó frissítésekor");
 					}
 				} catch (error) {
-					console.error('Hiba:', error);
-					alert('Hiba történt a felhasználó frissítésekor');
+					console.error("Hiba:", error);
+					alert("Hiba történt a felhasználó frissítésekor");
 				}
 			}
 
@@ -305,29 +290,29 @@
 
 				try {
 					const response = await fetch(`/api/admin/users/${userId}`, {
-						method: 'DELETE',
+						method: "DELETE",
 					});
 
 					const result = await response.json();
 
 					if (response.ok) {
-						alert('Felhasználó sikeresen törölve!');
+						alert("Felhasználó sikeresen törölve!");
 						location.reload();
 					} else {
-						alert(result.error || 'Hiba történt a felhasználó törlésekor');
+						alert(result.error || "Hiba történt a felhasználó törlésekor");
 					}
 				} catch (error) {
-					console.error('Hiba:', error);
-					alert('Hiba történt a felhasználó törlésekor');
+					console.error("Hiba:", error);
+					alert("Hiba történt a felhasználó törlésekor");
 				}
 			}
 
-			window.onclick = function(event) {
-				const addModal = document.getElementById('addUserModal');
-				const editModal = document.getElementById('editUserModal');
+			window.onclick = function (event) {
+				const addModal = document.getElementById("addUserModal");
+				const editModal = document.getElementById("editUserModal");
 				if (event.target === addModal) closeAddUserModal();
 				if (event.target === editModal) closeEditUserModal();
-			}
+			};
 		</script>
 	</body>
 </html>
