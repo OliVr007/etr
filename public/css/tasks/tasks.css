@@ -4,6 +4,7 @@
 	box-sizing: border-box;
 	font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
+
 body {
 	background-color: #fefcfb;
 	color: #0a1128;
@@ -11,45 +12,58 @@ body {
 	display: flex;
 	flex-direction: column;
 	min-height: 100vh;
-	overflow-y: hidden;
-	display: flex;
-	flex-direction: column;
 }
+
 .container {
 	max-width: 1400px;
 	margin: 0 auto;
 	padding: 0 20px;
 }
+
+/* Header */
 header {
 	background: linear-gradient(135deg, #0a1128 0%, #001f54 100%);
 	color: #fefcfb;
 	padding: 15px 0;
 	box-shadow: 0 4px 12px rgba(10, 17, 40, 0.15);
 }
+
 .header-content {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	flex-wrap: wrap;
+	gap: 10px;
 }
+
 .logo-section {
 	display: flex;
 	align-items: center;
 	gap: 15px;
 }
+
+.logo-section img {
+	width: 48px;
+	height: 48px;
+}
+
 .logo-section h1 {
 	font-size: 1.8rem;
 	font-weight: 600;
 	color: #fefcfb;
 }
+
 .user-info {
 	display: flex;
 	align-items: center;
 	gap: 20px;
 }
+
 .user-info span {
 	font-weight: 500;
 	color: #fefcfb;
 }
+
 .logout-btn {
 	display: flex;
 	align-items: center;
@@ -61,6 +75,7 @@ header {
 	color: #fefcfb;
 	font-weight: 500;
 	font-size: 1.05rem;
+	min-height: 44px;
 }
 
 .logout-btn:hover {
@@ -73,20 +88,25 @@ header {
 	height: 20px;
 	filter: brightness(0) invert(1);
 }
-/* Navigáció */
+
+/* Navigation */
 nav {
 	background: linear-gradient(135deg, #034078 0%, #001f54 100%);
 	padding: 0;
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
+
 .nav-menu {
 	display: flex;
 	list-style: none;
 	justify-content: center;
+	flex-wrap: wrap;
 }
+
 .nav-menu li {
 	margin: 0;
 }
+
 .nav-menu a {
 	display: block;
 	padding: 18px 25px;
@@ -95,15 +115,21 @@ nav {
 	transition: all 0.3s ease;
 	font-weight: 500;
 	position: relative;
+	min-height: 44px;
+	display: flex;
+	align-items: center;
 }
+
 .nav-menu a:hover {
 	background-color: rgba(255, 255, 255, 0.1);
 	transform: translateY(-2px);
 }
+
 .nav-menu a.active {
 	background-color: #1282a2;
 	font-weight: 600;
 }
+
 .nav-menu a.active::after {
 	content: "";
 	position: absolute;
@@ -123,12 +149,12 @@ main {
 .tasks-container h1 {
 	text-align: center;
 	font-size: 2rem;
-	margin-bottom: 25px;
+	margin-bottom: 30px;
 	color: #001f54;
 	font-weight: 600;
 }
 
-/* Feladat lista */
+/* Task list */
 .task-list {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -137,10 +163,13 @@ main {
 
 .task-card {
 	background: #ffffff;
-	padding: 20px;
+	padding: 22px;
 	border-radius: 12px;
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 	transition: transform 0.2s, box-shadow 0.2s;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
 }
 
 .task-card:hover {
@@ -150,45 +179,66 @@ main {
 
 .task-card h2 {
 	font-size: 1.2rem;
-	margin-bottom: 10px;
+	margin-bottom: 8px;
 	color: #034078;
+	line-height: 1.3;
 }
 
 .task-card p {
-	margin-bottom: 8px;
+	margin-bottom: 6px;
+	color: #475569;
+	font-size: 0.95rem;
 }
 
-/* Gombok */
-.done-btn {
+.task-card .status-text {
+	font-weight: 600;
+	color: #1282a2;
+	margin-top: 8px;
+}
+
+.task-actions {
+	display: flex;
+	gap: 10px;
+	margin-top: 10px;
+}
+
+/* Buttons */
+.done-btn,
+.delete-btn {
 	padding: 10px 16px;
-	background-color: #1282a2;
-	color: #fefcfb;
 	border: none;
 	border-radius: 8px;
 	cursor: pointer;
 	font-weight: 500;
-	transition: background-color 0.25s, transform 0.2s;
-	margin-left: 1rem;
-	margin-right: 8rem;
+	transition: all 0.25s;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	min-height: 44px;
+	min-width: 44px;
+}
+
+.done-btn {
+	background-color: #1282a2;
+	color: #fefcfb;
+	flex: 1;
 }
 
 .done-btn:hover {
 	background-color: #0f6b84;
 	transform: translateY(-2px);
 }
+
 .done-btn img {
 	width: 18px;
 	height: 18px;
+	filter: brightness(0) invert(1);
 }
+
 .delete-btn {
-	padding: 10px 16px;
 	background-color: #d9534f;
 	color: #fff;
-	border: none;
-	border-radius: 8px;
-	cursor: pointer;
-	font-weight: 500;
-	transition: background-color 0.25s, transform 0.2s;
 }
 
 .delete-btn:hover {
@@ -199,9 +249,10 @@ main {
 .delete-btn img {
 	width: 18px;
 	height: 18px;
+	filter: brightness(0) invert(1);
 }
 
-/* Állapot színek */
+/* Status colors */
 .task-card.pending {
 	border-left: 6px solid #1282a2;
 }
@@ -209,4 +260,182 @@ main {
 .task-card.completed {
 	border-left: 6px solid #2ecc71;
 	background-color: #e9f9ef;
+}
+
+.task-card.completed .status-text {
+	color: #2ecc71;
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+	.container {
+		padding: 0 15px;
+	}
+	
+	.logo-section h1 {
+		font-size: 1.3rem;
+	}
+	
+	.logo-section img {
+		width: 40px;
+		height: 40px;
+	}
+	
+	.user-info span {
+		display: none;
+	}
+	
+	.logout-btn span {
+		display: none;
+	}
+	
+	.logout-btn {
+		padding: 10px;
+		min-width: 44px;
+		justify-content: center;
+	}
+	
+	.nav-menu {
+		justify-content: flex-start;
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+	}
+	
+	.nav-menu a {
+		padding: 15px 18px;
+		font-size: 0.9rem;
+		white-space: nowrap;
+	}
+	
+	main {
+		padding: 20px 0;
+	}
+	
+	.tasks-container h1 {
+		font-size: 1.6rem;
+		margin-bottom: 25px;
+	}
+	
+	.task-list {
+		grid-template-columns: 1fr;
+		gap: 18px;
+	}
+	
+	.task-card {
+		padding: 18px;
+	}
+	
+	.task-card h2 {
+		font-size: 1.1rem;
+	}
+	
+	.task-card p {
+		font-size: 0.9rem;
+	}
+	
+	.task-actions {
+		gap: 8px;
+	}
+	
+	.done-btn,
+	.delete-btn {
+		padding: 10px 14px;
+		font-size: 0.9rem;
+	}
+}
+
+@media (max-width: 480px) {
+	.logo-section h1 {
+		font-size: 1.1rem;
+	}
+	
+	.logo-section img {
+		width: 36px;
+		height: 36px;
+	}
+	
+	.nav-menu a {
+		padding: 12px 15px;
+		font-size: 0.85rem;
+	}
+	
+	main {
+		padding: 15px 0;
+	}
+	
+	.tasks-container h1 {
+		font-size: 1.4rem;
+		margin-bottom: 20px;
+	}
+	
+	.task-list {
+		gap: 15px;
+	}
+	
+	.task-card {
+		padding: 15px;
+	}
+	
+	.task-card h2 {
+		font-size: 1.05rem;
+		margin-bottom: 6px;
+	}
+	
+	.task-card p {
+		font-size: 0.85rem;
+		margin-bottom: 5px;
+	}
+	
+	.task-actions {
+		flex-direction: column;
+		gap: 8px;
+	}
+	
+	.done-btn,
+	.delete-btn {
+		width: 100%;
+		padding: 12px;
+	}
+}
+
+/* Touch device improvements */
+@media (hover: none) and (pointer: coarse) {
+	.nav-menu a:hover {
+		transform: none;
+	}
+	
+	.nav-menu a:active {
+		background-color: rgba(255, 255, 255, 0.15);
+	}
+	
+	.logout-btn:hover {
+		transform: none;
+	}
+	
+	.logout-btn:active {
+		background-color: rgba(255, 255, 255, 0.2);
+	}
+	
+	.task-card:hover {
+		transform: none;
+	}
+	
+	.task-card:active {
+		transform: scale(0.98);
+	}
+	
+	.done-btn:hover,
+	.delete-btn:hover {
+		transform: none;
+	}
+	
+	.done-btn:active {
+		transform: scale(0.95);
+		background-color: #0a5a6f;
+	}
+	
+	.delete-btn:active {
+		transform: scale(0.95);
+		background-color: #b52925;
+	}
 }

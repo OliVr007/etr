@@ -20,7 +20,7 @@ body {
 	padding: 0 20px;
 }
 
-/* Header stílusok */
+/* Header styles */
 header {
 	background: linear-gradient(135deg, #0a1128 0%, #001f54 100%);
 	color: #fefcfb;
@@ -32,12 +32,19 @@ header {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	flex-wrap: wrap;
+	gap: 10px;
 }
 
 .logo-section {
 	display: flex;
 	align-items: center;
 	gap: 15px;
+}
+
+.logo-section img {
+	width: 48px;
+	height: 48px;
 }
 
 .logo-section h1 {
@@ -68,6 +75,7 @@ header {
 	color: #fefcfb;
 	font-weight: 500;
 	font-size: 1.05rem;
+	min-height: 44px;
 }
 
 .logout-btn:hover {
@@ -81,7 +89,7 @@ header {
 	filter: brightness(0) invert(1);
 }
 
-/* Navigáció */
+/* Navigation */
 nav {
 	background: linear-gradient(135deg, #034078 0%, #001f54 100%);
 	padding: 0;
@@ -92,6 +100,7 @@ nav {
 	display: flex;
 	list-style: none;
 	justify-content: center;
+	flex-wrap: wrap;
 }
 
 .nav-menu li {
@@ -106,6 +115,9 @@ nav {
 	transition: all 0.3s ease;
 	font-weight: 500;
 	position: relative;
+	min-height: 44px;
+	display: flex;
+	align-items: center;
 }
 
 .nav-menu a:hover {
@@ -128,70 +140,319 @@ nav {
 	background-color: #fefcfb;
 	border-radius: 2px;
 }
-.messages-tabs {
-	display: flex;
-	gap: 20px;
-	margin-bottom: 20px;
-}
-.messages-tabs .tab {
-	padding: 10px 18px;
-	background: #e6e6e6;
-	border-radius: 6px;
-	text-decoration: none;
-	color: #001f54;
-	font-weight: 500;
-	transition: 0.3s;
-}
-.messages-tabs .tab:hover {
-	background: #d4d4d4;
-}
-.messages-tabs .active {
-	background: #1282a2;
-	color: white;
-}
+
 .messages-container {
 	padding: 30px 0;
+	flex: 1;
 }
+
 .messages-header {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	margin-bottom: 20px;
+	margin-bottom: 25px;
+	flex-wrap: wrap;
+	gap: 15px;
 }
+
+.messages-header h1 {
+	font-size: 2rem;
+	color: #001f54;
+	margin: 0;
+}
+
+.messages-tabs {
+	display: flex;
+	gap: 15px;
+	margin-bottom: 25px;
+	flex-wrap: wrap;
+}
+
+.messages-tabs .tab {
+	padding: 12px 20px;
+	background: #e6e6e6;
+	border-radius: 8px;
+	text-decoration: none;
+	color: #001f54;
+	font-weight: 500;
+	transition: all 0.3s;
+	min-height: 44px;
+	display: flex;
+	align-items: center;
+	white-space: nowrap;
+}
+
+.messages-tabs .tab:hover {
+	background: #d4d4d4;
+}
+
+.messages-tabs .active {
+	background: #1282a2;
+	color: white;
+}
+
 .new-message-btn {
 	background-color: #1282a2;
 	color: white;
-	padding: 10px 18px;
+	padding: 12px 20px;
 	border: none;
-	border-radius: 6px;
+	border-radius: 8px;
 	cursor: pointer;
-	transition: 0.3s;
+	transition: all 0.3s;
+	font-size: 1rem;
+	font-weight: 600;
+	min-height: 44px;
+	white-space: nowrap;
 }
+
 .new-message-btn:hover {
 	background-color: #0f6e8b;
+	transform: translateY(-2px);
+	box-shadow: 0 4px 12px rgba(18, 130, 162, 0.3);
 }
+
 .messages-list {
 	display: flex;
 	flex-direction: column;
-	gap: 15px;
+	gap: 18px;
 	overflow-y: auto;
-	max-height: calc(100vh - 250px);
-	padding-right: 10px;
+	max-height: calc(100vh - 320px);
+	padding-right: 5px;
 }
+
+.messages-list::-webkit-scrollbar {
+	width: 6px;
+}
+
+.messages-list::-webkit-scrollbar-track {
+	background: #f1f5f9;
+	border-radius: 3px;
+}
+
+.messages-list::-webkit-scrollbar-thumb {
+	background: #cbd5e1;
+	border-radius: 3px;
+}
+
+.messages-list::-webkit-scrollbar-thumb:hover {
+	background: #94a3b8;
+}
+
 .message-card {
 	background: white;
-	padding: 20px;
-	border-radius: 8px;
-	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+	padding: 22px;
+	border-radius: 12px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+	transition: all 0.3s;
+	cursor: pointer;
 }
+
+.message-card:hover {
+	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+	transform: translateY(-2px);
+}
+
 .message-card h2 {
-	margin-bottom: 8px;
-	font-size: 1.2rem;
+	margin-bottom: 10px;
+	font-size: 1.3rem;
 	color: #001f54;
+	font-weight: 600;
 }
+
+.message-card p {
+	color: #475569;
+	font-size: 1rem;
+	line-height: 1.5;
+	margin-bottom: 12px;
+}
+
 .message-card .date {
 	font-size: 0.9rem;
-	color: #555;
-	margin-top: 10px;
+	color: #1282a2;
+	margin-top: 12px;
 	display: block;
+	font-weight: 500;
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+	.container {
+		padding: 0 15px;
+	}
+	
+	.logo-section h1 {
+		font-size: 1.3rem;
+	}
+	
+	.logo-section img {
+		width: 40px;
+		height: 40px;
+	}
+	
+	.user-info span {
+		display: none;
+	}
+	
+	.logout-btn span {
+		display: none;
+	}
+	
+	.logout-btn {
+		padding: 10px;
+		min-width: 44px;
+		justify-content: center;
+	}
+	
+	.nav-menu {
+		justify-content: flex-start;
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+	}
+	
+	.nav-menu a {
+		padding: 15px 18px;
+		font-size: 0.9rem;
+		white-space: nowrap;
+	}
+	
+	.messages-container {
+		padding: 20px 0;
+	}
+	
+	.messages-header {
+		flex-direction: column;
+		align-items: stretch;
+		gap: 12px;
+	}
+	
+	.messages-header h1 {
+		font-size: 1.6rem;
+	}
+	
+	.new-message-btn {
+		width: 100%;
+		justify-content: center;
+	}
+	
+	.messages-tabs {
+		gap: 10px;
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+		padding-bottom: 5px;
+	}
+	
+	.messages-tabs .tab {
+		padding: 10px 16px;
+		font-size: 0.9rem;
+	}
+	
+	.messages-list {
+		gap: 15px;
+		max-height: calc(100vh - 360px);
+	}
+	
+	.message-card {
+		padding: 18px;
+	}
+	
+	.message-card h2 {
+		font-size: 1.15rem;
+	}
+	
+	.message-card p {
+		font-size: 0.95rem;
+	}
+}
+
+@media (max-width: 480px) {
+	.logo-section h1 {
+		font-size: 1.1rem;
+	}
+	
+	.logo-section img {
+		width: 36px;
+		height: 36px;
+	}
+	
+	.nav-menu a {
+		padding: 12px 15px;
+		font-size: 0.85rem;
+	}
+	
+	.messages-container {
+		padding: 15px 0;
+	}
+	
+	.messages-header h1 {
+		font-size: 1.4rem;
+	}
+	
+	.messages-tabs .tab {
+		padding: 10px 14px;
+		font-size: 0.85rem;
+	}
+	
+	.messages-list {
+		gap: 12px;
+	}
+	
+	.message-card {
+		padding: 15px;
+	}
+	
+	.message-card h2 {
+		font-size: 1.05rem;
+		margin-bottom: 8px;
+	}
+	
+	.message-card p {
+		font-size: 0.9rem;
+	}
+	
+	.message-card .date {
+		font-size: 0.85rem;
+	}
+}
+
+/* Touch device improvements */
+@media (hover: none) and (pointer: coarse) {
+	.nav-menu a:hover {
+		transform: none;
+	}
+	
+	.nav-menu a:active {
+		background-color: rgba(255, 255, 255, 0.15);
+	}
+	
+	.logout-btn:hover {
+		transform: none;
+	}
+	
+	.logout-btn:active {
+		background-color: rgba(255, 255, 255, 0.2);
+	}
+	
+	.new-message-btn:hover {
+		transform: none;
+	}
+	
+	.new-message-btn:active {
+		transform: scale(0.98);
+	}
+	
+	.message-card:hover {
+		transform: none;
+	}
+	
+	.message-card:active {
+		transform: scale(0.98);
+	}
+	
+	.messages-tabs .tab:hover {
+		background: #e6e6e6;
+	}
+	
+	.messages-tabs .tab:active {
+		background: #d4d4d4;
+	}
 }

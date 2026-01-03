@@ -20,7 +20,7 @@ body {
 	padding: 0 20px;
 }
 
-/* Header stílusok */
+/* Header styles */
 header {
 	background: linear-gradient(135deg, #0a1128 0%, #001f54 100%);
 	color: #fefcfb;
@@ -32,12 +32,19 @@ header {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	flex-wrap: wrap;
+	gap: 10px;
 }
 
 .logo-section {
 	display: flex;
 	align-items: center;
 	gap: 15px;
+}
+
+.logo-section img {
+	width: 48px;
+	height: 48px;
 }
 
 .logo-section h1 {
@@ -68,6 +75,7 @@ header {
 	color: #fefcfb;
 	font-weight: 500;
 	font-size: 1.05rem;
+	min-height: 44px;
 }
 
 .logout-btn:hover {
@@ -81,7 +89,7 @@ header {
 	filter: brightness(0) invert(1);
 }
 
-/* Navigáció */
+/* Navigation */
 nav {
 	background: linear-gradient(135deg, #034078 0%, #001f54 100%);
 	padding: 0;
@@ -92,6 +100,7 @@ nav {
 	display: flex;
 	list-style: none;
 	justify-content: center;
+	flex-wrap: wrap;
 }
 
 .nav-menu li {
@@ -106,6 +115,9 @@ nav {
 	transition: all 0.3s ease;
 	font-weight: 500;
 	position: relative;
+	min-height: 44px;
+	display: flex;
+	align-items: center;
 }
 
 .nav-menu a:hover {
@@ -128,6 +140,7 @@ nav {
 	background-color: #fefcfb;
 	border-radius: 2px;
 }
+
 .grades-table-container {
 	max-width: 1400px;
 	margin: 40px auto;
@@ -141,8 +154,16 @@ nav {
 	color: #001f54;
 }
 
+.table-wrapper {
+	overflow-x: auto;
+	-webkit-overflow-scrolling: touch;
+	margin: 0 -20px;
+	padding: 0 20px;
+}
+
 .grades-table {
 	width: 100%;
+	min-width: 800px;
 	border-collapse: collapse;
 	font-size: 1rem;
 	background: #fff;
@@ -160,42 +181,188 @@ nav {
 	padding: 12px 10px;
 	text-align: center;
 	font-weight: 600;
-	border-right: 1px solid rgba(255, 255, 255, 0.1);
-	border: 1px solid #00325c; /* halványabb kontrasztkeret fejléchez */
+	border: 1px solid #00325c;
+	white-space: nowrap;
 }
 
 .grades-table td {
 	padding: 14px;
-	border-bottom: 1px solid #8aa4bd;
-	border: 1px solid #6e8aa5; /* még erősebb kontraszt */
-	background: #d3e7ff; /* erősebb halvány kék háttér */
+	border: 1px solid #6e8aa5;
+	background: #d3e7ff;
 	text-align: center;
-	font-weight: 600; /* félkövér tartalom */
+	font-weight: 600;
 }
 
 .grades-table tbody tr:nth-child(even) {
-	background: #c4dcf7; /* erősebb váltószín */
+	background: #c4dcf7;
 }
 
-/* Jegy színezések */
+.grades-table tbody tr:nth-child(even) td {
+	background: #c4dcf7;
+}
+
+/* Grade colors */
 .g5 {
 	color: #1e8e3e;
 	font-weight: 700;
 }
+
 .g4 {
 	color: #c9a20b;
 	font-weight: 700;
 }
+
 .g3 {
 	color: #d35400;
 	font-weight: 700;
 }
+
 .g2 {
 	color: #c0392b;
+	font-weight: 700;
+}
+
+.g1 {
+	color: #721c24;
 	font-weight: 700;
 }
 
 .grades-table td:first-child,
 .grades-table td:nth-child(2) {
 	text-align: left;
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+	.container {
+		padding: 0 15px;
+	}
+	
+	.logo-section h1 {
+		font-size: 1.3rem;
+	}
+	
+	.logo-section img {
+		width: 40px;
+		height: 40px;
+	}
+	
+	.user-info span {
+		display: none;
+	}
+	
+	.logout-btn span {
+		display: none;
+	}
+	
+	.logout-btn {
+		padding: 10px;
+		min-width: 44px;
+		justify-content: center;
+	}
+	
+	.nav-menu {
+		justify-content: flex-start;
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+	}
+	
+	.nav-menu a {
+		padding: 15px 18px;
+		font-size: 0.9rem;
+		white-space: nowrap;
+	}
+	
+	.grades-table-container {
+		margin: 20px auto;
+		padding: 15px;
+	}
+	
+	.grades-table-container h2 {
+		font-size: 1.6rem;
+		margin-bottom: 25px;
+	}
+	
+	.table-wrapper {
+		margin: 0 -15px;
+		padding: 0 15px;
+	}
+	
+	.grades-table {
+		font-size: 0.85rem;
+		min-width: 700px;
+	}
+	
+	.grades-table th {
+		padding: 10px 6px;
+		font-size: 0.8rem;
+	}
+	
+	.grades-table td {
+		padding: 10px 8px;
+	}
+}
+
+@media (max-width: 480px) {
+	.logo-section h1 {
+		font-size: 1.1rem;
+	}
+	
+	.logo-section img {
+		width: 36px;
+		height: 36px;
+	}
+	
+	.nav-menu a {
+		padding: 12px 15px;
+		font-size: 0.85rem;
+	}
+	
+	.grades-table-container {
+		margin: 15px auto;
+		padding: 10px;
+	}
+	
+	.grades-table-container h2 {
+		font-size: 1.4rem;
+		margin-bottom: 20px;
+	}
+	
+	.table-wrapper {
+		margin: 0 -10px;
+		padding: 0 10px;
+	}
+	
+	.grades-table {
+		font-size: 0.75rem;
+		min-width: 650px;
+	}
+	
+	.grades-table th {
+		padding: 8px 4px;
+		font-size: 0.75rem;
+	}
+	
+	.grades-table td {
+		padding: 8px 6px;
+	}
+}
+
+/* Touch device improvements */
+@media (hover: none) and (pointer: coarse) {
+	.nav-menu a:hover {
+		transform: none;
+	}
+	
+	.nav-menu a:active {
+		background-color: rgba(255, 255, 255, 0.15);
+	}
+	
+	.logout-btn:hover {
+		transform: none;
+	}
+	
+	.logout-btn:active {
+		background-color: rgba(255, 255, 255, 0.2);
+	}
 }

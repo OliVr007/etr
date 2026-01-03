@@ -5,6 +5,12 @@
 	font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
+body {
+	background-color: #fefcfb;
+	min-height: 100vh;
+	padding: 20px;
+}
+
 .new-message-wrapper {
 	max-width: 720px;
 	margin: 40px auto;
@@ -12,6 +18,24 @@
 	border-radius: 12px;
 	box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
 	padding: 35px 40px;
+}
+
+.back-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	color: #034078;
+	text-decoration: none;
+	font-weight: 500;
+	margin-bottom: 20px;
+	transition: color 0.2s, transform 0.2s;
+	padding: 8px;
+	min-height: 44px;
+}
+
+.back-link:hover {
+	color: #1282a2;
+	transform: translateX(-3px);
 }
 
 .new-message-header {
@@ -39,6 +63,7 @@
 	font-weight: 600;
 	margin-bottom: 6px;
 	color: #001f54;
+	font-size: 0.95rem;
 }
 
 .new-message-form input,
@@ -50,10 +75,14 @@
 	font-size: 1rem;
 	background-color: #fefcfb;
 	transition: border-color 0.2s, box-shadow 0.2s;
+	font-family: inherit;
+	min-height: 44px;
 }
 
 .new-message-form textarea {
 	resize: vertical;
+	min-height: 120px;
+	line-height: 1.5;
 }
 
 .new-message-form input:focus,
@@ -69,6 +98,7 @@
 	justify-content: flex-end;
 	gap: 15px;
 	margin-top: 35px;
+	flex-wrap: wrap;
 }
 
 .primary-btn {
@@ -81,6 +111,8 @@
 	font-weight: 600;
 	cursor: pointer;
 	transition: transform 0.2s, box-shadow 0.2s;
+	min-height: 44px;
+	white-space: nowrap;
 }
 
 .primary-btn:hover {
@@ -95,26 +127,156 @@
 	border: none;
 	border-radius: 8px;
 	font-size: 1rem;
+	font-weight: 600;
 	cursor: pointer;
 	transition: background-color 0.2s;
+	min-height: 44px;
+	white-space: nowrap;
 }
 
 .secondary-btn:hover {
 	background-color: #d4d4d4;
 }
 
-.back-link {
-	display: inline-flex;
-	align-items: center;
-	gap: 8px;
-	color: #034078;
-	text-decoration: none;
-	font-weight: 500;
-	margin-bottom: 20px;
-	transition: color 0.2s, transform 0.2s;
+/* Mobile Styles */
+@media (max-width: 768px) {
+	body {
+		padding: 15px;
+	}
+	
+	.new-message-wrapper {
+		margin: 20px auto;
+		padding: 25px 20px;
+		border-radius: 10px;
+	}
+	
+	.back-link {
+		margin-bottom: 18px;
+		font-size: 0.95rem;
+	}
+	
+	.new-message-header {
+		margin-bottom: 25px;
+	}
+	
+	.new-message-header h2 {
+		font-size: 1.5rem;
+	}
+	
+	.new-message-header p {
+		font-size: 0.9rem;
+	}
+	
+	.new-message-form .form-group {
+		margin-bottom: 18px;
+	}
+	
+	.new-message-form label {
+		font-size: 0.9rem;
+	}
+	
+	.new-message-form input,
+	.new-message-form select,
+	.new-message-form textarea {
+		padding: 11px 12px;
+		font-size: 0.95rem;
+	}
+	
+	.form-actions {
+		margin-top: 25px;
+		gap: 12px;
+	}
+	
+	.primary-btn,
+	.secondary-btn {
+		padding: 11px 18px;
+		font-size: 0.95rem;
+	}
 }
 
-.back-link:hover {
-	color: #1282a2;
-	transform: translateX(-3px);
+@media (max-width: 480px) {
+	body {
+		padding: 10px;
+	}
+	
+	.new-message-wrapper {
+		margin: 10px auto;
+		padding: 20px 15px;
+	}
+	
+	.back-link {
+		font-size: 0.9rem;
+		margin-bottom: 15px;
+	}
+	
+	.new-message-header {
+		margin-bottom: 20px;
+	}
+	
+	.new-message-header h2 {
+		font-size: 1.3rem;
+	}
+	
+	.new-message-header p {
+		font-size: 0.85rem;
+	}
+	
+	.new-message-form .form-group {
+		margin-bottom: 16px;
+	}
+	
+	.new-message-form label {
+		font-size: 0.85rem;
+		margin-bottom: 5px;
+	}
+	
+	.new-message-form input,
+	.new-message-form select,
+	.new-message-form textarea {
+		padding: 10px 12px;
+		font-size: 0.9rem;
+	}
+	
+	.form-actions {
+		flex-direction: column-reverse;
+		gap: 10px;
+		margin-top: 20px;
+	}
+	
+	.primary-btn,
+	.secondary-btn {
+		width: 100%;
+		padding: 12px;
+		justify-content: center;
+		font-size: 0.95rem;
+	}
+}
+
+/* Touch device improvements */
+@media (hover: none) and (pointer: coarse) {
+	.back-link:hover {
+		color: #034078;
+		transform: none;
+	}
+	
+	.back-link:active {
+		color: #1282a2;
+		transform: translateX(-3px);
+	}
+	
+	.primary-btn:hover {
+		transform: none;
+	}
+	
+	.primary-btn:active {
+		transform: scale(0.98);
+	}
+	
+	.secondary-btn:hover {
+		background-color: #e6e6e6;
+	}
+	
+	.secondary-btn:active {
+		background-color: #d4d4d4;
+	}
 }

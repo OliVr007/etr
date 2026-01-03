@@ -12,9 +12,6 @@ body {
 	display: flex;
 	flex-direction: column;
 	min-height: 100vh;
-	overflow-y: hidden;
-	display: flex;
-	flex-direction: column;
 }
 
 .container {
@@ -23,7 +20,7 @@ body {
 	padding: 0 20px;
 }
 
-/* Header stílusok */
+/* Header styles */
 header {
 	background: linear-gradient(135deg, #0a1128 0%, #001f54 100%);
 	color: #fefcfb;
@@ -35,12 +32,19 @@ header {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	flex-wrap: wrap;
+	gap: 10px;
 }
 
 .logo-section {
 	display: flex;
 	align-items: center;
 	gap: 15px;
+}
+
+.logo-section img {
+	width: 48px;
+	height: 48px;
 }
 
 .logo-section h1 {
@@ -71,6 +75,8 @@ header {
 	color: #fefcfb;
 	font-weight: 500;
 	font-size: 1.05rem;
+	min-height: 44px;
+	min-width: 44px;
 }
 
 .logout-btn:hover {
@@ -84,7 +90,7 @@ header {
 	filter: brightness(0) invert(1);
 }
 
-/* Navigáció */
+/* Navigation */
 nav {
 	background: linear-gradient(135deg, #034078 0%, #001f54 100%);
 	padding: 0;
@@ -95,6 +101,7 @@ nav {
 	display: flex;
 	list-style: none;
 	justify-content: center;
+	flex-wrap: wrap;
 }
 
 .nav-menu li {
@@ -109,6 +116,9 @@ nav {
 	transition: all 0.3s ease;
 	font-weight: 500;
 	position: relative;
+	min-height: 44px;
+	display: flex;
+	align-items: center;
 }
 
 .nav-menu a:hover {
@@ -131,6 +141,27 @@ nav {
 	background-color: #fefcfb;
 	border-radius: 2px;
 }
+
+.timetable-container {
+	max-width: 1200px;
+	margin: 20px auto;
+	padding: 20px;
+}
+
+.timetable-container h1 {
+	text-align: center;
+	margin-bottom: 10px;
+	color: #001f54;
+	font-size: 2rem;
+}
+
+.timetable-container p {
+	text-align: center;
+	margin-bottom: 35px;
+	color: #666;
+	font-size: 1.1rem;
+}
+
 .timetable {
 	display: grid;
 	grid-template-columns: repeat(5, 1fr);
@@ -144,9 +175,10 @@ nav {
 	border-bottom: 1px solid #eee;
 	border-right: 1px solid #eee;
 	padding: 12px;
+	min-height: 80px;
 }
 
-.timetable div:last-child {
+.timetable div:nth-child(5n) {
 	border-right: none;
 }
 
@@ -156,6 +188,9 @@ nav {
 	text-align: center;
 	font-weight: 600;
 	font-size: 1.1rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .time-slot {
@@ -168,11 +203,18 @@ nav {
 	background: #e8f4fa;
 	border-radius: 8px;
 	padding: 10px;
-	min-height: 50px;
+	min-height: 60px;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	gap: 5px;
+}
+
+.lesson.empty {
+	background: transparent;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .lesson strong {
@@ -184,14 +226,165 @@ nav {
 	font-size: 0.9rem;
 	color: #0a1128;
 }
-.timetable-container {
-	max-width: 900px;
-	margin: 20px auto;
-	padding: 10px;
+
+/* Mobile Styles */
+@media (max-width: 1024px) {
+	.timetable-container {
+		padding: 15px;
+	}
+	
+	.timetable {
+		font-size: 0.9rem;
+	}
+	
+	.timetable div {
+		padding: 10px;
+	}
 }
 
 @media (max-width: 768px) {
+	.container {
+		padding: 0 15px;
+	}
+	
+	.logo-section h1 {
+		font-size: 1.3rem;
+	}
+	
+	.logo-section img {
+		width: 40px;
+		height: 40px;
+	}
+	
+	.user-info span {
+		display: none;
+	}
+	
+	.logout-btn span {
+		display: none;
+	}
+	
+	.logout-btn {
+		padding: 10px;
+		min-width: 44px;
+		justify-content: center;
+	}
+	
+	.nav-menu {
+		justify-content: flex-start;
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+	}
+	
+	.nav-menu a {
+		padding: 15px 18px;
+		font-size: 0.9rem;
+		white-space: nowrap;
+	}
+	
+	.timetable-container {
+		padding: 10px;
+		margin: 10px auto;
+	}
+	
+	.timetable-container h1 {
+		font-size: 1.5rem;
+		margin-bottom: 8px;
+	}
+	
+	.timetable-container p {
+		font-size: 0.95rem;
+		margin-bottom: 20px;
+	}
+	
+	/* Horizontal scroll for timetable on mobile */
 	.timetable {
-		grid-template-columns: 80px repeat(5, 1fr);
+		display: block;
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+	}
+	
+	.timetable-wrapper {
+		min-width: 600px;
+		display: grid;
+		grid-template-columns: repeat(5, 1fr);
+	}
+	
+	.timetable div {
+		padding: 8px;
+		font-size: 0.85rem;
+		min-height: 70px;
+	}
+	
+	.timetable-header {
+		font-size: 0.95rem;
+		padding: 10px 8px;
+	}
+	
+	.lesson strong {
+		font-size: 0.9rem;
+	}
+	
+	.lesson span {
+		font-size: 0.8rem;
+	}
+}
+
+@media (max-width: 480px) {
+	.logo-section h1 {
+		font-size: 1.1rem;
+	}
+	
+	.logo-section img {
+		width: 36px;
+		height: 36px;
+	}
+	
+	.nav-menu a {
+		padding: 12px 15px;
+		font-size: 0.85rem;
+	}
+	
+	.timetable-container {
+		padding: 8px;
+	}
+	
+	.timetable-container h1 {
+		font-size: 1.3rem;
+	}
+	
+	.timetable-container p {
+		font-size: 0.9rem;
+		margin-bottom: 15px;
+	}
+	
+	.timetable div {
+		padding: 6px;
+		font-size: 0.8rem;
+		min-height: 60px;
+	}
+	
+	.lesson {
+		padding: 6px;
+		min-height: 50px;
+	}
+}
+
+/* Touch device improvements */
+@media (hover: none) and (pointer: coarse) {
+	.nav-menu a:hover {
+		transform: none;
+	}
+	
+	.nav-menu a:active {
+		background-color: rgba(255, 255, 255, 0.15);
+	}
+	
+	.logout-btn:hover {
+		transform: none;
+	}
+	
+	.logout-btn:active {
+		background-color: rgba(255, 255, 255, 0.2);
 	}
 }

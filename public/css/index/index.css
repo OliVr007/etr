@@ -20,7 +20,7 @@ body {
 	padding: 0 20px;
 }
 
-/* Header stílusok */
+/* Header styles */
 header {
 	background: linear-gradient(135deg, #0a1128 0%, #001f54 100%);
 	color: #fefcfb;
@@ -32,12 +32,19 @@ header {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	flex-wrap: wrap;
+	gap: 10px;
 }
 
 .logo-section {
 	display: flex;
 	align-items: center;
 	gap: 15px;
+}
+
+.logo-section img {
+	width: 48px;
+	height: 48px;
 }
 
 .logo-section h1 {
@@ -68,6 +75,7 @@ header {
 	color: #fefcfb;
 	font-weight: 500;
 	font-size: 1.05rem;
+	min-height: 44px;
 }
 
 .logout-btn:hover {
@@ -81,7 +89,7 @@ header {
 	filter: brightness(0) invert(1);
 }
 
-/* Navigáció */
+/* Navigation */
 nav {
 	background: linear-gradient(135deg, #034078 0%, #001f54 100%);
 	padding: 0;
@@ -92,6 +100,7 @@ nav {
 	display: flex;
 	list-style: none;
 	justify-content: center;
+	flex-wrap: wrap;
 }
 
 .nav-menu li {
@@ -106,6 +115,9 @@ nav {
 	transition: all 0.3s ease;
 	font-weight: 500;
 	position: relative;
+	min-height: 44px;
+	display: flex;
+	align-items: center;
 }
 
 .nav-menu a:hover {
@@ -129,7 +141,7 @@ nav {
 	border-radius: 2px;
 }
 
-/* Fő tartalom */
+/* Main content */
 main {
 	padding: 40px 0;
 	flex: 1;
@@ -158,7 +170,7 @@ main {
 	font-weight: 500;
 }
 
-/* Carousel stílusok */
+/* Carousel styles */
 .carousel-container {
 	position: relative;
 	max-width: 1000px;
@@ -201,6 +213,8 @@ main {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	flex-wrap: wrap;
+	gap: 10px;
 }
 
 .card-header h3 {
@@ -263,13 +277,19 @@ main {
 	font-weight: 600;
 	font-size: 0.95rem;
 	transition: color 0.3s;
+	display: inline-block;
+	padding: 8px 16px;
+	min-height: 44px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .view-all:hover {
 	color: #1282a2;
 }
 
-/* Kártya elemek */
+/* Card elements */
 .card-item {
 	padding: 16px 0;
 	border-bottom: 1px solid #f1f5f9;
@@ -328,6 +348,7 @@ main {
 	align-items: center;
 	margin-top: 25px;
 	gap: 15px;
+	flex-wrap: wrap;
 }
 
 .carousel-btn {
@@ -344,6 +365,8 @@ main {
 	justify-content: center;
 	transition: all 0.3s ease;
 	box-shadow: 0 4px 12px rgba(0, 31, 84, 0.2);
+	min-width: 50px;
+	min-height: 50px;
 }
 
 .carousel-btn:hover {
@@ -367,9 +390,232 @@ main {
 	background-color: #cbd5e1;
 	cursor: pointer;
 	transition: all 0.3s ease;
+	min-width: 44px;
+	min-height: 44px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
-.carousel-indicator.active {
+.carousel-indicator::after {
+	content: "";
+	width: 12px;
+	height: 12px;
+	border-radius: 50%;
+	background-color: #cbd5e1;
+	transition: all 0.3s ease;
+}
+
+.carousel-indicator.active::after {
 	background: linear-gradient(135deg, #034078 0%, #001f54 100%);
 	transform: scale(1.2);
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+	.container {
+		padding: 0 15px;
+	}
+	
+	.logo-section h1 {
+		font-size: 1.3rem;
+	}
+	
+	.logo-section img {
+		width: 40px;
+		height: 40px;
+	}
+	
+	.user-info span {
+		display: none;
+	}
+	
+	.logout-btn span {
+		display: none;
+	}
+	
+	.logout-btn {
+		padding: 10px;
+		min-width: 44px;
+		justify-content: center;
+	}
+	
+	.nav-menu {
+		justify-content: flex-start;
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+	}
+	
+	.nav-menu a {
+		padding: 15px 18px;
+		font-size: 0.9rem;
+		white-space: nowrap;
+	}
+	
+	main {
+		padding: 20px 0;
+	}
+	
+	.welcome-section {
+		padding: 20px 15px;
+		margin-bottom: 30px;
+		border-radius: 12px;
+	}
+	
+	.welcome-section h2 {
+		font-size: 1.6rem;
+	}
+	
+	.welcome-section p {
+		font-size: 0.95rem;
+	}
+	
+	.carousel-container {
+		border-radius: 12px;
+	}
+	
+	.carousel-card {
+		border-radius: 12px;
+	}
+	
+	.card-header {
+		padding: 20px 15px 12px;
+	}
+	
+	.card-header h3 {
+		font-size: 1.15rem;
+	}
+	
+	.card-badge {
+		font-size: 0.8rem;
+		padding: 5px 10px;
+	}
+	
+	.card-content {
+		padding: 15px;
+		max-height: 280px;
+	}
+	
+	.card-footer {
+		padding: 15px;
+	}
+	
+	.card-item {
+		padding: 12px 0;
+		flex-direction: column;
+		gap: 8px;
+	}
+	
+	.item-value {
+		text-align: left;
+		font-size: 1.3rem;
+	}
+	
+	.item-type {
+		text-align: left;
+	}
+	
+	.carousel-controls {
+		margin-top: 20px;
+		gap: 12px;
+	}
+	
+	.carousel-btn {
+		width: 44px;
+		height: 44px;
+		font-size: 1rem;
+	}
+}
+
+@media (max-width: 480px) {
+	.logo-section h1 {
+		font-size: 1.1rem;
+	}
+	
+	.logo-section img {
+		width: 36px;
+		height: 36px;
+	}
+	
+	.nav-menu a {
+		padding: 12px 15px;
+		font-size: 0.85rem;
+	}
+	
+	.welcome-section {
+		padding: 18px 12px;
+		margin-bottom: 25px;
+	}
+	
+	.welcome-section h2 {
+		font-size: 1.4rem;
+	}
+	
+	.welcome-section p {
+		font-size: 0.9rem;
+	}
+	
+	.card-header {
+		padding: 18px 12px 10px;
+	}
+	
+	.card-header h3 {
+		font-size: 1.05rem;
+	}
+	
+	.card-content {
+		padding: 12px;
+		max-height: 250px;
+	}
+	
+	.card-footer {
+		padding: 12px;
+	}
+	
+	.item-title {
+		font-size: 0.9rem;
+	}
+	
+	.item-date {
+		font-size: 0.8rem;
+	}
+	
+	.item-desc {
+		font-size: 0.8rem;
+	}
+}
+
+/* Touch device improvements */
+@media (hover: none) and (pointer: coarse) {
+	.nav-menu a:hover {
+		transform: none;
+	}
+	
+	.nav-menu a:active {
+		background-color: rgba(255, 255, 255, 0.15);
+	}
+	
+	.logout-btn:hover {
+		transform: none;
+	}
+	
+	.logout-btn:active {
+		background-color: rgba(255, 255, 255, 0.2);
+	}
+	
+	.carousel-btn:hover {
+		transform: none;
+	}
+	
+	.carousel-btn:active {
+		transform: scale(0.95);
+	}
+	
+	.view-all:hover {
+		color: #034078;
+	}
+	
+	.view-all:active {
+		color: #1282a2;
+	}
 }
