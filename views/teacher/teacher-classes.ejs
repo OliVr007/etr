@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="hu">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="/css/teacher/teacher-classes.css" />
+		<title>Osztályok kezelése - Tanári felület</title>
+	</head>
+	<body>
+		<header>
+			<div class="container">
+				<div class="header-content">
+					<div class="logo-section">
+						<img src="/icons/icon-128.webp" alt="Iskola logo" />
+						<h1>Osztályok kezelése</h1>
+					</div>
+					<div class="user-info">
+						<span>Bejelentkezve: <%= first_name %> <%= last_name %></span>
+						<a href="/logout" class="logout-btn">
+							<img src="/icons/logouticon.svg" alt="Kijelentkezés" title="Kijelentkezés" />
+						</a>
+					</div>
+				</div>
+			</div>
+		</header>
+
+		<nav>
+			<div class="container">
+				<ul class="nav-menu">
+					<li><a href="/teacher">Áttekintés</a></li>
+					<li><a href="/teacher/classes" class="active">Osztályok</a></li>
+					<li><a href="/teacher/grading">Értékelések</a></li>
+					<li><a href="/teacher/schedule">Órarend</a></li>
+					<li><a href="/teacher/messages">Üzenetek</a></li>
+				</ul>
+			</div>
+		</nav>
+
+		<main class="container">
+			<section class="classes-overview">
+				<h2>Osztályaim</h2>
+				<div class="stats-cards">
+					<div class="stat-card">
+						<div class="stat-icon">👥</div>
+						<div class="stat-info">
+							<h3><%= stats.totalClasses %></h3>
+							<p>Osztály összesen</p>
+						</div>
+					</div>
+					<div class="stat-card">
+						<div class="stat-icon">🎓</div>
+						<div class="stat-info">
+							<h3><%= stats.totalStudents %></h3>
+							<p>Diák összesen</p>
+						</div>
+					</div>
+					<div class="stat-card">
+						<div class="stat-icon">📊</div>
+						<div class="stat-info">
+							<h3><%= stats.averageClassGrade %></h3>
+							<p>Átlagos osztályátlag</p>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<section class="classes-section">
+				<div class="section-header">
+					<h2>Osztályok listája</h2>
+					<div class="filter-controls">
+						<select id="subjectFilter" class="filter-select">
+							<option value="all">Minden tantárgy</option>
+							<% 
+								const uniqueSubjects = [...new Set(classes.map(c => c.subject_name))];
+								uniqueSubjects.forEach(subject => { 
+							%>
+								<option value="<%= subject %>"><%= subject %></option>
+							<% }); %>
+						</select>
+					</div>
+				</div>
+
+				<div class="classes-grid">
+					<% if (classes.length === 0) { %>
+						<div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: #666;">
+							<p>Még nincs hozzárendelt osztály.</p>
+						</div>
+					<% } else { %>
+						<% classes.forEach(classData => { %>
+							<div class="class-card" data-subject="<%= classData.subject_name %>">
+								<div class="class-header">
+									<div class="class-title">
+										<h3><%= classData.class_name %></h3>
+										<span class="subject-badge badge-<%= classData.subject_name.toLowerCase() %>"><%= classData.subject_name %></span>
+									</div>
+									<div class="class-stats-inline">
+										<span class="stat-item">👥 <%= classData.student_count %> fő</span>
+										<span class="stat-item">📊 <%= classData.average_grade %></span>
+									</div>
+								</div>
+								<div class="class-body">
+									<div class="class-info">
+										<p><strong>Osztályfőnök:</strong> <%= classData.class_teacher %></p>
+										<p><strong>Heti óraszám:</strong> <%= classData.weekly_hours %> óra</p>
+										<p><strong>Terem:</strong> <%= classData.room_number %></p>
+									</div>
+									<div class="class-progress">
+										<div class="progress-item">
+											<span class="progress-label">Jeles (5)</span>
+											<div class="progress-bar">
+												<div class="progress-fill" style="width: <%= classData.distribution.grade5Percent %>%"></div>
+											</div>
+											<span class="progress-value"><%= classData.distribution.grade5Percent %>%</span>
+										</div>
+										<div class="progress-item">
+											<span class="progress-label">Jó (4)</span>
+											<div class="progress-bar">
+												<div class="progress-fill" style="width: <%= classData.distribution.grade4Percent %>%"></div>
+											</div>
+											<span class="progress-value"><%= classData.distribution.grade4Percent %>%</span>
+										</div>
+										<div class="progress-item">
+											<span class="progress-label">Közepes (3)</span>
+											<div class="progress-bar">
+												<div class="progress-fill" style="width: <%= classData.distribution.grade3Percent %>%"></div>
+											</div>
+											<span class="progress-value"><%= classData.distribution.grade3Percent %>%</span>
+										</div>
+									</div>
+								</div>
+								<div class="class-actions">
+									<button class="btn-view" onclick="viewStudents('<%= classData.class_id %>', '<%= classData.subject_id %>', '<%= classData.class_name %> - <%= classData.subject_name %>')">👥 Diákok megtekintése</button>
+									<button class="btn-grade" onclick="openGrading('<%= classData.class_id %>', '<%= classData.subject_id %>')">📝 Értékelés</button>
+								</div>
+							</div>
+						<% }); %>
+					<% } %>
+				</div>
+			</section>
+		</main>
+
+		<!-- Students Modal -->
+		<div id="studentsModal" class="modal">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3 id="modalTitle">Diákok listája</h3>
+					<button class="close-btn" onclick="closeStudentsModal()">&times;</button>
+				</div>
+				<div class="modal-body">
+					<div class="search-box">
+						<input type="text" id="studentSearch" placeholder="Keresés név alapján..." />
+					</div>
+					<div id="loadingMessage" style="text-align: center; padding: 2rem; color: #666;">
+						Betöltés...
+					</div>
+					<div class="students-table-wrapper" style="display: none;">
+						<table class="students-table">
+							<thead>
+								<tr>
+									<th>Név</th>
+									<th>Átlag</th>
+									<th>Hiányzások</th>
+									<th>Utolsó jegy</th>
+									<th>Műveletek</th>
+								</tr>
+							</thead>
+							<tbody id="studentsTableBody">
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script>
+			// Filter functionality
+			document.getElementById("subjectFilter").addEventListener("change", function () {
+				const filterValue = this.value;
+				const cards = document.querySelectorAll(".class-card");
+
+				cards.forEach((card) => {
+					if (filterValue === "all") {
+						card.style.display = "block";
+					} else {
+						if (card.dataset.subject === filterValue) {
+							card.style.display = "block";
+						} else {
+							card.style.display = "none";
+						}
+					}
+				});
+			});
+
+			// View students modal
+			async function viewStudents(classId, subjectId, className) {
+				document.getElementById("modalTitle").textContent = `Diákok listája - ${className}`;
+				document.getElementById("studentsModal").style.display = "flex";
+				document.getElementById("loadingMessage").style.display = "block";
+				document.querySelector(".students-table-wrapper").style.display = "none";
+
+				try {
+					const response = await fetch(`/api/teacher/class/${classId}/subject/${subjectId}/students`);
+					const students = await response.json();
+
+					const tbody = document.getElementById("studentsTableBody");
+					tbody.innerHTML = "";
+
+					if (students.length === 0) {
+						tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 2rem;">Nincs diák ebben az osztályban.</td></tr>';
+					} else {
+						students.forEach(student => {
+							const row = document.createElement("tr");
+							
+							const gradeClass = student.average >= 4.5 ? "g5" : student.average >= 3.5 ? "g4" : student.average >= 2.5 ? "g3" : "g2";
+							const lastGradeText = student.lastGrade 
+								? `${student.lastGrade.value} (${new Date(student.lastGrade.date).toLocaleDateString('hu-HU')})`
+								: "Nincs jegy";
+							
+							row.innerHTML = `
+								<td>${student.name}</td>
+								<td><span class="grade-badge ${gradeClass}">${student.average || 'N/A'}</span></td>
+								<td>${student.absences} óra</td>
+								<td>${lastGradeText}</td>
+								<td>
+									<button class="btn-small btn-info" onclick="viewStudentDetails(${student.id})">Részletek</button>
+									<button class="btn-small btn-primary" onclick="gradeStudent(${student.id}, '${student.name}')">Értékelés</button>
+								</td>
+							`;
+							tbody.appendChild(row);
+						});
+					}
+
+					document.getElementById("loadingMessage").style.display = "none";
+					document.querySelector(".students-table-wrapper").style.display = "block";
+				} catch (error) {
+					console.error("Hiba a diákok betöltésekor:", error);
+					document.getElementById("loadingMessage").textContent = "Hiba történt a diákok betöltésekor.";
+				}
+			}
+
+			function closeStudentsModal() {
+				document.getElementById("studentsModal").style.display = "none";
+				document.getElementById("studentsTableBody").innerHTML = "";
+			}
+
+			// Student search
+			document.getElementById("studentSearch").addEventListener("input", function (e) {
+				const searchTerm = e.target.value.toLowerCase();
+				const rows = document.querySelectorAll("#studentsTableBody tr");
+
+				rows.forEach((row) => {
+					if (row.cells.length > 1) {
+						const name = row.cells[0].textContent.toLowerCase();
+						if (name.includes(searchTerm)) {
+							row.style.display = "";
+						} else {
+							row.style.display = "none";
+						}
+					}
+				});
+			});
+
+			// Open grading
+			function openGrading(classId, subjectId) {
+				alert(`Értékelés megnyitása: Osztály ID: ${classId}, Tantárgy ID: ${subjectId}`);
+				// Here you would navigate to grading page
+				// window.location.href = `/teacher/grading?class=${classId}&subject=${subjectId}`;
+			}
+
+			// View student details
+			function viewStudentDetails(studentId) {
+				alert(`Diák részletei: ${studentId}`);
+				// Here you would show student details modal or navigate to details page
+			}
+
+			// Grade student
+			function gradeStudent(studentId, studentName) {
+				alert(`Értékelés: ${studentName} (ID: ${studentId})`);
+				// Here you would open grading modal
+			}
+
+			// Close modal on outside click
+			window.onclick = function (event) {
+				const modal = document.getElementById("studentsModal");
+				if (event.target === modal) {
+					closeStudentsModal();
+				}
+			};
+		</script>
+	</body>
+</html>
