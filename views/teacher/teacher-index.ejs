@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link rel="stylesheet" href="/css/teacher-index.css" />
+		<link rel="stylesheet" href="/css/teacher/teacher-index.css" />
 		<title>Tanári felület - Elektronikus tanulmányi rendszer</title>
 	</head>
 	<body>
@@ -37,7 +37,7 @@
 		<main class="container">
 			<section class="welcome-section">
 				<h2>Üdvözöllek <%= first_name %>!</h2>
-				<p>Ma: 2025. december 22., vasárnap</p>
+				<p>Ma: 2025. január 7., kedd</p>
 			</section>
 
 			<div class="carousel-container">
@@ -146,21 +146,21 @@
 								<div class="card-item">
 									<div class="item-main">
 										<div class="item-title">Kovács János (9.A)</div>
-										<div class="item-date">2025. dec. 21.</div>
+										<div class="item-date">2025. jan. 6.</div>
 										<div class="item-desc">Kérdés a házi feladattal kapcsolatban…</div>
 									</div>
 								</div>
 								<div class="card-item">
 									<div class="item-main">
 										<div class="item-title">Nagy Emma szülője</div>
-										<div class="item-date">2025. dec. 20.</div>
+										<div class="item-date">2025. jan. 5.</div>
 										<div class="item-desc">Hiányzás igazolása melléklettel…</div>
 									</div>
 								</div>
 								<div class="card-item">
 									<div class="item-main">
 										<div class="item-title">Tanulmányi osztály</div>
-										<div class="item-date">2025. dec. 19.</div>
+										<div class="item-date">2025. jan. 4.</div>
 										<div class="item-desc">Félévi értékelések határideje: jan. 10.</div>
 									</div>
 								</div>
@@ -195,14 +195,20 @@
 				const slideWidth = track.clientWidth;
 				let currentIndex = 0;
 
-				// Mozgás a következő kártyára
+				// Set slide positions
+				const setSlidePosition = (slide, index) => {
+					slide.style.left = slideWidth * index + "px";
+				};
+				slides.forEach(setSlidePosition);
+
+				// Move to slide
 				const moveToSlide = (track, currentSlide, targetSlide) => {
 					track.style.transform = "translateX(-" + targetSlide.style.left + ")";
 					currentSlide = targetSlide;
 					return currentSlide;
 				};
 
-				// Frissíti az indikátorokat
+				// Update indicators
 				const updateIndicators = (currentIndex) => {
 					indicators.forEach((indicator, index) => {
 						if (index === currentIndex) {
@@ -213,7 +219,7 @@
 					});
 				};
 
-				// Következő gomb eseménykezelő
+				// Next button
 				nextButton.addEventListener("click", (e) => {
 					const nextIndex = currentIndex < slides.length - 1 ? currentIndex + 1 : 0;
 					const targetSlide = slides[nextIndex];
@@ -223,7 +229,7 @@
 					updateIndicators(currentIndex);
 				});
 
-				// Előző gomb eseménykezelő
+				// Previous button
 				prevButton.addEventListener("click", (e) => {
 					const prevIndex = currentIndex > 0 ? currentIndex - 1 : slides.length - 1;
 					const targetSlide = slides[prevIndex];
@@ -233,7 +239,7 @@
 					updateIndicators(currentIndex);
 				});
 
-				// Indikátor eseménykezelők
+				// Indicator clicks
 				indicators.forEach((indicator) => {
 					indicator.addEventListener("click", (e) => {
 						const targetIndex = parseInt(e.target.getAttribute("data-index"));
@@ -245,7 +251,7 @@
 					});
 				});
 
-				// Automatikus lapozás
+				// Auto slide
 				let autoSlideInterval = setInterval(() => {
 					const nextIndex = currentIndex < slides.length - 1 ? currentIndex + 1 : 0;
 					const targetSlide = slides[nextIndex];
@@ -255,7 +261,7 @@
 					updateIndicators(currentIndex);
 				}, 5000);
 
-				// Automatikus lapozás szüneteltetése, ha a felhasználó interaktál
+				// Pause on hover
 				track.addEventListener("mouseenter", () => {
 					clearInterval(autoSlideInterval);
 				});
