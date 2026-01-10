@@ -42,11 +42,6 @@ header {
 	gap: 15px;
 }
 
-.logo-section img {
-	width: 48px;
-	height: 48px;
-}
-
 .logo-section h1 {
 	font-size: 1.8rem;
 	font-weight: 600;
@@ -271,72 +266,72 @@ main {
 	.container {
 		padding: 0 15px;
 	}
-	
+
 	.logo-section h1 {
 		font-size: 1.3rem;
 	}
-	
+
 	.logo-section img {
 		width: 40px;
 		height: 40px;
 	}
-	
+
 	.user-info span {
 		display: none;
 	}
-	
+
 	.logout-btn span {
 		display: none;
 	}
-	
+
 	.logout-btn {
 		padding: 10px;
 		min-width: 44px;
 		justify-content: center;
 	}
-	
+
 	.nav-menu {
 		justify-content: flex-start;
 		overflow-x: auto;
 		-webkit-overflow-scrolling: touch;
 	}
-	
+
 	.nav-menu a {
 		padding: 15px 18px;
 		font-size: 0.9rem;
 		white-space: nowrap;
 	}
-	
+
 	main {
 		padding: 20px 0;
 	}
-	
+
 	.tasks-container h1 {
 		font-size: 1.6rem;
 		margin-bottom: 25px;
 	}
-	
+
 	.task-list {
 		grid-template-columns: 1fr;
 		gap: 18px;
 	}
-	
+
 	.task-card {
 		padding: 18px;
 	}
-	
+
 	.task-card h2 {
 		font-size: 1.1rem;
 	}
-	
+
 	.task-card p {
 		font-size: 0.9rem;
 	}
-	
+
 	.task-actions {
 		gap: 8px;
 	}
-	
+
 	.done-btn,
 	.delete-btn {
 		padding: 10px 14px;
@@ -348,49 +343,49 @@ main {
 	.logo-section h1 {
 		font-size: 1.1rem;
 	}
-	
+
 	.logo-section img {
 		width: 36px;
 		height: 36px;
 	}
-	
+
 	.nav-menu a {
 		padding: 12px 15px;
 		font-size: 0.85rem;
 	}
-	
+
 	main {
 		padding: 15px 0;
 	}
-	
+
 	.tasks-container h1 {
 		font-size: 1.4rem;
 		margin-bottom: 20px;
 	}
-	
+
 	.task-list {
 		gap: 15px;
 	}
-	
+
 	.task-card {
 		padding: 15px;
 	}
-	
+
 	.task-card h2 {
 		font-size: 1.05rem;
 		margin-bottom: 6px;
 	}
-	
+
 	.task-card p {
 		font-size: 0.85rem;
 		margin-bottom: 5px;
 	}
-	
+
 	.task-actions {
 		flex-direction: column;
 		gap: 8px;
 	}
-	
+
 	.done-btn,
 	.delete-btn {
 		width: 100%;
@@ -403,37 +398,37 @@ main {
 	.nav-menu a:hover {
 		transform: none;
 	}
-	
+
 	.nav-menu a:active {
 		background-color: rgba(255, 255, 255, 0.15);
 	}
-	
+
 	.logout-btn:hover {
 		transform: none;
 	}
-	
+
 	.logout-btn:active {
 		background-color: rgba(255, 255, 255, 0.2);
 	}
-	
+
 	.task-card:hover {
 		transform: none;
 	}
-	
+
 	.task-card:active {
 		transform: scale(0.98);
 	}
-	
+
 	.done-btn:hover,
 	.delete-btn:hover {
 		transform: none;
 	}
-	
+
 	.done-btn:active {
 		transform: scale(0.95);
 		background-color: #0a5a6f;
 	}
-	
+
 	.delete-btn:active {
 		transform: scale(0.95);
 		background-color: #b52925;

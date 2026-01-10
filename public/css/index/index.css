@@ -42,11 +42,6 @@ header {
 	gap: 15px;
 }
 
-.logo-section img {
-	width: 48px;
-	height: 48px;
-}
-
 .logo-section h1 {
 	font-size: 1.8rem;
 	font-weight: 600;
@@ -416,110 +411,110 @@ main {
 	.container {
 		padding: 0 15px;
 	}
-	
+
 	.logo-section h1 {
 		font-size: 1.3rem;
 	}
-	
+
 	.logo-section img {
 		width: 40px;
 		height: 40px;
 	}
-	
+
 	.user-info span {
 		display: none;
 	}
-	
+
 	.logout-btn span {
 		display: none;
 	}
-	
+
 	.logout-btn {
 		padding: 10px;
 		min-width: 44px;
 		justify-content: center;
 	}
-	
+
 	.nav-menu {
 		justify-content: flex-start;
 		overflow-x: auto;
 		-webkit-overflow-scrolling: touch;
 	}
-	
+
 	.nav-menu a {
 		padding: 15px 18px;
 		font-size: 0.9rem;
 		white-space: nowrap;
 	}
-	
+
 	main {
 		padding: 20px 0;
 	}
-	
+
 	.welcome-section {
 		padding: 20px 15px;
 		margin-bottom: 30px;
 		border-radius: 12px;
 	}
-	
+
 	.welcome-section h2 {
 		font-size: 1.6rem;
 	}
-	
+
 	.welcome-section p {
 		font-size: 0.95rem;
 	}
-	
+
 	.carousel-container {
 		border-radius: 12px;
 	}
-	
+
 	.carousel-card {
 		border-radius: 12px;
 	}
-	
+
 	.card-header {
 		padding: 20px 15px 12px;
 	}
-	
+
 	.card-header h3 {
 		font-size: 1.15rem;
 	}
-	
+
 	.card-badge {
 		font-size: 0.8rem;
 		padding: 5px 10px;
 	}
-	
+
 	.card-content {
 		padding: 15px;
 		max-height: 280px;
 	}
-	
+
 	.card-footer {
 		padding: 15px;
 	}
-	
+
 	.card-item {
 		padding: 12px 0;
 		flex-direction: column;
 		gap: 8px;
 	}
-	
+
 	.item-value {
 		text-align: left;
 		font-size: 1.3rem;
 	}
-	
+
 	.item-type {
 		text-align: left;
 	}
-	
+
 	.carousel-controls {
 		margin-top: 20px;
 		gap: 12px;
 	}
-	
+
 	.carousel-btn {
 		width: 44px;
 		height: 44px;
@@ -531,55 +526,55 @@ main {
 	.logo-section h1 {
 		font-size: 1.1rem;
 	}
-	
+
 	.logo-section img {
 		width: 36px;
 		height: 36px;
 	}
-	
+
 	.nav-menu a {
 		padding: 12px 15px;
 		font-size: 0.85rem;
 	}
-	
+
 	.welcome-section {
 		padding: 18px 12px;
 		margin-bottom: 25px;
 	}
-	
+
 	.welcome-section h2 {
 		font-size: 1.4rem;
 	}
-	
+
 	.welcome-section p {
 		font-size: 0.9rem;
 	}
-	
+
 	.card-header {
 		padding: 18px 12px 10px;
 	}
-	
+
 	.card-header h3 {
 		font-size: 1.05rem;
 	}
-	
+
 	.card-content {
 		padding: 12px;
 		max-height: 250px;
 	}
-	
+
 	.card-footer {
 		padding: 12px;
 	}
-	
+
 	.item-title {
 		font-size: 0.9rem;
 	}
-	
+
 	.item-date {
 		font-size: 0.8rem;
 	}
-	
+
 	.item-desc {
 		font-size: 0.8rem;
 	}
@@ -590,31 +585,31 @@ main {
 	.nav-menu a:hover {
 		transform: none;
 	}
-	
+
 	.nav-menu a:active {
 		background-color: rgba(255, 255, 255, 0.15);
 	}
-	
+
 	.logout-btn:hover {
 		transform: none;
 	}
-	
+
 	.logout-btn:active {
 		background-color: rgba(255, 255, 255, 0.2);
 	}
-	
+
 	.carousel-btn:hover {
 		transform: none;
 	}
-	
+
 	.carousel-btn:active {
 		transform: scale(0.95);
 	}
-	
+
 	.view-all:hover {
 		color: #034078;
 	}
-	
+
 	.view-all:active {
 		color: #1282a2;
 	}

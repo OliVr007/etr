@@ -42,11 +42,6 @@ header {
 	gap: 15px;
 }
 
-.logo-section img {
-	width: 48px;
-	height: 48px;
-}
-
 .logo-section h1 {
 	font-size: 1.8rem;
 	font-weight: 600;
@@ -279,86 +274,86 @@ nav {
 	.container {
 		padding: 0 15px;
 	}
-	
+
 	.logo-section h1 {
 		font-size: 1.3rem;
 	}
-	
+
 	.logo-section img {
 		width: 40px;
 		height: 40px;
 	}
-	
+
 	.user-info span {
 		display: none;
 	}
-	
+
 	.logout-btn span {
 		display: none;
 	}
-	
+
 	.logout-btn {
 		padding: 10px;
 		min-width: 44px;
 		justify-content: center;
 	}
-	
+
 	.nav-menu {
 		justify-content: flex-start;
 		overflow-x: auto;
 		-webkit-overflow-scrolling: touch;
 	}
-	
+
 	.nav-menu a {
 		padding: 15px 18px;
 		font-size: 0.9rem;
 		white-space: nowrap;
 	}
-	
+
 	.messages-container {
 		padding: 20px 0;
 	}
-	
+
 	.messages-header {
 		flex-direction: column;
 		align-items: stretch;
 		gap: 12px;
 	}
-	
+
 	.messages-header h1 {
 		font-size: 1.6rem;
 	}
-	
+
 	.new-message-btn {
 		width: 100%;
 		justify-content: center;
 	}
-	
+
 	.messages-tabs {
 		gap: 10px;
 		overflow-x: auto;
 		-webkit-overflow-scrolling: touch;
 		padding-bottom: 5px;
 	}
-	
+
 	.messages-tabs .tab {
 		padding: 10px 16px;
 		font-size: 0.9rem;
 	}
-	
+
 	.messages-list {
 		gap: 15px;
 		max-height: calc(100vh - 360px);
 	}
-	
+
 	.message-card {
 		padding: 18px;
 	}
-	
+
 	.message-card h2 {
 		font-size: 1.15rem;
 	}
-	
+
 	.message-card p {
 		font-size: 0.95rem;
 	}
@@ -368,47 +363,47 @@ nav {
 	.logo-section h1 {
 		font-size: 1.1rem;
 	}
-	
+
 	.logo-section img {
 		width: 36px;
 		height: 36px;
 	}
-	
+
 	.nav-menu a {
 		padding: 12px 15px;
 		font-size: 0.85rem;
 	}
-	
+
 	.messages-container {
 		padding: 15px 0;
 	}
-	
+
 	.messages-header h1 {
 		font-size: 1.4rem;
 	}
-	
+
 	.messages-tabs .tab {
 		padding: 10px 14px;
 		font-size: 0.85rem;
 	}
-	
+
 	.messages-list {
 		gap: 12px;
 	}
-	
+
 	.message-card {
 		padding: 15px;
 	}
-	
+
 	.message-card h2 {
 		font-size: 1.05rem;
 		margin-bottom: 8px;
 	}
-	
+
 	.message-card p {
 		font-size: 0.9rem;
 	}
-	
+
 	.message-card .date {
 		font-size: 0.85rem;
 	}
@@ -419,39 +414,39 @@ nav {
 	.nav-menu a:hover {
 		transform: none;
 	}
-	
+
 	.nav-menu a:active {
 		background-color: rgba(255, 255, 255, 0.15);
 	}
-	
+
 	.logout-btn:hover {
 		transform: none;
 	}
-	
+
 	.logout-btn:active {
 		background-color: rgba(255, 255, 255, 0.2);
 	}
-	
+
 	.new-message-btn:hover {
 		transform: none;
 	}
-	
+
 	.new-message-btn:active {
 		transform: scale(0.98);
 	}
-	
+
 	.message-card:hover {
 		transform: none;
 	}
-	
+
 	.message-card:active {
 		transform: scale(0.98);
 	}
-	
+
 	.messages-tabs .tab:hover {
 		background: #e6e6e6;
 	}
-	
+
 	.messages-tabs .tab:active {
 		background: #d4d4d4;
 	}
