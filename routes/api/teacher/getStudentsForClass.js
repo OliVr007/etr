@@ -3,6 +3,10 @@ async function getStudentsForClass(req, res) {
 
 	const classId = parseInt(req.params.classId);
 
+	if (!classId || isNaN(classId)) {
+		return res.status(400).json({ error: "Érvénytelen osztály ID" });
+	}
+
 	try {
 		const students = await req.db.student_classes.findMany({
 			where: {
@@ -16,6 +20,11 @@ async function getStudentsForClass(req, res) {
 						first_name: true,
 						last_name: true,
 					},
+				},
+			},
+			orderBy: {
+				users: {
+					last_name: "asc",
 				},
 			},
 		});
