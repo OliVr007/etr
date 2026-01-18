@@ -1,6 +1,9 @@
-async function rootTeacherClasses(req, res){
-    	try {
-		// Get all classes where this teacher teaches
+// Tanár összes osztályának listázása tantárgyakkal
+async function rootTeacherClasses(req, res) {
+	try {
+		const db = req.db;
+
+		// Összes osztály lekérése, ahol ez a tanár tanít
 		const teacherClasses = await db.timetable.findMany({
 			where: {
 				teacher_id: req.session.id,
@@ -9,10 +12,10 @@ async function rootTeacherClasses(req, res){
 				classes: true,
 				subjects: true,
 			},
-			distinct: ['class_id', 'subject_id'],
+			distinct: ["class_id", "subject_id"],
 		});
 
-		// Get unique class-subject combinations
+		// Egyedi osztály-tantárgy kombinációk
 		const uniqueClasses = [];
 		const seen = new Set();
 
@@ -20,8 +23,8 @@ async function rootTeacherClasses(req, res){
 			const key = `${tc.class_id}-${tc.subject_id}`;
 			if (!seen.has(key)) {
 				seen.add(key);
-				
-				// Get student count for this class
+
+				// Diákok száma ebben az osztályban
 				const studentCount = await db.student_classes.count({
 					where: {
 						class_id: tc.class_id,
@@ -29,18 +32,20 @@ async function rootTeacherClasses(req, res){
 					},
 				});
 
-				// Get average grade for this class and subject
+				// Átlag jegy ehhez az osztályhoz és tantárgyhoz
 				const grades = await db.grades.findMany({
 					where: {
 						subject_id: tc.subject_id,
 						student_id: {
-							in: (await db.student_classes.findMany({
-								where: {
-									class_id: tc.class_id,
-									is_active: true,
-								},
-								select: { student_id: true },
-							})).map(sc => sc.student_id),
+							in: (
+								await db.student_classes.findMany({
+									where: {
+										class_id: tc.class_id,
+										is_active: true,
+									},
+									select: { student_id: true },
+								})
+							).map((sc) => sc.student_id),
 						},
 					},
 					select: {
@@ -54,13 +59,13 @@ async function rootTeacherClasses(req, res){
 					averageGrade = (sum / grades.length).toFixed(2);
 				}
 
-				// Get grade distribution
+				// Jegy eloszlás számítása
 				const gradeDistribution = {
-					grade5: grades.filter(g => parseFloat(g.grade_value) === 5).length,
-					grade4: grades.filter(g => parseFloat(g.grade_value) === 4).length,
-					grade3: grades.filter(g => parseFloat(g.grade_value) === 3).length,
-					grade2: grades.filter(g => parseFloat(g.grade_value) === 2).length,
-					grade1: grades.filter(g => parseFloat(g.grade_value) === 1).length,
+					grade5: grades.filter((g) => parseFloat(g.grade_value) === 5).length,
+					grade4: grades.filter((g) => parseFloat(g.grade_value) === 4).length,
+					grade3: grades.filter((g) => parseFloat(g.grade_value) === 3).length,
+					grade2: grades.filter((g) => parseFloat(g.grade_value) === 2).length,
+					grade1: grades.filter((g) => parseFloat(g.grade_value) === 1).length,
 				};
 
 				const total = grades.length || 1;
@@ -72,7 +77,7 @@ async function rootTeacherClasses(req, res){
 					grade1Percent: Math.round((gradeDistribution.grade1 / total) * 100),
 				};
 
-				// Get class teacher info
+				// Osztályfőnök adatai
 				const classInfo = await db.classes.findUnique({
 					where: { id: tc.class_id },
 					include: {
@@ -85,7 +90,7 @@ async function rootTeacherClasses(req, res){
 					},
 				});
 
-				// Get weekly hours for this subject in this class
+				// Heti óraszám ehhez a tantárgyhoz ebben az osztályban
 				const weeklyHours = await db.timetable.count({
 					where: {
 						class_id: tc.class_id,
@@ -102,20 +107,18 @@ async function rootTeacherClasses(req, res){
 					student_count: studentCount,
 					average_grade: averageGrade,
 					distribution: distribution,
-					class_teacher: classInfo.users ? `${classInfo.users.first_name} ${classInfo.users.last_name}` : 'N/A',
+					class_teacher: classInfo.users ? `${classInfo.users.first_name} ${classInfo.users.last_name}` : "N/A",
 					weekly_hours: weeklyHours,
-					room_number: tc.room_number || 'N/A',
+					room_number: tc.room_number || "N/A",
 				});
 			}
 		}
 
-		// Calculate stats
+		// Statisztikák számítása
 		const stats = {
 			totalClasses: uniqueClasses.length,
 			totalStudents: uniqueClasses.reduce((sum, c) => sum + c.student_count, 0),
-			averageClassGrade: uniqueClasses.length > 0 
-				? (uniqueClasses.reduce((sum, c) => sum + parseFloat(c.average_grade), 0) / uniqueClasses.length).toFixed(2)
-				: 0,
+			averageClassGrade: uniqueClasses.length > 0 ? (uniqueClasses.reduce((sum, c) => sum + parseFloat(c.average_grade), 0) / uniqueClasses.length).toFixed(2) : 0,
 		};
 
 		res.render("teacher/teacher-classes", {

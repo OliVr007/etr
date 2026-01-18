@@ -4,7 +4,7 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="stylesheet" href="/css/messages/messages.css" />
-		<title>Üzenetek - Tanári felület</title>
+		<title>Elküldött üzenetek - Tanári felület</title>
 	</head>
 	<body>
 		<header>
@@ -14,7 +14,10 @@
 						<img src="/icons/icon-128.webp" alt="Iskola logo" />
 					</div>
 					<div class="user-info">
-						<a href="/logout" class="logout-btn"> <span>Kijelentkezés</span><img src="/icons/logouticon.svg" alt="Kijelentkezés" title="Kijelentkezés" /> </a>
+						<span>Bejelentkezve: <%= first_name %> <%= last_name %></span>
+						<a href="/logout" class="logout-btn">
+							<img src="/icons/logouticon.svg" alt="Kijelentkezés" title="Kijelentkezés" />
+						</a>
 					</div>
 				</div>
 			</div>
@@ -39,38 +42,38 @@
 			</div>
 
 			<div class="messages-tabs">
-				<a href="/teacher/messages" class="tab active">Beérkező</a>
-				<a href="/teacher/messages/sent" class="tab">Elküldött</a>
+				<a href="/teacher/messages" class="tab">Beérkező</a>
+				<a href="/teacher/messages/sent" class="tab active">Elküldött</a>
 			</div>
 
 			<div class="messages-list">
 				<div class="message-card">
-					<h2>Kovács János (9.A) - Házi feladat kérdés</h2>
-					<p>Tisztelt Tanár Úr! Kérdésem lenne a mai házi feladattal kapcsolatban...</p>
+					<h2>9.A osztály - Házi feladat emlékeztető</h2>
+					<p>Tisztelt Diákok! Emlékeztetlek benneteket, hogy a holnapi órára...</p>
 					<span class="date">2025.01.16</span>
 				</div>
 
 				<div class="message-card">
-					<h2>Nagy Anna szülője - Hiányzás igazolása</h2>
-					<p>Tisztelt Tanár Úr! Lányom, Nagy Anna betegség miatt hiányzott...</p>
+					<h2>Tóth Emma szülője - Teljesítményről</h2>
+					<p>Tisztelt Szülő! Szeretném tájékoztatni, hogy Emma teljesítménye...</p>
 					<span class="date">2025.01.15</span>
 				</div>
 
 				<div class="message-card">
-					<h2>Tanulmányi osztály - Fontos értesítés</h2>
-					<p>Tisztelt Kollégák! A félévi értékelések leadási határideje január 20...</p>
+					<h2>10.B osztály - ZH időpont</h2>
+					<p>Tisztelt Diákok! A következő dolgozat időpontja: január 22...</p>
 					<span class="date">2025.01.14</span>
 				</div>
 
 				<div class="message-card">
-					<h2>Szabó Péter (10.B) - ZH időpont kérdés</h2>
-					<p>Tanár Úr! Szeretném megkérdezni, hogy a jövő heti ZH-t...</p>
+					<h2>Kiss Márton - Konzultáció</h2>
+					<p>Szia Márton! Szeretnék veled konzultálni a projekted kapcsán...</p>
 					<span class="date">2025.01.13</span>
 				</div>
 
 				<div class="message-card">
-					<h2>Dr. Molnár Katalin - Konzultáció</h2>
-					<p>Kedves Kolléga! Szeretnék egyeztetni veled a közös projektről...</p>
+					<h2>11.C osztály - Fontos információ</h2>
+					<p>Tisztelt Diákok! A jövő heti óra elmarad, helyette...</p>
 					<span class="date">2025.01.12</span>
 				</div>
 			</div>

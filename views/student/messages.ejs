@@ -45,52 +45,59 @@
 				<a href="/messages/sent" class="tab">Elküldött</a>
 			</div>
 
-			<div class="messages-list">
-				<div class="message-card">
-					<h2>Tanár üzenete</h2>
-					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi.</p>
-					<span class="date">2025.02.12</span>
-				</div>
-
-				<div class="message-card">
-					<h2>Rendszerüzenet</h2>
-					<p>Holnap karbantartás miatt az oldal 2 órára nem lesz elérhető.</p>
-					<span class="date">2025.02.10</span>
-				</div>
+			<div class="messages-list" id="messages-list">
+				<p style="text-align: center; color: #666; padding: 2rem">Betöltés...</p>
 			</div>
 		</main>
 
 		<script>
 			async function loadMessages() {
-				const resp = await fetch("/api/messages");
-				const json = await resp.json();
-				const messages = json["messages"];
+				try {
+					const resp = await fetch("/api/messages/received");
+					const data = await resp.json();
+					const messages = data.messages || [];
 
-				const messagesContainer = document.getElementById("messages");
+					const messagesContainer = document.getElementById("messages-list");
+					messagesContainer.innerHTML = "";
 
-				messagesContainer.innerHTML = "";
+					if (messages.length === 0) {
+						messagesContainer.innerHTML = '<p style="text-align: center; color: #666; padding: 2rem;">Még nincs üzenet</p>';
+						return;
+					}
 
-				messages.forEach((msg) => {
-					const msgContainer = document.createElement("div");
-					msgContainer.classList.add("message");
+					messages.forEach((msg) => {
+						const msgCard = document.createElement("div");
+						msgCard.classList.add("message-card");
 
-					const msgTitle = document.createElement("h1");
-					msgTitle.classList.add("message-title");
-					msgTitle.innerText = msg.title;
+						const title = document.createElement("h2");
+						title.textContent = msg.title;
 
-					const msgContent = document.createElement("p");
-					msgContent.classList.add("message-content");
-					msgContent.innerText = msg.content;
+						const sender = document.createElement("p");
+						sender.innerHTML = `<strong>Feladó:</strong> ${msg.sender.last_name} ${msg.sender.first_name}`;
+						sender.style.fontSize = "0.9rem";
+						sender.style.color = "#666";
 
-					msgContainer.appendChild(msgTitle);
-					msgContainer.appendChild(msgContent);
+						const content = document.createElement("p");
+						content.textContent = msg.content;
 
-					messagesContainer.appendChild(msgContainer);
-				});
+						const date = document.createElement("span");
+						date.classList.add("date");
+						date.textContent = new Date(msg.created_at).toLocaleDateString("hu-HU");
+
+						msgCard.appendChild(title);
+						msgCard.appendChild(sender);
+						msgCard.appendChild(content);
+						msgCard.appendChild(date);
+
+						messagesContainer.appendChild(msgCard);
+					});
+				} catch (error) {
+					console.error("Hiba az üzenetek betöltésekor:", error);
+					document.getElementById("messages-list").innerHTML = '<p style="text-align: center; color: #e63946; padding: 2rem;">Hiba történt az üzenetek betöltésekor</p>';
+				}
 			}
 
 			loadMessages();
-
 			setInterval(loadMessages, 5000);
 		</script>
 	</body>

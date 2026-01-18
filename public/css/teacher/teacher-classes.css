@@ -42,11 +42,6 @@ header {
 	gap: 15px;
 }
 
-.logo-section img {
-	width: 48px;
-	height: 48px;
-}
-
 .logo-section h1 {
 	font-size: 1.8rem;
 	font-weight: 600;

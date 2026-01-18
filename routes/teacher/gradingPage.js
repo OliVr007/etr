@@ -1,5 +1,6 @@
+// Értékelési oldal megjelenítése
 async function gradePage(req, res) {
-    	try {
+	try {
 		res.render("teacher/teacher-grading", {
 			username: req.session.username,
 			first_name: req.session.first_name,

@@ -12,7 +12,6 @@
 				<div class="header-content">
 					<div class="logo-section">
 						<img src="/icons/icon-128.webp" alt="Iskola logo" />
-						<h1>Osztályok kezelése</h1>
 					</div>
 					<div class="user-info">
 						<span>Bejelentkezve: <%= first_name %> <%= last_name %></span>
@@ -70,11 +69,8 @@
 					<div class="filter-controls">
 						<select id="subjectFilter" class="filter-select">
 							<option value="all">Minden tantárgy</option>
-							<% 
-								const uniqueSubjects = [...new Set(classes.map(c => c.subject_name))];
-								uniqueSubjects.forEach(subject => { 
-							%>
-								<option value="<%= subject %>"><%= subject %></option>
+							<% const uniqueSubjects = [...new Set(classes.map(c => c.subject_name))]; uniqueSubjects.forEach(subject => { %>
+							<option value="<%= subject %>"><%= subject %></option>
 							<% }); %>
 						</select>
 					</div>
@@ -82,59 +78,57 @@
 
 				<div class="classes-grid">
 					<% if (classes.length === 0) { %>
-						<div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: #666;">
-							<p>Még nincs hozzárendelt osztály.</p>
+					<div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: #666">
+						<p>Még nincs hozzárendelt osztály.</p>
+					</div>
+					<% } else { %> <% classes.forEach(classData => { %>
+					<div class="class-card" data-subject="<%= classData.subject_name %>">
+						<div class="class-header">
+							<div class="class-title">
+								<h3><%= classData.class_name %></h3>
+								<span class="subject-badge badge-<%= classData.subject_name.toLowerCase() %>"><%= classData.subject_name %></span>
+							</div>
+							<div class="class-stats-inline">
+								<span class="stat-item">👥 <%= classData.student_count %> fő</span>
+								<span class="stat-item">📊 <%= classData.average_grade %></span>
+							</div>
 						</div>
-					<% } else { %>
-						<% classes.forEach(classData => { %>
-							<div class="class-card" data-subject="<%= classData.subject_name %>">
-								<div class="class-header">
-									<div class="class-title">
-										<h3><%= classData.class_name %></h3>
-										<span class="subject-badge badge-<%= classData.subject_name.toLowerCase() %>"><%= classData.subject_name %></span>
+						<div class="class-body">
+							<div class="class-info">
+								<p><strong>Osztályfőnök:</strong> <%= classData.class_teacher %></p>
+								<p><strong>Heti óraszám:</strong> <%= classData.weekly_hours %> óra</p>
+								<p><strong>Terem:</strong> <%= classData.room_number %></p>
+							</div>
+							<div class="class-progress">
+								<div class="progress-item">
+									<span class="progress-label">Jeles (5)</span>
+									<div class="progress-bar">
+										<div class="progress-fill" style="width: <%= classData.distribution.grade5Percent %>%"></div>
 									</div>
-									<div class="class-stats-inline">
-										<span class="stat-item">👥 <%= classData.student_count %> fő</span>
-										<span class="stat-item">📊 <%= classData.average_grade %></span>
-									</div>
+									<span class="progress-value"><%= classData.distribution.grade5Percent %>%</span>
 								</div>
-								<div class="class-body">
-									<div class="class-info">
-										<p><strong>Osztályfőnök:</strong> <%= classData.class_teacher %></p>
-										<p><strong>Heti óraszám:</strong> <%= classData.weekly_hours %> óra</p>
-										<p><strong>Terem:</strong> <%= classData.room_number %></p>
+								<div class="progress-item">
+									<span class="progress-label">Jó (4)</span>
+									<div class="progress-bar">
+										<div class="progress-fill" style="width: <%= classData.distribution.grade4Percent %>%"></div>
 									</div>
-									<div class="class-progress">
-										<div class="progress-item">
-											<span class="progress-label">Jeles (5)</span>
-											<div class="progress-bar">
-												<div class="progress-fill" style="width: <%= classData.distribution.grade5Percent %>%"></div>
-											</div>
-											<span class="progress-value"><%= classData.distribution.grade5Percent %>%</span>
-										</div>
-										<div class="progress-item">
-											<span class="progress-label">Jó (4)</span>
-											<div class="progress-bar">
-												<div class="progress-fill" style="width: <%= classData.distribution.grade4Percent %>%"></div>
-											</div>
-											<span class="progress-value"><%= classData.distribution.grade4Percent %>%</span>
-										</div>
-										<div class="progress-item">
-											<span class="progress-label">Közepes (3)</span>
-											<div class="progress-bar">
-												<div class="progress-fill" style="width: <%= classData.distribution.grade3Percent %>%"></div>
-											</div>
-											<span class="progress-value"><%= classData.distribution.grade3Percent %>%</span>
-										</div>
-									</div>
+									<span class="progress-value"><%= classData.distribution.grade4Percent %>%</span>
 								</div>
-								<div class="class-actions">
-									<button class="btn-view" onclick="viewStudents('<%= classData.class_id %>', '<%= classData.subject_id %>', '<%= classData.class_name %> - <%= classData.subject_name %>')">👥 Diákok megtekintése</button>
-									<button class="btn-grade" onclick="openGrading('<%= classData.class_id %>', '<%= classData.subject_id %>')">📝 Értékelés</button>
+								<div class="progress-item">
+									<span class="progress-label">Közepes (3)</span>
+									<div class="progress-bar">
+										<div class="progress-fill" style="width: <%= classData.distribution.grade3Percent %>%"></div>
+									</div>
+									<span class="progress-value"><%= classData.distribution.grade3Percent %>%</span>
 								</div>
 							</div>
-						<% }); %>
-					<% } %>
+						</div>
+						<div class="class-actions">
+							<button class="btn-view" onclick="viewStudents('<%= classData.class_id %>', '<%= classData.subject_id %>', '<%= classData.class_name %> - <%= classData.subject_name %>')">👥 Diákok megtekintése</button>
+							<button class="btn-grade" onclick="openGrading('<%= classData.class_id %>', '<%= classData.subject_id %>')">📝 Értékelés</button>
+						</div>
+					</div>
+					<% }); %> <% } %>
 				</div>
 			</section>
 		</main>
@@ -150,10 +144,8 @@
 					<div class="search-box">
 						<input type="text" id="studentSearch" placeholder="Keresés név alapján..." />
 					</div>
-					<div id="loadingMessage" style="text-align: center; padding: 2rem; color: #666;">
-						Betöltés...
-					</div>
-					<div class="students-table-wrapper" style="display: none;">
+					<div id="loadingMessage" style="text-align: center; padding: 2rem; color: #666">Betöltés...</div>
+					<div class="students-table-wrapper" style="display: none">
 						<table class="students-table">
 							<thead>
 								<tr>
@@ -164,8 +156,7 @@
 									<th>Műveletek</th>
 								</tr>
 							</thead>
-							<tbody id="studentsTableBody">
-							</tbody>
+							<tbody id="studentsTableBody"></tbody>
 						</table>
 					</div>
 				</div>
@@ -208,17 +199,15 @@
 					if (students.length === 0) {
 						tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 2rem;">Nincs diák ebben az osztályban.</td></tr>';
 					} else {
-						students.forEach(student => {
+						students.forEach((student) => {
 							const row = document.createElement("tr");
-							
+
 							const gradeClass = student.average >= 4.5 ? "g5" : student.average >= 3.5 ? "g4" : student.average >= 2.5 ? "g3" : "g2";
-							const lastGradeText = student.lastGrade 
-								? `${student.lastGrade.value} (${new Date(student.lastGrade.date).toLocaleDateString('hu-HU')})`
-								: "Nincs jegy";
-							
+							const lastGradeText = student.lastGrade ? `${student.lastGrade.value} (${new Date(student.lastGrade.date).toLocaleDateString("hu-HU")})` : "Nincs jegy";
+
 							row.innerHTML = `
 								<td>${student.name}</td>
-								<td><span class="grade-badge ${gradeClass}">${student.average || 'N/A'}</span></td>
+								<td><span class="grade-badge ${gradeClass}">${student.average || "N/A"}</span></td>
 								<td>${student.absences} óra</td>
 								<td>${lastGradeText}</td>
 								<td>

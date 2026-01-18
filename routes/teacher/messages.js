@@ -1,5 +1,5 @@
 async function teacherMessages(req, res) {
-    try {
+	try {
 		res.render("teacher/teacher-messages", {
 			username: req.session.username,
 			first_name: req.session.first_name,

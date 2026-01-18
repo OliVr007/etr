@@ -1,9 +1,11 @@
+// Diákok lekérése egy adott osztályhoz és tantárgyhoz (API endpoint)
 async function studentforClass(req, res) {
-    	try {
+	try {
+		const db = req.db;
 		const classId = parseInt(req.params.classId);
 		const subjectId = parseInt(req.params.subjectId);
 
-		// Get all students in this class
+		// Összes diák lekérése ebben az osztályban
 		const students = await db.student_classes.findMany({
 			where: {
 				class_id: classId,
@@ -20,43 +22,52 @@ async function studentforClass(req, res) {
 			},
 		});
 
-		// Get grades and attendance for each student
-		const studentsWithData = await Promise.all(students.map(async (student) => {
-			// Get grades for this subject
-			const grades = await db.grades.findMany({
-				where: {
-					student_id: student.student_id,
-					subject_id: subjectId,
-				},
-				orderBy: {
-					grade_date: 'desc',
-				},
-			});
+		// Jegyek és hiányzások lekérése minden diákhoz
+		const studentsWithData = await Promise.all(
+			students.map(async (student) => {
+				// Jegyek lekérése ehhez a tantárgyhoz
+				const grades = await db.grades.findMany({
+					where: {
+						student_id: student.student_id,
+						subject_id: subjectId,
+					},
+					orderBy: {
+						grade_date: "desc",
+					},
+				});
 
-			// Calculate average
-			let average = 0;
-			if (grades.length > 0) {
-				const sum = grades.reduce((acc, g) => acc + parseFloat(g.grade_value), 0);
-				average = (sum / grades.length).toFixed(2);
-			}
+				// Átlag számítása
+				let average = 0;
+				if (grades.length > 0) {
+					const sum = grades.reduce((acc, g) => acc + parseFloat(g.grade_value), 0);
+					average = (sum / grades.length).toFixed(2);
+				}
 
-			// Get last grade
-			const lastGrade = grades[0] || null;
+				// Utolsó jegy
+				const lastGrade = grades[0] || null;
 
-			// Get absences (you'll need to implement this based on your schema)
-			const absences = 0; // Placeholder
+				// Hiányzások lekérése (az absences táblából)
+				const absences = await db.absences.count({
+					where: {
+						student_id: student.student_id,
+						subject_id: subjectId,
+					},
+				});
 
-			return {
-				id: student.users.id,
-				name: `${student.users.last_name} ${student.users.first_name}`,
-				average: average,
-				absences: absences,
-				lastGrade: lastGrade ? {
-					value: lastGrade.grade_value,
-					date: lastGrade.grade_date,
-				} : null,
-			};
-		}));
+				return {
+					id: student.users.id,
+					name: `${student.users.last_name} ${student.users.first_name}`,
+					average: average,
+					absences: absences,
+					lastGrade: lastGrade
+						? {
+								value: lastGrade.grade_value,
+								date: lastGrade.grade_date,
+						  }
+						: null,
+				};
+			})
+		);
 
 		res.json(studentsWithData);
 	} catch (error) {

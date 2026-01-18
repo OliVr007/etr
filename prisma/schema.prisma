@@ -30,10 +30,10 @@ model absences {
 model classes {
   id               Int                @id @default(autoincrement())
   class_name       String             @db.VarChar(20)
-  class_teacher_id Int?
   academic_year    String             @db.VarChar(9)
-  room_number      String?            @db.VarChar(10)
   created_at       DateTime?          @default(now()) @db.DateTime(0)
+  class_teacher_id Int?
+  room_number      String?            @db.VarChar(10)
   users            users?             @relation(fields: [class_teacher_id], references: [id], onUpdate: Restrict, map: "classes_ibfk_1")
   student_classes  student_classes[]
   teacher_subjects teacher_subjects[]
@@ -52,8 +52,8 @@ model grades {
   description                    String?           @db.VarChar(200)
   grade_date                     DateTime          @db.Date
   created_at                     DateTime?         @default(now()) @db.DateTime(0)
-  weight                         Int?              @default(1)
   is_final                       Boolean?          @default(false)
+  weight                         Int?              @default(1)
   users_grades_student_idTousers users             @relation("grades_student_idTousers", fields: [student_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "grades_ibfk_1")
   subjects                       subjects          @relation(fields: [subject_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "grades_ibfk_2")
   users_grades_teacher_idTousers users             @relation("grades_teacher_idTousers", fields: [teacher_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "grades_ibfk_3")
@@ -81,10 +81,10 @@ model subjects {
   id               Int                @id @default(autoincrement())
   subject_code     String             @unique(map: "subject_code") @db.VarChar(10)
   subject_name     String             @db.VarChar(100)
-  description      String?            @db.Text
-  credits          Int?               @default(1)
   is_active        Boolean?           @default(true)
   created_at       DateTime?          @default(now()) @db.DateTime(0)
+  credits          Int?               @default(1)
+  description      String?            @db.Text
   absences         absences[]
   grades           grades[]
   teacher_subjects teacher_subjects[]
@@ -128,27 +128,44 @@ model timetable {
 }
 
 model users {
-  id                                  Int                @id @default(autoincrement())
-  username                            String             @unique(map: "username") @db.VarChar(50)
-  email                               String             @unique(map: "email") @db.VarChar(100)
-  password_hash                       String             @db.VarChar(255)
-  first_name                          String             @db.VarChar(50)
-  last_name                           String             @db.VarChar(50)
-  role                                users_role
-  is_active                           Boolean?           @default(true)
-  created_at                          DateTime?          @default(now()) @db.DateTime(0)
-  last_login                          DateTime?          @db.DateTime(0)
-  profile_image                       String?            @db.VarChar(255)
-  phone                               String?            @db.VarChar(20)
-  date_of_birth                       DateTime?          @db.Date
-  absences_absences_student_idTousers absences[]         @relation("absences_student_idTousers")
-  absences_absences_teacher_idTousers absences[]         @relation("absences_teacher_idTousers")
-  classes                             classes[]
-  grades_grades_student_idTousers     grades[]           @relation("grades_student_idTousers")
-  grades_grades_teacher_idTousers     grades[]           @relation("grades_teacher_idTousers")
-  student_classes                     student_classes[]
-  teacher_subjects                    teacher_subjects[]
-  timetable                           timetable[]
+  id                                   Int                @id @default(autoincrement())
+  username                             String             @unique(map: "username") @db.VarChar(50)
+  email                                String             @unique(map: "email") @db.VarChar(100)
+  password_hash                        String             @db.VarChar(255)
+  first_name                           String             @db.VarChar(50)
+  last_name                            String             @db.VarChar(50)
+  role                                 users_role
+  is_active                            Boolean?           @default(true)
+  created_at                           DateTime?          @default(now()) @db.DateTime(0)
+  date_of_birth                        DateTime?          @db.Date
+  last_login                           DateTime?          @db.DateTime(0)
+  phone                                String?            @db.VarChar(20)
+  profile_image                        String?            @db.VarChar(255)
+  absences_absences_student_idTousers  absences[]         @relation("absences_student_idTousers")
+  absences_absences_teacher_idTousers  absences[]         @relation("absences_teacher_idTousers")
+  classes                              classes[]
+  grades_grades_student_idTousers      grades[]           @relation("grades_student_idTousers")
+  grades_grades_teacher_idTousers      grades[]           @relation("grades_teacher_idTousers")
+  messages_messages_sender_idTousers   messages[]         @relation("messages_sender_idTousers")
+  messages_messages_receiver_idTousers messages[]         @relation("messages_receiver_idTousers")
+  student_classes                      student_classes[]
+  teacher_subjects                     teacher_subjects[]
+  timetable                            timetable[]
+}
+
+model messages {
+  id                                Int       @id @default(autoincrement())
+  sender_id                         Int
+  receiver_id                       Int
+  title                             String    @db.VarChar(200)
+  content                           String    @db.Text
+  is_read                           Boolean?  @default(false)
+  created_at                        DateTime? @default(now()) @db.DateTime(0)
+  users_messages_sender_idTousers   users     @relation("messages_sender_idTousers", fields: [sender_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "messages_ibfk_1")
+  users_messages_receiver_idTousers users     @relation("messages_receiver_idTousers", fields: [receiver_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "messages_ibfk_2")
+
+  @@index([receiver_id], map: "idx_receiver")
+  @@index([sender_id], map: "idx_sender")
 }
 
 enum grades_grade_type {

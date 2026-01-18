@@ -15,27 +15,25 @@
 				<a href="/messages" class="back-link"> ← Vissza az üzenetekhez </a>
 				<header class="new-message-header">
 					<h2>Új üzenet írása</h2>
-					<p>Küldj üzenetet hallgatónak vagy oktatónak</p>
+					<p>Küldj üzenetet diáknak vagy tanárnak</p>
 				</header>
 
-				<form class="new-message-form">
+				<form class="new-message-form" id="messageForm">
 					<div class="form-group">
-						<label for="recipient">Címzett</label>
-						<select id="recipient" required>
+						<label for="recipient">Címzett *</label>
+						<select id="recipient" name="receiver_id" required>
 							<option value="">— Válassz címzettet —</option>
-							<option>Dr. Kovács Péter (oktató)</option>
-							<option>Nagy Anna (hallgató)</option>
 						</select>
 					</div>
 
 					<div class="form-group">
-						<label for="subject">Tárgy</label>
-						<input type="text" id="subject" placeholder="Pl. ZH időpont" required />
+						<label for="subject">Tárgy *</label>
+						<input type="text" id="subject" name="title" placeholder="Pl. ZH időpont" required />
 					</div>
 
 					<div class="form-group">
-						<label for="content">Üzenet</label>
-						<textarea id="content" rows="7" placeholder="Írd le részletesen az üzeneted…" required></textarea>
+						<label for="content">Üzenet *</label>
+						<textarea id="content" name="content" rows="7" placeholder="Írd le részletesen az üzeneted…" required></textarea>
 					</div>
 
 					<div class="form-actions">
@@ -45,5 +43,73 @@
 				</form>
 			</section>
 		</main>
+
+		<script>
+			async function loadUsers() {
+				try {
+					const resp = await fetch("/api/messages/users");
+					const data = await resp.json();
+					const users = data.users || [];
+
+					const select = document.getElementById("recipient");
+
+					users.forEach((user) => {
+						const option = document.createElement("option");
+						option.value = user.id;
+
+						let roleText = "";
+						if (user.role === "teacher") roleText = "tanár";
+						else if (user.role === "student") roleText = "diák";
+						else if (user.role === "admin") roleText = "admin";
+
+						option.textContent = `${user.last_name} ${user.first_name} (${roleText})`;
+						select.appendChild(option);
+					});
+				} catch (error) {
+					console.error("Hiba a felhasználók betöltésekor:", error);
+					alert("Hiba történt a címzettek betöltésekor");
+				}
+			}
+
+			document.getElementById("messageForm").addEventListener("submit", async (e) => {
+				e.preventDefault();
+
+				const formData = new FormData(e.target);
+				const data = {
+					receiver_id: formData.get("receiver_id"),
+					title: formData.get("title"),
+					content: formData.get("content"),
+				};
+
+				if (!data.receiver_id || !data.title || !data.content) {
+					alert("Minden mezőt ki kell tölteni!");
+					return;
+				}
+
+				try {
+					const resp = await fetch("/api/messages/send", {
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json",
+						},
+						body: JSON.stringify(data),
+					});
+
+					const result = await resp.json();
+
+					if (resp.ok) {
+						alert("Üzenet sikeresen elküldve!");
+						window.close();
+					} else {
+						alert(result.error || "Hiba történt az üzenet küldésekor");
+					}
+				} catch (error) {
+					console.error("Hiba az üzenet küldésekor:", error);
+					alert("Hiba történt az üzenet küldésekor");
+				}
+			});
+
+			loadUsers();
+		</script>
 	</body>
 </html>

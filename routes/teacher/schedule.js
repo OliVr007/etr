@@ -1,5 +1,9 @@
+// Tanár órarendjének megjelenítése
 async function teacherSchedule(req, res) {
-    	try {
+	try {
+		const db = req.db;
+
+		// Órarend lekérése
 		const schedule = await db.timetable.findMany({
 			where: {
 				teacher_id: req.session.id,
@@ -8,10 +12,7 @@ async function teacherSchedule(req, res) {
 				classes: true,
 				subjects: true,
 			},
-			orderBy: [
-				{ day_of_week: 'asc' },
-				{ lesson_number: 'asc' },
-			],
+			orderBy: [{ day_of_week: "asc" }, { lesson_number: "asc" }],
 		});
 
 		res.render("teacher/teacher-schedule", {

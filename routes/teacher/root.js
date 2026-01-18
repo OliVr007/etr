@@ -1,3 +1,4 @@
+// Tanári főoldal megjelenítése
 async function routeTeacher(req, res) {
 	try {
 		res.render("teacher/teacher-index", {
