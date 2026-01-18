@@ -14,6 +14,15 @@ async function adminIndex(req, res) {
 			},
 		});
 
+		// Osztályok lekérése a dropdown-hoz
+		const classes = await db.classes.findMany({
+			orderBy: { class_name: "asc" },
+			select: {
+				id: true,
+				class_name: true,
+			},
+		});
+
 		const stats = {
 			totalUsers: users.length,
 			students: users.filter((u) => u.role === "student").length,
@@ -25,6 +34,7 @@ async function adminIndex(req, res) {
 			username: req.session.username,
 			first_name: req.session.first_name,
 			users: users,
+			classes: classes,
 			stats: stats,
 		});
 	} catch (error) {
