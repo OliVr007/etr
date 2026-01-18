@@ -50,6 +50,13 @@ const { getAllUsers } = require("./routes/api/getAllUsers");
 const { sendMessage } = require("./routes/api/sendMessage");
 const { markAsRead } = require("./routes/api/markAsRead");
 
+// Teacher API routes for messages
+const { getTeacherReceivedMessages } = require("./routes/api/teacher/getReceivedMessages");
+const { getTeacherSentMessages } = require("./routes/api/teacher/getSentMessages");
+const { getTeacherClasses } = require("./routes/api/teacher/getTeacherClasses");
+const { getStudentsForClass } = require("./routes/api/teacher/getStudentsForClass");
+
+
 const app = express();
 const port = 3000;
 
@@ -136,6 +143,14 @@ app.get("/api/messages/sent", requireAuth, getSentMessages);
 app.get("/api/messages/users", requireAuth, getAllUsers);
 app.post("/api/messages/send", requireAuth, sendMessage);
 app.put("/api/messages/:id/read", requireAuth, markAsRead);
+
+// ========================================
+// TEACHER API ROUTES - Messages
+// ========================================
+app.get("/api/teacher/messages/received", requireTeacher, getTeacherReceivedMessages);
+app.get("/api/teacher/messages/sent", requireTeacher, getTeacherSentMessages);
+app.get("/api/teacher/classes", requireTeacher, getTeacherClasses);
+app.get("/api/teacher/class/:classId/students", requireTeacher, getStudentsForClass);
 
 // ========================================
 // SZERVER INDÍTÁSA

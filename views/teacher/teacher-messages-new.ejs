@@ -18,13 +18,12 @@
 					<p>Küldj üzenetet diáknak, szülőnek vagy kollégának</p>
 				</header>
 
-				<form class="new-message-form" action="/api/teacher/messages/send" method="POST">
+				<form class="new-message-form" id="messageForm">
 					<div class="form-group">
 						<label for="recipient_type">Címzett típusa</label>
-						<select id="recipient_type" name="recipient_type" required onchange="updateRecipientList()">
+						<select id="recipient_type" name="recipient_type" required>
 							<option value="">— Válassz típust —</option>
 							<option value="student">Diák</option>
-							<option value="parent">Szülő</option>
 							<option value="teacher">Tanár</option>
 							<option value="class">Osztály (összes diák)</option>
 						</select>
@@ -32,22 +31,21 @@
 
 					<div class="form-group" id="class_selector_group" style="display: none;">
 						<label for="class_selector">Válassz osztályt</label>
-						<select id="class_selector" name="class_id" onchange="loadClassStudents()">
+						<select id="class_selector" name="class_id">
 							<option value="">— Válassz osztályt —</option>
-							<!-- Classes will be loaded dynamically -->
 						</select>
 					</div>
 
 					<div class="form-group" id="recipient_group" style="display: none;">
 						<label for="recipient">Címzett</label>
-						<select id="recipient" name="recipient_id" required>
+						<select id="recipient" name="receiver_id" required>
 							<option value="">— Válassz címzettet —</option>
 						</select>
 					</div>
 
 					<div class="form-group">
 						<label for="subject">Tárgy</label>
-						<input type="text" id="subject" name="subject" placeholder="Pl. Házi feladat megbeszélése" required />
+						<input type="text" id="subject" name="title" placeholder="Pl. Házi feladat megbeszélése" required />
 					</div>
 
 					<div class="form-group">
@@ -55,15 +53,8 @@
 						<textarea id="content" name="content" rows="7" placeholder="Írd le részletesen az üzeneted…" required></textarea>
 					</div>
 
-					<div class="form-group">
-						<label>
-							<input type="checkbox" id="important" name="important" style="width: auto; margin-right: 8px;" />
-							Fontos üzenet megjelölése
-						</label>
-					</div>
-
 					<div class="form-actions">
-						<button type="button" class="secondary-btn" onclick="window.location.href='/teacher/messages'">Mégse</button>
+						<button type="button" class="secondary-btn" onclick="window.close()">Mégse</button>
 						<button type="submit" class="primary-btn">Üzenet küldése</button>
 					</div>
 				</form>
@@ -71,144 +62,191 @@
 		</main>
 
 		<script>
-			// Sample data - in production this would come from the server
-			const teacherClasses = [
-				{ id: 1, name: "9.A" },
-				{ id: 2, name: "10.B" },
-				{ id: 3, name: "11.C" }
-			];
+			let allTeachers = [];
+			let classStudents = {};
 
-			const students = [
-				{ id: 1, name: "Kovács János", class_id: 1 },
-				{ id: 2, name: "Nagy Anna", class_id: 1 },
-				{ id: 3, name: "Szabó Péter", class_id: 2 },
-				{ id: 4, name: "Tóth Emma", class_id: 2 },
-				{ id: 5, name: "Kiss Márton", class_id: 3 }
-			];
+			async function loadInitialData() {
+				try {
+					// Osztályok betöltése
+					const classesResp = await fetch("/api/teacher/classes");
+					const classesData = await classesResp.json();
+					const classes = classesData.classes || [];
 
-			const teachers = [
-				{ id: 1, name: "Dr. Molnár Katalin" },
-				{ id: 2, name: "Varga László" },
-				{ id: 3, name: "Horváth Erzsébet" }
-			];
-
-			function updateRecipientList() {
-				const recipientType = document.getElementById('recipient_type').value;
-				const recipientGroup = document.getElementById('recipient_group');
-				const recipientSelect = document.getElementById('recipient');
-				const classSelectorGroup = document.getElementById('class_selector_group');
-				const classSelector = document.getElementById('class_selector');
-
-				// Clear recipient select
-				recipientSelect.innerHTML = '<option value="">— Válassz címzettet —</option>';
-
-				if (recipientType === 'class') {
-					// Show class selector
-					classSelectorGroup.style.display = 'flex';
-					recipientGroup.style.display = 'none';
-					
-					// Load classes
-					classSelector.innerHTML = '<option value="">— Válassz osztályt —</option>';
-					teacherClasses.forEach(cls => {
-						const option = document.createElement('option');
+					const classSelector = document.getElementById("class_selector");
+					classes.forEach((cls) => {
+						const option = document.createElement("option");
 						option.value = cls.id;
 						option.textContent = cls.name;
 						classSelector.appendChild(option);
 					});
-					classSelector.required = true;
-					recipientSelect.required = false;
-				} else if (recipientType === 'student') {
-					classSelectorGroup.style.display = 'flex';
-					recipientGroup.style.display = 'flex';
-					
-					// Load classes
-					classSelector.innerHTML = '<option value="">— Válassz osztályt —</option>';
-					teacherClasses.forEach(cls => {
-						const option = document.createElement('option');
-						option.value = cls.id;
-						option.textContent = cls.name;
-						classSelector.appendChild(option);
-					});
-					classSelector.required = true;
-					recipientSelect.required = true;
-				} else if (recipientType === 'teacher') {
-					classSelectorGroup.style.display = 'none';
-					recipientGroup.style.display = 'flex';
-					classSelector.required = false;
-					recipientSelect.required = true;
-					
-					// Load teachers
-					teachers.forEach(teacher => {
-						const option = document.createElement('option');
-						option.value = teacher.id;
-						option.textContent = teacher.name;
-						recipientSelect.appendChild(option);
-					});
-				} else if (recipientType === 'parent') {
-					classSelectorGroup.style.display = 'flex';
-					recipientGroup.style.display = 'flex';
-					
-					// Load classes
-					classSelector.innerHTML = '<option value="">— Válassz osztályt —</option>';
-					teacherClasses.forEach(cls => {
-						const option = document.createElement('option');
-						option.value = cls.id;
-						option.textContent = cls.name;
-						classSelector.appendChild(option);
-					});
-					classSelector.required = true;
-					recipientSelect.required = true;
-				} else {
-					classSelectorGroup.style.display = 'none';
-					recipientGroup.style.display = 'none';
-					classSelector.required = false;
-					recipientSelect.required = false;
+
+					// Tanárok betöltése
+					const teachersResp = await fetch("/api/messages/users");
+					const teachersData = await teachersResp.json();
+					allTeachers = (teachersData.users || []).filter((u) => u.role === "teacher");
+				} catch (error) {
+					console.error("Hiba az adatok betöltésekor:", error);
+					alert("Hiba történt az adatok betöltésekor");
 				}
 			}
 
-			function loadClassStudents() {
-				const classId = parseInt(document.getElementById('class_selector').value);
-				const recipientType = document.getElementById('recipient_type').value;
-				const recipientSelect = document.getElementById('recipient');
-				
-				if (!classId) {
-					recipientSelect.innerHTML = '<option value="">— Válassz címzettet —</option>';
+			async function loadClassStudents(classId) {
+				if (classStudents[classId]) {
+					return classStudents[classId];
+				}
+
+				try {
+					const resp = await fetch(`/api/teacher/class/${classId}/students`);
+					const data = await resp.json();
+					classStudents[classId] = data.students || [];
+					return classStudents[classId];
+				} catch (error) {
+					console.error("Hiba a diákok betöltésekor:", error);
+					return [];
+				}
+			}
+
+			document.getElementById("recipient_type").addEventListener("change", async function () {
+				const recipientType = this.value;
+				const recipientGroup = document.getElementById("recipient_group");
+				const recipientSelect = document.getElementById("recipient");
+				const classSelectorGroup = document.getElementById("class_selector_group");
+				const classSelector = document.getElementById("class_selector");
+
+				recipientSelect.innerHTML = '<option value="">— Válassz címzettet —</option>';
+				classSelector.value = "";
+
+				if (recipientType === "class") {
+					classSelectorGroup.style.display = "flex";
+					recipientGroup.style.display = "none";
+					classSelector.required = true;
+					recipientSelect.required = false;
+				} else if (recipientType === "student") {
+					classSelectorGroup.style.display = "flex";
+					recipientGroup.style.display = "flex";
+					classSelector.required = true;
+					recipientSelect.required = true;
+				} else if (recipientType === "teacher") {
+					classSelectorGroup.style.display = "none";
+					recipientGroup.style.display = "flex";
+					classSelector.required = false;
+					recipientSelect.required = true;
+
+					allTeachers.forEach((teacher) => {
+						const option = document.createElement("option");
+						option.value = teacher.id;
+						option.textContent = `${teacher.last_name} ${teacher.first_name}`;
+						recipientSelect.appendChild(option);
+					});
+				} else {
+					classSelectorGroup.style.display = "none";
+					recipientGroup.style.display = "none";
+					classSelector.required = false;
+					recipientSelect.required = false;
+				}
+			});
+
+			document.getElementById("class_selector").addEventListener("change", async function () {
+				const classId = this.value;
+				const recipientType = document.getElementById("recipient_type").value;
+				const recipientSelect = document.getElementById("recipient");
+
+				if (!classId || recipientType === "class") return;
+
+				recipientSelect.innerHTML = '<option value="">— Betöltés... —</option>';
+
+				const students = await loadClassStudents(classId);
+				recipientSelect.innerHTML = '<option value="">— Válassz címzettet —</option>';
+
+				students.forEach((student) => {
+					const option = document.createElement("option");
+					option.value = student.id;
+					option.textContent = `${student.last_name} ${student.first_name}`;
+					recipientSelect.appendChild(option);
+				});
+			});
+
+			document.getElementById("messageForm").addEventListener("submit", async (e) => {
+				e.preventDefault();
+
+				const recipientType = document.getElementById("recipient_type").value;
+				const classId = document.getElementById("class_selector").value;
+				const recipientId = document.getElementById("recipient").value;
+				const title = document.getElementById("subject").value;
+				const content = document.getElementById("content").value;
+
+				if (!title || !content) {
+					alert("Minden mezőt ki kell tölteni!");
 					return;
 				}
 
-				recipientSelect.innerHTML = '<option value="">— Válassz címzettet —</option>';
-				
-				if (recipientType === 'student') {
-					const classStudents = students.filter(s => s.class_id === classId);
-					classStudents.forEach(student => {
-						const option = document.createElement('option');
-						option.value = student.id;
-						option.textContent = student.name;
-						recipientSelect.appendChild(option);
-					});
-				} else if (recipientType === 'parent') {
-					const classStudents = students.filter(s => s.class_id === classId);
-					classStudents.forEach(student => {
-						const option = document.createElement('option');
-						option.value = student.id;
-						option.textContent = `${student.name} szülője`;
-						recipientSelect.appendChild(option);
-					});
-				}
-			}
+				if (recipientType === "class") {
+					if (!classId) {
+						alert("Válassz osztályt!");
+						return;
+					}
 
-			// Form submission
-			document.querySelector('.new-message-form').addEventListener('submit', async (e) => {
-				e.preventDefault();
-				
-				const formData = new FormData(e.target);
-				const data = Object.fromEntries(formData);
-				
-				// For demonstration - in production this would send to the server
-				console.log('Sending message:', data);
-				alert('Üzenet elküldve! (Demo funkció)');
-				window.location.href = '/teacher/messages';
+					const students = await loadClassStudents(classId);
+					if (students.length === 0) {
+						alert("Nincsenek diákok ebben az osztályban!");
+						return;
+					}
+
+					try {
+						let successCount = 0;
+						for (const student of students) {
+							const resp = await fetch("/api/messages/send", {
+								method: "POST",
+								headers: { "Content-Type": "application/json" },
+								body: JSON.stringify({
+									receiver_id: student.id,
+									title: title,
+									content: content,
+								}),
+							});
+
+							if (resp.ok) successCount++;
+						}
+
+						alert(`Üzenet sikeresen elküldve ${successCount} diáknak!`);
+						window.close();
+					} catch (error) {
+						console.error("Hiba az üzenetek küldésekor:", error);
+						alert("Hiba történt az üzenetek küldésekor");
+					}
+				} else {
+					if (!recipientId) {
+						alert("Válassz címzettet!");
+						return;
+					}
+
+					try {
+						const resp = await fetch("/api/messages/send", {
+							method: "POST",
+							headers: { "Content-Type": "application/json" },
+							body: JSON.stringify({
+								receiver_id: recipientId,
+								title: title,
+								content: content,
+							}),
+						});
+
+						const result = await resp.json();
+
+						if (resp.ok) {
+							alert("Üzenet sikeresen elküldve!");
+							window.close();
+						} else {
+							alert(result.error || "Hiba történt az üzenet küldésekor");
+						}
+					} catch (error) {
+						console.error("Hiba az üzenet küldésekor:", error);
+						alert("Hiba történt az üzenet küldésekor");
+					}
+				}
 			});
+
+			loadInitialData();
 		</script>
 	</body>
 </html>

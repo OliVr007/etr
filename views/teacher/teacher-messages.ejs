@@ -14,7 +14,10 @@
 						<img src="/icons/icon-128.webp" alt="Iskola logo" />
 					</div>
 					<div class="user-info">
-						<a href="/logout" class="logout-btn"> <span>Kijelentkezés</span><img src="/icons/logouticon.svg" alt="Kijelentkezés" title="Kijelentkezés" /> </a>
+						<a href="/logout" class="logout-btn">
+							<span>Kijelentkezés</span>
+							<img src="/icons/logouticon.svg" alt="Kijelentkezés" title="Kijelentkezés" />
+						</a>
 					</div>
 				</div>
 			</div>
@@ -35,7 +38,7 @@
 		<main class="container messages-container">
 			<div class="messages-header">
 				<h1>Üzenetek</h1>
-				<a href="/teacher/messages/new"><button class="new-message-btn">Új üzenet</button></a>
+				<a href="/teacher/messages/new" target="_blank"><button class="new-message-btn">Új üzenet</button></a>
 			</div>
 
 			<div class="messages-tabs">
@@ -43,37 +46,60 @@
 				<a href="/teacher/messages/sent" class="tab">Elküldött</a>
 			</div>
 
-			<div class="messages-list">
-				<div class="message-card">
-					<h2>Kovács János (9.A) - Házi feladat kérdés</h2>
-					<p>Tisztelt Tanár Úr! Kérdésem lenne a mai házi feladattal kapcsolatban...</p>
-					<span class="date">2025.01.16</span>
-				</div>
-
-				<div class="message-card">
-					<h2>Nagy Anna szülője - Hiányzás igazolása</h2>
-					<p>Tisztelt Tanár Úr! Lányom, Nagy Anna betegség miatt hiányzott...</p>
-					<span class="date">2025.01.15</span>
-				</div>
-
-				<div class="message-card">
-					<h2>Tanulmányi osztály - Fontos értesítés</h2>
-					<p>Tisztelt Kollégák! A félévi értékelések leadási határideje január 20...</p>
-					<span class="date">2025.01.14</span>
-				</div>
-
-				<div class="message-card">
-					<h2>Szabó Péter (10.B) - ZH időpont kérdés</h2>
-					<p>Tanár Úr! Szeretném megkérdezni, hogy a jövő heti ZH-t...</p>
-					<span class="date">2025.01.13</span>
-				</div>
-
-				<div class="message-card">
-					<h2>Dr. Molnár Katalin - Konzultáció</h2>
-					<p>Kedves Kolléga! Szeretnék egyeztetni veled a közös projektről...</p>
-					<span class="date">2025.01.12</span>
-				</div>
+			<div class="messages-list" id="messages-list">
+				<p style="text-align: center; color: #666; padding: 2rem">Betöltés...</p>
 			</div>
 		</main>
+
+		<script>
+			async function loadMessages() {
+				try {
+					const resp = await fetch("/api/teacher/messages/received");
+					const data = await resp.json();
+					const messages = data.messages || [];
+
+					const messagesContainer = document.getElementById("messages-list");
+					messagesContainer.innerHTML = "";
+
+					if (messages.length === 0) {
+						messagesContainer.innerHTML = '<p style="text-align: center; color: #666; padding: 2rem;">Még nincs üzenet</p>';
+						return;
+					}
+
+					messages.forEach((msg) => {
+						const msgCard = document.createElement("div");
+						msgCard.classList.add("message-card");
+
+						const title = document.createElement("h2");
+						title.textContent = msg.title;
+
+						const sender = document.createElement("p");
+						sender.innerHTML = `<strong>Feladó:</strong> ${msg.sender.last_name} ${msg.sender.first_name}`;
+						sender.style.fontSize = "0.9rem";
+						sender.style.color = "#666";
+
+						const content = document.createElement("p");
+						content.textContent = msg.content;
+
+						const date = document.createElement("span");
+						date.classList.add("date");
+						date.textContent = new Date(msg.created_at).toLocaleDateString("hu-HU");
+
+						msgCard.appendChild(title);
+						msgCard.appendChild(sender);
+						msgCard.appendChild(content);
+						msgCard.appendChild(date);
+
+						messagesContainer.appendChild(msgCard);
+					});
+				} catch (error) {
+					console.error("Hiba az üzenetek betöltésekor:", error);
+					document.getElementById("messages-list").innerHTML = '<p style="text-align: center; color: #e63946; padding: 2rem;">Hiba történt az üzenetek betöltésekor</p>';
+				}
+			}
+
+			loadMessages();
+			setInterval(loadMessages, 5000);
+		</script>
 	</body>
 </html>
