@@ -37,6 +37,7 @@ const { teacherLegacyRoot } = require("./routes/teacher/legacyRoot");
 const { teacherMessages } = require("./routes/teacher/messages");
 const { teacherMessagesSent } = require("./routes/teacher/messagesSent");
 const { teacherMessagesNew } = require("./routes/teacher/messagesNew");
+const { teacherHomework } = require("./routes/teacher/homework");
 
 // Auth routes
 const { loginPage } = require("./routes/auth/login");
@@ -56,6 +57,13 @@ const { getTeacherSentMessages } = require("./routes/api/teacher/getSentMessages
 const { getTeacherClasses } = require("./routes/api/teacher/getTeacherClasses");
 const { getStudentsForClass } = require("./routes/api/teacher/getStudentsForClass");
 
+// Homework API routes
+const { createHomework } = require("./routes/api/teacher/createHomework");
+const { getTeacherHomeworks } = require("./routes/api/teacher/getTeacherHomeworks");
+const { acceptHomework } = require("./routes/api/teacher/acceptHomework");
+const { getStudentHomeworks } = require("./routes/api/getStudentHomeworks");
+const { submitHomework } = require("./routes/api/submitHomework");
+const { deleteHomework } = require("./routes/api/deleteHomework");
 
 const app = express();
 const port = 3000;
@@ -114,6 +122,7 @@ app.get("/teacher/schedule", requireTeacher, teacherSchedule);
 app.get("/teacher/messages", requireTeacher, teacherMessages);
 app.get("/teacher/messages/sent", requireTeacher, teacherMessagesSent);
 app.get("/teacher/messages/new", requireTeacher, teacherMessagesNew);
+app.get("/teacher/homework", requireTeacher, teacherHomework);
 app.get("/teacherui", requireTeacher, teacherLegacyRoot); // Legacy átirányítás
 
 // ========================================
@@ -151,6 +160,20 @@ app.get("/api/teacher/messages/received", requireTeacher, getTeacherReceivedMess
 app.get("/api/teacher/messages/sent", requireTeacher, getTeacherSentMessages);
 app.get("/api/teacher/classes", requireTeacher, getTeacherClasses);
 app.get("/api/teacher/class/:classId/students", requireTeacher, getStudentsForClass);
+
+// ========================================
+// TEACHER API ROUTES - Homework
+// ========================================
+app.post("/api/teacher/homework", requireTeacher, createHomework);
+app.get("/api/teacher/homeworks", requireTeacher, getTeacherHomeworks);
+app.put("/api/teacher/homework/accept/:submission_id", requireTeacher, acceptHomework);
+
+// ========================================
+// STUDENT API ROUTES - Homework
+// ========================================
+app.get("/api/student/homeworks", requireAuth, getStudentHomeworks);
+app.put("/api/student/homework/submit/:submission_id", requireAuth, submitHomework);
+app.delete("/api/student/homework/:submission_id", requireAuth, deleteHomework);
 
 // ========================================
 // SZERVER INDÍTÁSA

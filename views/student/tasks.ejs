@@ -4,7 +4,7 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="stylesheet" href="/css/tasks/tasks.css" />
-		<title>Elektronikus tanulmányi rendszer</title>
+		<title>Házi feladatok - Elektronikus tanulmányi rendszer</title>
 	</head>
 	<body>
 		<header>
@@ -36,126 +36,101 @@
 		<main>
 			<div class="container tasks-container">
 				<h1>Házi feladatok</h1>
-
-				<div class="task-list">
-					<div class="task-card pending">
-						<h2>Matematika – Másodfokú egyenletek</h2>
-						<p>Határidő: 2025.02.12</p>
-						<p>Oldd meg a feladatlap 1–8. példáit.</p>
-						<p class="status-text">Folyamatban</p>
-						<div class="task-actions">
-							<button class="done-btn" type="button" title="Kész">
-								<img src="/icons/check.svg" alt="Kész!" class="check-icon" />
-							</button>
-							<button class="delete-btn" type="button" title="Törlés">
-								<img src="/icons/delete.svg" alt="Törlés" class="trash-icon" />
-							</button>
-						</div>
-					</div>
-
-					<div class="task-card pending">
-						<h2>Fizika – Newton törvényei</h2>
-						<p>Határidő: 2025.02.15</p>
-						<p>Készíts jegyzetet a tankönyv 56–60. oldaláról.</p>
-						<p class="status-text">Folyamatban</p>
-						<div class="task-actions">
-							<button class="done-btn" type="button" title="Kész">
-								<img src="/icons/check.svg" alt="Kész" class="check-icon" />
-							</button>
-							<button class="delete-btn" type="button" title="Törlés">
-								<img src="/icons/delete.svg" alt="Törlés" class="trash-icon" />
-							</button>
-						</div>
-					</div>
-
-					<div class="task-card pending">
-						<h2>Fizika – Newton törvényei</h2>
-						<p>Határidő: 2025.02.15</p>
-						<p>Készíts jegyzetet a tankönyv 56–60. oldaláról.</p>
-						<p class="status-text">Folyamatban</p>
-						<div class="task-actions">
-							<button class="done-btn" type="button" title="Kész">
-								<img src="/icons/check.svg" alt="Kész" class="check-icon" />
-							</button>
-							<button class="delete-btn" type="button" title="Törlés">
-								<img src="/icons/delete.svg" alt="Törlés" class="trash-icon" />
-							</button>
-						</div>
-					</div>
-
-					<div class="task-card pending">
-						<h2>Fizika – Newton törvényei</h2>
-						<p>Határidő: 2025.02.15</p>
-						<p>Készíts jegyzetet a tankönyv 56–60. oldaláról.</p>
-						<p class="status-text">Folyamatban</p>
-						<div class="task-actions">
-							<button class="done-btn" type="button" title="Kész">
-								<img src="/icons/check.svg" alt="Kész" class="check-icon" />
-							</button>
-							<button class="delete-btn" type="button" title="Törlés">
-								<img src="/icons/delete.svg" alt="Törlés" class="trash-icon" />
-							</button>
-						</div>
-					</div>
-
-					<div class="task-card pending">
-						<h2>Fizika – Newton törvényei</h2>
-						<p>Határidő: 2025.02.15</p>
-						<p>Készíts jegyzetet a tankönyv 56–60. oldaláról.</p>
-						<p class="status-text">Folyamatban</p>
-						<div class="task-actions">
-							<button class="done-btn" type="button" title="Kész">
-								<img src="/icons/check.svg" alt="Kész" class="check-icon" />
-							</button>
-							<button class="delete-btn" type="button" title="Törlés">
-								<img src="/icons/delete.svg" alt="Törlés" class="trash-icon" />
-							</button>
-						</div>
-					</div>
-				</div>
+				<div class="task-list" id="task-list"></div>
 			</div>
 		</main>
+
 		<script>
-			// Kész / Kivétel a készből – pipa gomb
-			const doneButtons = document.querySelectorAll(".task-card .done-btn");
+			document.addEventListener("DOMContentLoaded", loadHomeworks);
 
-			doneButtons.forEach((btn) => {
-				btn.addEventListener("click", () => {
-					const card = btn.closest(".task-card");
-					if (!card) return;
+			async function loadHomeworks() {
+				try {
+					const resp = await fetch("/api/student/homeworks");
+					const data = await resp.json();
+					renderHomeworks(data.homeworks || []);
+				} catch (error) {
+					console.error("Hiba:", error);
+				}
+			}
 
-					const status = card.querySelector(".status-text");
+			function renderHomeworks(homeworks) {
+				const container = document.getElementById("task-list");
 
-					// Ha már kész → visszaváltás pending-re
-					if (card.classList.contains("completed")) {
-						card.classList.remove("completed");
-						card.classList.add("pending");
-						if (status) status.textContent = "Folyamatban";
-						btn.classList.remove("active");
-						return;
-					}
+				if (homeworks.length === 0) {
+					container.innerHTML = '<p class="empty-message">Nincs házi feladatod.</p>';
+					return;
+				}
 
-					// Ha pending → kész állapot beállítása
-					card.classList.add("completed");
-					card.classList.remove("pending");
-					if (status) status.textContent = "Leadva";
-					btn.classList.add("active");
+				const statusText = {
+					pending: "Folyamatban",
+					submitted: "Ellenőrzés alatt...",
+					accepted: "Kész",
+				};
+
+				const statusClass = {
+					pending: "pending",
+					submitted: "submitted",
+					accepted: "completed",
+				};
+
+				let html = "";
+
+				homeworks.forEach((hw) => {
+					const dueDate = new Date(hw.due_date).toLocaleDateString("hu-HU");
+
+					html += `
+				<div class="task-card ${statusClass[hw.status]}">
+					<h2>${hw.subject} – ${hw.title}</h2>
+					<p>Határidő: ${dueDate}</p>
+					<p>${hw.description}</p>
+					<p class="teacher-name">Tanár: ${hw.teacher_name}</p>
+					<p class="status-text">${statusText[hw.status]}</p>
+					<div class="task-actions">
+						${hw.status === "pending" ? `<button class="done-btn" onclick="submitHomework(${hw.id})" title="Beadás"><img src="/icons/check.svg" alt="Beadás" class="check-icon" /></button>` : ""}
+						${hw.status === "accepted" ? `<button class="delete-btn" onclick="deleteHomework(${hw.id})" title="Törlés"><img src="/icons/delete.svg" alt="Törlés" class="trash-icon" /></button>` : ""}
+					</div>
+				</div>
+			`;
 				});
-			});
 
-			// Törlés – kuka gomb megerősítéssel
-			const deleteButtons = document.querySelectorAll(".task-card .delete-btn");
+				container.innerHTML = html;
+			}
 
-			deleteButtons.forEach((btn) => {
-				btn.addEventListener("click", () => {
-					const card = btn.closest(".task-card");
-					if (!card) return;
+			async function submitHomework(submissionId) {
+				if (!confirm("Biztosan beadod a házi feladatot?")) return;
 
-					if (confirm("Biztosan törlöd a feladatot?")) {
-						card.remove();
+				try {
+					const resp = await fetch(`/api/student/homework/submit/${submissionId}`, {
+						method: "PUT",
+					});
+
+					if (resp.ok) {
+						loadHomeworks();
+					} else {
+						alert("Hiba történt!");
 					}
-				});
-			});
+				} catch (error) {
+					console.error("Hiba:", error);
+				}
+			}
+
+			async function deleteHomework(submissionId) {
+				if (!confirm("Biztosan törlöd a házi feladatot?")) return;
+
+				try {
+					const resp = await fetch(`/api/student/homework/${submissionId}`, {
+						method: "DELETE",
+					});
+
+					if (resp.ok) {
+						loadHomeworks();
+					} else {
+						alert("Hiba történt!");
+					}
+				} catch (error) {
+					console.error("Hiba:", error);
+				}
+			}
 		</script>
 	</body>
 </html>

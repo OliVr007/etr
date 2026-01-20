@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="hu">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="/css/teacher/teacher-homerwork.css" />
+		<title>Házi feladatok - Tanári felület</title>
+	</head>
+	<body>
+		<header>
+			<div class="container">
+				<div class="header-content">
+					<div class="logo-section">
+						<img src="/icons/icon-128.webp" alt="Iskola logo" />
+					</div>
+					<div class="user-info">
+						<a href="/logout" class="logout-btn">
+							<img src="/icons/logouticon.svg" alt="Kijelentkezés" title="Kijelentkezés" />
+						</a>
+					</div>
+				</div>
+			</div>
+		</header>
+
+		<nav>
+			<div class="container">
+				<ul class="nav-menu">
+					<li><a href="/teacher">Áttekintés</a></li>
+					<li><a href="/teacher/classes">Osztályok</a></li>
+					<li><a href="/teacher/grading">Értékelések</a></li>
+					<li><a href="/teacher/homework" class="active">Házi feladatok</a></li>
+					<li><a href="/teacher/schedule">Órarend</a></li>
+					<li><a href="/teacher/messages">Üzenetek</a></li>
+				</ul>
+			</div>
+		</nav>
+
+		<main class="container">
+			<section class="homework-section">
+				<div class="section-header">
+					<h1>Házi feladatok kezelése</h1>
+					<button class="primary-btn" onclick="openNewHomeworkModal()">+ Új házi feladat</button>
+				</div>
+
+				<div class="tabs">
+					<button class="tab-btn active" data-tab="pending">Beadásra vár</button>
+					<button class="tab-btn" data-tab="submitted">Ellenőrzésre vár</button>
+					<button class="tab-btn" data-tab="accepted">Elfogadott</button>
+				</div>
+
+				<div class="homework-list" id="homework-list"></div>
+			</section>
+		</main>
+
+		<!-- Modal -->
+		<div class="modal" id="newHomeworkModal">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h2>Új házi feladat</h2>
+					<button class="close-btn" onclick="closeModal()">&times;</button>
+				</div>
+				<form id="homeworkForm">
+					<div class="form-group">
+						<label for="assignment_type">Kinek szól?</label>
+						<select id="assignment_type" required>
+							<option value="">— Válassz —</option>
+							<option value="class">Egész osztálynak</option>
+							<option value="student">Egy diáknak</option>
+						</select>
+					</div>
+
+					<div class="form-group" id="class_group" style="display: none">
+						<label for="class_id">Osztály</label>
+						<select id="class_id"></select>
+					</div>
+
+					<div class="form-group" id="student_group" style="display: none">
+						<label for="student_id">Diák</label>
+						<select id="student_id"></select>
+					</div>
+
+					<div class="form-group">
+						<label for="subject">Tantárgy</label>
+						<input type="text" id="subject" placeholder="pl. Matematika" required />
+					</div>
+
+					<div class="form-group">
+						<label for="title">Cím</label>
+						<input type="text" id="title" placeholder="pl. Másodfokú egyenletek" required />
+					</div>
+
+					<div class="form-group">
+						<label for="description">Leírás</label>
+						<textarea id="description" rows="4" placeholder="Feladat részletei..." required></textarea>
+					</div>
+
+					<div class="form-group">
+						<label for="due_date">Határidő</label>
+						<input type="date" id="due_date" required />
+					</div>
+
+					<div class="form-actions">
+						<button type="button" class="secondary-btn" onclick="closeModal()">Mégse</button>
+						<button type="submit" class="primary-btn">Létrehozás</button>
+					</div>
+				</form>
+			</div>
+		</div>
+
+		<script>
+			let classes = [];
+			let classStudents = {};
+			let allHomeworks = [];
+
+			document.addEventListener("DOMContentLoaded", () => {
+				loadClasses();
+				loadHomeworks();
+				setupTabs();
+			});
+
+			async function loadClasses() {
+				try {
+					const resp = await fetch("/api/teacher/classes");
+					const data = await resp.json();
+					classes = data.classes || [];
+
+					const classSelect = document.getElementById("class_id");
+					classSelect.innerHTML = '<option value="">— Válassz osztályt —</option>';
+					classes.forEach((cls) => {
+						classSelect.innerHTML += `<option value="${cls.id}">${cls.name}</option>`;
+					});
+				} catch (error) {
+					console.error("Hiba:", error);
+				}
+			}
+
+			async function loadStudentsForClass(classId) {
+				if (classStudents[classId]) return classStudents[classId];
+
+				try {
+					const resp = await fetch(`/api/teacher/class/${classId}/students`);
+					const data = await resp.json();
+					classStudents[classId] = data.students || [];
+					return classStudents[classId];
+				} catch (error) {
+					console.error("Hiba:", error);
+					return [];
+				}
+			}
+
+			async function loadHomeworks() {
+				try {
+					const resp = await fetch("/api/teacher/homeworks");
+					const data = await resp.json();
+					allHomeworks = data.homeworks || [];
+					renderHomeworks();
+				} catch (error) {
+					console.error("Hiba:", error);
+				}
+			}
+
+			function renderHomeworks() {
+				const container = document.getElementById("homework-list");
+				const activeTab = document.querySelector(".tab-btn.active").dataset.tab;
+
+				const statusText = {
+					pending: "Folyamatban",
+					submitted: "Ellenőrzés alatt...",
+					accepted: "Kész",
+				};
+
+				let html = "";
+
+				allHomeworks.forEach((hw) => {
+					hw.submissions.forEach((sub) => {
+						if (sub.status !== activeTab) return;
+
+						const dueDate = new Date(hw.due_date).toLocaleDateString("hu-HU");
+
+						html += `
+							<div class="homework-card ${sub.status}">
+								<div class="homework-info">
+									<h3>${hw.subject} – ${hw.title}</h3>
+									<p class="student-name">${sub.student_name}</p>
+									<p class="due-date">Határidő: ${dueDate}</p>
+									<p class="description">${hw.description}</p>
+									<span class="status-badge ${sub.status}">${statusText[sub.status]}</span>
+								</div>
+								<div class="homework-actions">
+									${sub.status === "submitted" ? `<button class="accept-btn" onclick="acceptHomework(${sub.id})">✓ Elfogadás</button>` : ""}
+								</div>
+							</div>
+						`;
+					});
+				});
+
+				container.innerHTML = html || '<p class="empty-message">Nincs házi feladat ebben a kategóriában.</p>';
+			}
+
+			function setupTabs() {
+				document.querySelectorAll(".tab-btn").forEach((btn) => {
+					btn.addEventListener("click", () => {
+						document.querySelectorAll(".tab-btn").forEach((b) => b.classList.remove("active"));
+						btn.classList.add("active");
+						renderHomeworks();
+					});
+				});
+			}
+
+			function openNewHomeworkModal() {
+				document.getElementById("newHomeworkModal").style.display = "flex";
+			}
+
+			function closeModal() {
+				document.getElementById("newHomeworkModal").style.display = "none";
+				document.getElementById("homeworkForm").reset();
+				document.getElementById("class_group").style.display = "none";
+				document.getElementById("student_group").style.display = "none";
+			}
+
+			document.getElementById("assignment_type").addEventListener("change", function () {
+				const type = this.value;
+				const classGroup = document.getElementById("class_group");
+				const studentGroup = document.getElementById("student_group");
+
+				if (type === "class") {
+					classGroup.style.display = "flex";
+					studentGroup.style.display = "none";
+					document.getElementById("class_id").required = true;
+					document.getElementById("student_id").required = false;
+				} else if (type === "student") {
+					classGroup.style.display = "flex";
+					studentGroup.style.display = "flex";
+					document.getElementById("class_id").required = true;
+					document.getElementById("student_id").required = true;
+				} else {
+					classGroup.style.display = "none";
+					studentGroup.style.display = "none";
+				}
+			});
+
+			document.getElementById("class_id").addEventListener("change", async function () {
+				const classId = this.value;
+				const studentSelect = document.getElementById("student_id");
+				const assignmentType = document.getElementById("assignment_type").value;
+
+				if (assignmentType === "student" && classId) {
+					const students = await loadStudentsForClass(classId);
+					studentSelect.innerHTML = '<option value="">— Válassz diákot —</option>';
+					students.forEach((s) => {
+						studentSelect.innerHTML += `<option value="${s.id}">${s.last_name} ${s.first_name}</option>`;
+					});
+				}
+			});
+
+			document.getElementById("homeworkForm").addEventListener("submit", async function (e) {
+				e.preventDefault();
+
+				const type = document.getElementById("assignment_type").value;
+				const data = {
+					subject: document.getElementById("subject").value,
+					title: document.getElementById("title").value,
+					description: document.getElementById("description").value,
+					due_date: document.getElementById("due_date").value,
+				};
+
+				if (type === "class") {
+					data.class_id = document.getElementById("class_id").value;
+				} else if (type === "student") {
+					data.student_id = document.getElementById("student_id").value;
+				}
+
+				try {
+					const resp = await fetch("/api/teacher/homework", {
+						method: "POST",
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify(data),
+					});
+
+					if (resp.ok) {
+						closeModal();
+						loadHomeworks();
+						alert("Házi feladat létrehozva!");
+					} else {
+						alert("Hiba történt!");
+					}
+				} catch (error) {
+					console.error("Hiba:", error);
+					alert("Hiba történt!");
+				}
+			});
+
+			async function acceptHomework(submissionId) {
+				try {
+					const resp = await fetch(`/api/teacher/homework/accept/${submissionId}`, {
+						method: "PUT",
+					});
+
+					if (resp.ok) {
+						loadHomeworks();
+					} else {
+						alert("Hiba történt!");
+					}
+				} catch (error) {
+					console.error("Hiba:", error);
+				}
+			}
+		</script>
+	</body>
+</html>
