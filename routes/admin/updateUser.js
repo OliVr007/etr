@@ -1,3 +1,5 @@
+const { hash } = require("bcrypt");
+
 // Felhasználó adatainak frissítése
 async function updateUser(req, res) {
 	try {
@@ -84,6 +86,17 @@ async function updateUser(req, res) {
 					},
 				});
 			}
+		} else if (role !== 'student') {
+			// Ha már nem diák, inaktiváljuk az összes osztályba tartozást
+			await db.student_classes.updateMany({
+				where: {
+					student_id: userId,
+					is_active: true,
+				},
+				data: {
+					is_active: false,
+				},
+			});
 		}
 
 		res.json({ success: true, user: updatedUser });

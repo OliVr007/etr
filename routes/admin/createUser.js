@@ -1,3 +1,5 @@
+const { hash } = require("bcrypt");
+
 // Új felhasználó létrehozása
 async function createUser(req, res) {
 	try {
