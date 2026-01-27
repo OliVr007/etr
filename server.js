@@ -69,8 +69,40 @@ const { deleteHomework } = require("./routes/api/deleteHomework");
 const app = express();
 const port = 3000;
 
-const SESSION_COOKIE = "session";
 const SESSION_PASSWORD = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+
+// Cookie nevek szerepkör szerint
+const SESSION_COOKIES = {
+	student: "session_student",
+	teacher: "session_teacher",
+	admin: "session_admin",
+};
+
+// Session opciók generálása
+const getSessionOptions = (cookieName) => ({
+	password: SESSION_PASSWORD,
+	cookieName: cookieName,
+	cookieOptions: { secure: false },
+});
+
+// Session lekérése útvonal alapján
+async function getSessionByPath(req, res) {
+	const path = req.path;
+
+	if (path.startsWith("/admin") || path.startsWith("/api/admin")) {
+		return await getIronSession(req, res, getSessionOptions(SESSION_COOKIES.admin));
+	} else if (path.startsWith("/teacher") || path.startsWith("/api/teacher")) {
+		return await getIronSession(req, res, getSessionOptions(SESSION_COOKIES.teacher));
+	} else {
+		return await getIronSession(req, res, getSessionOptions(SESSION_COOKIES.student));
+	}
+}
+
+// Session lekérése szerepkör alapján (login-hoz exportálva)
+async function getSessionByRole(req, res, role) {
+	const cookieName = SESSION_COOKIES[role] || SESSION_COOKIES.student;
+	return await getIronSession(req, res, getSessionOptions(cookieName));
+}
 
 // Prisma Client inicializálása
 const db = new PrismaClient();
@@ -86,11 +118,8 @@ app.use(bodyParser.json());
 
 // Session middleware
 app.use(async (req, res, next) => {
-	req.session = await getIronSession(req, res, {
-		password: SESSION_PASSWORD,
-		cookieName: SESSION_COOKIE,
-		cookieOptions: { secure: false },
-	});
+	req.session = await getSessionByPath(req, res);
+	req.getSessionByRole = (role) => getSessionByRole(req, res, role);
 
 	// DB elérhetővé tétele minden route-ban
 	req.db = db;

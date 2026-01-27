@@ -12,6 +12,8 @@ body {
 	display: flex;
 	flex-direction: column;
 	min-height: 100vh;
+	overflow-x: hidden;
+	overflow-y: hidden;
 }
 
 .container {
@@ -207,30 +209,9 @@ nav {
 }
 
 .messages-list {
-	display: flex;
-	flex-direction: column;
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
 	gap: 18px;
-	overflow-y: auto;
-	max-height: calc(100vh - 320px);
-	padding-right: 5px;
-}
-
-.messages-list::-webkit-scrollbar {
-	width: 6px;
-}
-
-.messages-list::-webkit-scrollbar-track {
-	background: #f1f5f9;
-	border-radius: 3px;
-}
-
-.messages-list::-webkit-scrollbar-thumb {
-	background: #cbd5e1;
-	border-radius: 3px;
-}
-
-.messages-list::-webkit-scrollbar-thumb:hover {
-	background: #94a3b8;
 }
 
 .message-card {
@@ -340,10 +321,8 @@ nav {
 		padding: 10px 16px;
 		font-size: 0.9rem;
 	}
-
 	.messages-list {
 		gap: 15px;
-		max-height: calc(100vh - 360px);
 	}
 
 	.message-card {
