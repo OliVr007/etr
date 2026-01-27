@@ -15,6 +15,7 @@
 					</div>
 					<div class="user-info">
 						<a href="/logout" class="logout-btn">
+							<span>Kijelentkezés</span>
 							<img src="/icons/logouticon.svg" alt="Kijelentkezés" title="Kijelentkezés" />
 						</a>
 					</div>
@@ -38,7 +39,7 @@
 		<main class="container">
 			<section class="welcome-section">
 				<h2>Üdvözöllek <%= first_name %>!</h2>
-				<p>Ma: 2025. január 7., kedd</p>
+				<p>Ma: <%= new Date().toLocaleDateString('hu-HU', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' }) %></p>
 			</section>
 
 			<div class="carousel-container">
@@ -48,37 +49,51 @@
 						<div class="carousel-card">
 							<div class="card-header">
 								<h3>Mai órák</h3>
-								<div class="card-badge">4 db</div>
+								<div class="card-badge"><%= todayLessons.length %> db</div>
 							</div>
 							<div class="card-content">
-								<div class="card-item">
-									<div class="item-main">
-										<div class="item-title">Matematika - 9.A</div>
-										<div class="item-date">8:00 - 8:45 • 102-es terem</div>
+								<% if (todayLessons.length > 0) { %>
+									<% todayLessons.forEach((lesson, index) => { %>
+										<% 
+											let status = "";
+											const now = new Date();
+											const currentHour = now.getHours();
+											const currentMin = now.getMinutes();
+											const [startHour, startMin] = lesson.start_time.split(':').map(Number);
+											const [endHour, endMin] = lesson.end_time.split(':').map(Number);
+											
+											const currentMinutes = currentHour * 60 + currentMin;
+											const startMinutes = startHour * 60 + startMin;
+											const endMinutes = endHour * 60 + endMin;
+											
+											if (currentMinutes < startMinutes) {
+												if (index === 0 || (index > 0 && currentMinutes >= (todayLessons[index-1] ? parseInt(todayLessons[index-1].end_time.split(':')[0]) * 60 + parseInt(todayLessons[index-1].end_time.split(':')[1]) : 0))) {
+													status = "Következő";
+												} else {
+													status = "Később";
+												}
+											} else if (currentMinutes >= startMinutes && currentMinutes <= endMinutes) {
+												status = "Folyamatban";
+											} else {
+												status = "Befejezett";
+											}
+										%>
+										<div class="card-item">
+											<div class="item-main">
+												<div class="item-title"><%= lesson.subject_name %> - <%= lesson.class_name %></div>
+												<div class="item-date"><%= lesson.start_time %> - <%= lesson.end_time %> • <%= lesson.room_number %> terem</div>
+											</div>
+											<div class="item-value"><%= status %></div>
+										</div>
+									<% }); %>
+								<% } else { %>
+									<div class="card-item">
+										<div class="item-main">
+											<div class="item-title">Nincs órád ma</div>
+											<div class="item-date">Pihenj!</div>
+										</div>
 									</div>
-									<div class="item-value">Hamarosan</div>
-								</div>
-								<div class="card-item">
-									<div class="item-main">
-										<div class="item-title">Fizika - 10.B</div>
-										<div class="item-date">9:00 - 9:45 • 110-es terem</div>
-									</div>
-									<div class="item-value">Következő</div>
-								</div>
-								<div class="card-item">
-									<div class="item-main">
-										<div class="item-title">Matematika - 11.C</div>
-										<div class="item-date">11:00 - 11:45 • 102-es terem</div>
-									</div>
-									<div class="item-value">Délelőtt</div>
-								</div>
-								<div class="card-item">
-									<div class="item-main">
-										<div class="item-title">Fizika - 9.A</div>
-										<div class="item-date">13:00 - 13:45 • 110-es terem</div>
-									</div>
-									<div class="item-value">Délután</div>
-								</div>
+								<% } %>
 							</div>
 							<div class="card-footer">
 								<a href="/teacher/schedule" class="view-all">Teljes órarend →</a>
@@ -91,44 +106,27 @@
 						<div class="carousel-card">
 							<div class="card-header">
 								<h3>Osztályok áttekintése</h3>
-								<div class="card-badge">5 osztály</div>
+								<div class="card-badge"><%= classesOverview.length %> osztály</div>
 							</div>
 							<div class="card-content">
-								<div class="card-item">
-									<div class="item-main">
-										<div class="item-title">9.A osztály - Matematika</div>
-										<div class="item-date">28 tanuló • Átlag: 3.85</div>
+								<% if (classesOverview.length > 0) { %>
+									<% classesOverview.slice(0, 5).forEach(classData => { %>
+										<div class="card-item">
+											<div class="item-main">
+												<div class="item-title"><%= classData.class_name %> - <%= classData.subject_name %></div>
+												<div class="item-date"><%= classData.student_count %> tanuló • Átlag: <%= classData.average_grade %></div>
+											</div>
+											<div class="item-value"><%= classData.grade_label %></div>
+										</div>
+									<% }); %>
+								<% } else { %>
+									<div class="card-item">
+										<div class="item-main">
+											<div class="item-title">Még nincs hozzárendelt osztály</div>
+											<div class="item-date">Hamarosan érkezik</div>
+										</div>
 									</div>
-									<div class="item-value">Jó</div>
-								</div>
-								<div class="card-item">
-									<div class="item-main">
-										<div class="item-title">10.B osztály - Fizika</div>
-										<div class="item-date">25 tanuló • Átlag: 4.12</div>
-									</div>
-									<div class="item-value">Kiváló</div>
-								</div>
-								<div class="card-item">
-									<div class="item-main">
-										<div class="item-title">11.C osztály - Matematika</div>
-										<div class="item-date">22 tanuló • Átlag: 3.64</div>
-									</div>
-									<div class="item-value">Közepes</div>
-								</div>
-								<div class="card-item">
-									<div class="item-main">
-										<div class="item-title">9.A osztály - Fizika</div>
-										<div class="item-date">28 tanuló • Átlag: 3.92</div>
-									</div>
-									<div class="item-value">Jó</div>
-								</div>
-								<div class="card-item">
-									<div class="item-main">
-										<div class="item-title">10.A osztály - Matematika</div>
-										<div class="item-date">30 tanuló • Átlag: 4.25</div>
-									</div>
-									<div class="item-value">Kiváló</div>
-								</div>
+								<% } %>
 							</div>
 							<div class="card-footer">
 								<a href="/teacher/classes" class="view-all">Összes osztály →</a>
@@ -141,30 +139,27 @@
 						<div class="carousel-card">
 							<div class="card-header">
 								<h3>Legutóbbi üzenetek</h3>
-								<div class="card-badge">4 db</div>
+								<div class="card-badge"><%= recentMessages.length %> db</div>
 							</div>
 							<div class="card-content">
-								<div class="card-item">
-									<div class="item-main">
-										<div class="item-title">Kovács János (9.A)</div>
-										<div class="item-date">2025. jan. 6.</div>
-										<div class="item-desc">Kérdés a házi feladattal kapcsolatban…</div>
+								<% if (recentMessages.length > 0) { %>
+									<% recentMessages.forEach(msg => { %>
+										<div class="card-item <%= !msg.is_read ? 'unread' : '' %>">
+											<div class="item-main">
+												<div class="item-title"><%= msg.sender_name %></div>
+												<div class="item-date"><%= new Date(msg.sent_at).toLocaleDateString('hu-HU', { year: 'numeric', month: 'short', day: 'numeric' }) %></div>
+												<div class="item-desc"><%= msg.subject %>: <%= msg.content_preview %></div>
+											</div>
+										</div>
+									<% }); %>
+								<% } else { %>
+									<div class="card-item">
+										<div class="item-main">
+											<div class="item-title">Nincs új üzenet</div>
+											<div class="item-date">A beérkező mappád üres</div>
+										</div>
 									</div>
-								</div>
-								<div class="card-item">
-									<div class="item-main">
-										<div class="item-title">Nagy Emma szülője</div>
-										<div class="item-date">2025. jan. 5.</div>
-										<div class="item-desc">Hiányzás igazolása melléklettel…</div>
-									</div>
-								</div>
-								<div class="card-item">
-									<div class="item-main">
-										<div class="item-title">Tanulmányi osztály</div>
-										<div class="item-date">2025. jan. 4.</div>
-										<div class="item-desc">Félévi értékelések határideje: jan. 10.</div>
-									</div>
-								</div>
+								<% } %>
 							</div>
 							<div class="card-footer">
 								<a href="/teacher/messages" class="view-all">Összes üzenet →</a>
@@ -196,20 +191,17 @@
 				const slideWidth = track.clientWidth;
 				let currentIndex = 0;
 
-				// Set slide positions
 				const setSlidePosition = (slide, index) => {
 					slide.style.left = slideWidth * index + "px";
 				};
 				slides.forEach(setSlidePosition);
 
-				// Move to slide
 				const moveToSlide = (track, currentSlide, targetSlide) => {
 					track.style.transform = "translateX(-" + targetSlide.style.left + ")";
 					currentSlide = targetSlide;
 					return currentSlide;
 				};
 
-				// Update indicators
 				const updateIndicators = (currentIndex) => {
 					indicators.forEach((indicator, index) => {
 						if (index === currentIndex) {
@@ -220,63 +212,46 @@
 					});
 				};
 
-				// Next button
 				nextButton.addEventListener("click", (e) => {
 					const nextIndex = currentIndex < slides.length - 1 ? currentIndex + 1 : 0;
 					const targetSlide = slides[nextIndex];
-
 					moveToSlide(track, slides[currentIndex], targetSlide);
 					currentIndex = nextIndex;
 					updateIndicators(currentIndex);
 				});
 
-				// Previous button
 				prevButton.addEventListener("click", (e) => {
 					const prevIndex = currentIndex > 0 ? currentIndex - 1 : slides.length - 1;
 					const targetSlide = slides[prevIndex];
-
 					moveToSlide(track, slides[currentIndex], targetSlide);
 					currentIndex = prevIndex;
 					updateIndicators(currentIndex);
 				});
 
-				// Indicator clicks
-				indicators.forEach((indicator) => {
+				indicators.forEach((indicator, index) => {
 					indicator.addEventListener("click", (e) => {
-						const targetIndex = parseInt(e.target.getAttribute("data-index"));
-						const targetSlide = slides[targetIndex];
-
+						const targetSlide = slides[index];
 						moveToSlide(track, slides[currentIndex], targetSlide);
-						currentIndex = targetIndex;
+						currentIndex = index;
 						updateIndicators(currentIndex);
 					});
 				});
 
-				// Auto slide
-				let autoSlideInterval = setInterval(() => {
+				window.addEventListener("resize", () => {
+					const newSlideWidth = track.clientWidth;
+					slides.forEach((slide, index) => {
+						slide.style.left = newSlideWidth * index + "px";
+					});
+					track.style.transform = "translateX(-" + slides[currentIndex].style.left + ")";
+				});
+
+				setInterval(() => {
 					const nextIndex = currentIndex < slides.length - 1 ? currentIndex + 1 : 0;
 					const targetSlide = slides[nextIndex];
-
 					moveToSlide(track, slides[currentIndex], targetSlide);
 					currentIndex = nextIndex;
 					updateIndicators(currentIndex);
 				}, 5000);
-
-				// Pause on hover
-				track.addEventListener("mouseenter", () => {
-					clearInterval(autoSlideInterval);
-				});
-
-				track.addEventListener("mouseleave", () => {
-					autoSlideInterval = setInterval(() => {
-						const nextIndex = currentIndex < slides.length - 1 ? currentIndex + 1 : 0;
-						const targetSlide = slides[nextIndex];
-
-						moveToSlide(track, slides[currentIndex], targetSlide);
-						currentIndex = nextIndex;
-						updateIndicators(currentIndex);
-					}, 5000);
-				});
 			});
 		</script>
 	</body>
