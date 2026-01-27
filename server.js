@@ -15,6 +15,7 @@ const { getUser } = require("./routes/admin/getUser");
 const { createUser } = require("./routes/admin/createUser");
 const { updateUser } = require("./routes/admin/updateUser");
 const { deleteUser } = require("./routes/admin/deleteUser");
+const { createClass } = require("./routes/admin/createClass");
 
 // Student routes
 const { studentIndex } = require("./routes/student/index");
@@ -110,6 +111,7 @@ app.get("/api/admin/users/:id", requireAdmin, getUser);
 app.post("/api/admin/users", requireAdmin, createUser);
 app.put("/api/admin/users/:id", requireAdmin, updateUser);
 app.delete("/api/admin/users/:id", requireAdmin, deleteUser);
+app.post("/api/admin/classes", requireAdmin, createClass);
 
 // ========================================
 // TEACHER ROUTES

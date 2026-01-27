@@ -106,7 +106,9 @@ main {
 	display: flex;
 	align-items: center;
 	gap: 20px;
-	transition: transform 0.3s, box-shadow 0.3s;
+	transition:
+		transform 0.3s,
+		box-shadow 0.3s;
 }
 
 .stat-card:hover {
@@ -171,7 +173,9 @@ main {
 	display: flex;
 	align-items: center;
 	gap: 8px;
-	transition: transform 0.3s, box-shadow 0.3s;
+	transition:
+		transform 0.3s,
+		box-shadow 0.3s;
 	min-height: 44px;
 	white-space: nowrap;
 }
@@ -404,7 +408,9 @@ form {
 	border: 1px solid #cbd5e1;
 	border-radius: 8px;
 	font-size: 1rem;
-	transition: border-color 0.3s, box-shadow 0.3s;
+	transition:
+		border-color 0.3s,
+		box-shadow 0.3s;
 	min-height: 44px;
 }
 
@@ -626,5 +632,39 @@ form {
 
 	.stat-card:active {
 		transform: scale(0.98);
+	}
+}
+
+/* Content Grid - Felhasználók és Osztályok egymás mellett */
+.content-grid {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 30px;
+	align-items: start;
+}
+
+.classes-section {
+	background: white;
+	border-radius: 16px;
+	padding: 30px;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+@media (max-width: 1200px) {
+	.content-grid {
+		grid-template-columns: 1fr;
+	}
+}
+
+@media (max-width: 768px) {
+	.classes-section {
+		padding: 20px;
+		border-radius: 12px;
+	}
+}
+
+@media (max-width: 480px) {
+	.classes-section {
+		padding: 15px;
 	}
 }

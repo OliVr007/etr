@@ -58,49 +58,83 @@
 				</div>
 			</section>
 
-			<section class="users-section">
-				<div class="section-header">
-					<h2>Felhasználó kezelés</h2>
-					<button class="btn-primary" onclick="openAddUserModal()"><span>➕</span> Új felhasználó</button>
-				</div>
+			<div class="content-grid">
+				<section class="users-section">
+					<div class="section-header">
+						<h2>Felhasználó kezelés</h2>
+						<button class="btn-primary" onclick="openAddUserModal()"><span>➕</span> Új felhasználó</button>
+					</div>
 
-				<div class="table-container">
-					<table class="users-table">
-						<thead>
-							<tr>
-								<th>ID</th>
-								<th>Felhasználónév</th>
-								<th>Név</th>
-								<th>Email</th>
-								<th>Szerepkör</th>
-								<th>Műveletek</th>
-							</tr>
-						</thead>
-						<tbody>
-							<% users.forEach(user => { %>
-							<tr>
-								<td><%= user.id %></td>
-								<td><%= user.username %></td>
-								<td><%= user.last_name %> <%= user.first_name %></td>
-								<td><%= user.email || '-' %></td>
-								<td>
-									<span class="role-badge role-<%= user.role %>">
-										<% if (user.role === 'student') { %> 🎓 Diák
-										<% } else if (user.role === 'teacher') { %> 👨‍🏫 Tanár
-										<% } else if (user.role === 'admin') { %> ⚙️ Admin
-										<% } %>
-									</span>
-								</td>
-								<td class="action-buttons">
-									<button class="btn-edit" onclick="openEditUserModal(<%= user.id %>)" title="Szerkesztés">✏️</button>
-									<button class="btn-delete" onclick="deleteUser(<%= user.id %>, '<%= user.username %>')" title="Törlés">🗑️</button>
-								</td>
-							</tr>
-							<% }); %>
-						</tbody>
-					</table>
-				</div>
-			</section>
+					<div class="table-container">
+						<table class="users-table">
+							<thead>
+								<tr>
+									<th>ID</th>
+									<th>Felhasználónév</th>
+									<th>Név</th>
+									<th>Email</th>
+									<th>Szerepkör</th>
+									<th>Műveletek</th>
+								</tr>
+							</thead>
+							<tbody>
+								<% users.forEach(user => { %>
+								<tr>
+									<td><%= user.id %></td>
+									<td><%= user.username %></td>
+									<td><%= user.last_name %> <%= user.first_name %></td>
+									<td><%= user.email || '-' %></td>
+									<td>
+										<span class="role-badge role-<%= user.role %>">
+											<% if (user.role === 'student') { %> 🎓 Diák
+											<% } else if (user.role === 'teacher') { %> 👨‍🏫 Tanár
+											<% } else if (user.role === 'admin') { %> ⚙️ Admin
+											<% } %>
+										</span>
+									</td>
+									<td class="action-buttons">
+										<button class="btn-edit" onclick="openEditUserModal(<%= user.id %>)" title="Szerkesztés">✏️</button>
+										<button class="btn-delete" onclick="deleteUser(<%= user.id %>, '<%= user.username %>')" title="Törlés">🗑️</button>
+									</td>
+								</tr>
+								<% }); %>
+							</tbody>
+						</table>
+					</div>
+				</section>
+
+				<section class="classes-section">
+					<div class="section-header">
+						<h2>Osztály kezelés</h2>
+						<button class="btn-primary" onclick="openAddClassModal()"><span>➕</span> Új osztály</button>
+					</div>
+
+					<div class="table-container">
+						<table class="users-table">
+							<thead>
+								<tr>
+									<th>ID</th>
+									<th>Osztály neve</th>
+									<th>Tanév</th>
+									<th>Osztályfőnök</th>
+									<th>Terem</th>
+								</tr>
+							</thead>
+							<tbody>
+								<% classes.forEach(cls => { %>
+								<tr>
+									<td><%= cls.id %></td>
+									<td><%= cls.class_name %></td>
+									<td><%= cls.academic_year %></td>
+									<td><%= cls.users ? cls.users.last_name + ' ' + cls.users.first_name : '-' %></td>
+									<td><%= cls.room_number || '-' %></td>
+								</tr>
+								<% }); %>
+							</tbody>
+						</table>
+					</div>
+				</section>
+			</div>
 		</main>
 
 		<!-- Add User Modal -->
@@ -215,6 +249,43 @@
 			</div>
 		</div>
 
+		<!-- Add Class Modal -->
+		<div id="addClassModal" class="modal">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3>Új osztály létrehozása</h3>
+					<button class="close-btn" onclick="closeAddClassModal()">&times;</button>
+				</div>
+				<form id="addClassForm" onsubmit="addClass(event)">
+					<div class="form-group">
+						<label for="class_name">Osztály neve *</label>
+						<input type="text" id="class_name" name="class_name" placeholder="pl. 9.A" required />
+					</div>
+					<div class="form-group">
+						<label for="academic_year">Tanév *</label>
+						<input type="text" id="academic_year" name="academic_year" placeholder="2024/2025" required />
+					</div>
+					<div class="form-group">
+						<label for="class_teacher_id">Osztályfőnök</label>
+						<select id="class_teacher_id" name="class_teacher_id">
+							<option value="">Nincs megadva</option>
+							<% teachers.forEach(t => { %>
+							<option value="<%= t.id %>"><%= t.last_name %> <%= t.first_name %></option>
+							<% }); %>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="room_number">Terem</label>
+						<input type="text" id="room_number" name="room_number" placeholder="pl. 101" />
+					</div>
+					<div class="form-actions">
+						<button type="button" class="btn-secondary" onclick="closeAddClassModal()">Mégse</button>
+						<button type="submit" class="btn-primary">Létrehozás</button>
+					</div>
+				</form>
+			</div>
+		</div>
+
 		<script>
 			function toggleClassSelector(mode) {
 				const roleSelect = document.getElementById(`${mode}_role`);
@@ -255,7 +326,6 @@
 						document.getElementById("edit_role").value = user.role;
 						document.getElementById("edit_password").value = "";
 
-						// Ha diák, megjelenítjük az osztály választót
 						if (user.role === 'student') {
 							document.getElementById("edit_class_group").style.display = "flex";
 							document.getElementById("edit_class").required = true;
@@ -360,11 +430,49 @@
 				}
 			}
 
+			function openAddClassModal() {
+				document.getElementById("addClassModal").style.display = "flex";
+			}
+
+			function closeAddClassModal() {
+				document.getElementById("addClassModal").style.display = "none";
+				document.getElementById("addClassForm").reset();
+			}
+
+			async function addClass(event) {
+				event.preventDefault();
+				const formData = new FormData(event.target);
+				const data = Object.fromEntries(formData);
+
+				try {
+					const response = await fetch("/api/admin/classes", {
+						method: "POST",
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify(data),
+					});
+
+					const result = await response.json();
+
+					if (response.ok) {
+						alert("Osztály sikeresen létrehozva!");
+						closeAddClassModal();
+						location.reload();
+					} else {
+						alert(result.error || "Hiba történt az osztály létrehozásakor");
+					}
+				} catch (error) {
+					console.error("Hiba:", error);
+					alert("Hiba történt az osztály létrehozásakor");
+				}
+			}
+
 			window.onclick = function (event) {
 				const addModal = document.getElementById("addUserModal");
 				const editModal = document.getElementById("editUserModal");
+				const addClassModal = document.getElementById("addClassModal");
 				if (event.target === addModal) closeAddUserModal();
 				if (event.target === editModal) closeEditUserModal();
+				if (event.target === addClassModal) closeAddClassModal();
 			};
 		</script>
 	</body>

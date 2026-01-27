@@ -14,12 +14,31 @@ async function adminIndex(req, res) {
 			},
 		});
 
-		// Osztályok lekérése a dropdown-hoz
+		// Osztályok lekérése a dropdown-hoz (osztályfőnökkel együtt)
 		const classes = await db.classes.findMany({
 			orderBy: { class_name: "asc" },
 			select: {
 				id: true,
 				class_name: true,
+				academic_year: true,
+				room_number: true,
+				users: {
+					select: {
+						first_name: true,
+						last_name: true,
+					},
+				},
+			},
+		});
+
+		// Tanárok lekérése az osztályfőnök választóhoz
+		const teachers = await db.users.findMany({
+			where: { role: "teacher" },
+			orderBy: { last_name: "asc" },
+			select: {
+				id: true,
+				first_name: true,
+				last_name: true,
 			},
 		});
 
@@ -35,6 +54,7 @@ async function adminIndex(req, res) {
 			first_name: req.session.first_name,
 			users: users,
 			classes: classes,
+			teachers: teachers,
 			stats: stats,
 		});
 	} catch (error) {
