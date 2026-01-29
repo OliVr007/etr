@@ -19,7 +19,6 @@ const { createClass } = require("./routes/admin/createClass");
 
 // Student routes
 const { studentIndex } = require("./routes/student/index");
-const { studentCourses } = require("./routes/student/courses");
 const { studentTasks } = require("./routes/student/tasks");
 const { studentGrades } = require("./routes/student/grades");
 
@@ -33,7 +32,6 @@ const { routeTeacher } = require("./routes/teacher/root");
 const { rootTeacherClasses } = require("./routes/teacher/classes");
 const { studentforClass } = require("./routes/teacher/getStudentForClass");
 const { gradePage } = require("./routes/teacher/gradingPage");
-const { teacherSchedule } = require("./routes/teacher/schedule");
 const { teacherLegacyRoot } = require("./routes/teacher/legacyRoot");
 const { teacherMessages } = require("./routes/teacher/messages");
 const { teacherMessagesSent } = require("./routes/teacher/messagesSent");
@@ -149,7 +147,6 @@ app.get("/teacher", requireTeacher, routeTeacher);
 app.get("/teacher/classes", requireTeacher, rootTeacherClasses);
 app.get("/api/teacher/class/:classId/subject/:subjectId/students", requireTeacher, studentforClass);
 app.get("/teacher/grading", requireTeacher, gradePage);
-app.get("/teacher/schedule", requireTeacher, teacherSchedule);
 app.get("/teacher/messages", requireTeacher, teacherMessages);
 app.get("/teacher/messages/sent", requireTeacher, teacherMessagesSent);
 app.get("/teacher/messages/new", requireTeacher, teacherMessagesNew);
@@ -159,7 +156,6 @@ app.get("/teacherui", requireTeacher, teacherLegacyRoot); // Legacy átirányít
 // ========================================
 // STUDENT ROUTES
 // ========================================
-app.get("/courses", requireAuth, studentCourses);
 app.get("/tasks", requireAuth, studentTasks);
 app.get("/grades", requireAuth, studentGrades);
 
