@@ -185,6 +185,8 @@ app.put("/api/messages/:id/read", requireAuth, markAsRead);
 // ========================================
 app.get("/api/teacher/messages/received", requireTeacher, getTeacherReceivedMessages);
 app.get("/api/teacher/messages/sent", requireTeacher, getTeacherSentMessages);
+app.get("/api/teacher/messages/users", requireTeacher, getAllUsers);
+app.post("/api/teacher/messages/send", requireTeacher, sendMessage);
 app.get("/api/teacher/classes", requireTeacher, getTeacherClasses);
 app.get("/api/teacher/class/:classId/students", requireTeacher, getStudentsForClass);
 

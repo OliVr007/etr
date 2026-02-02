@@ -29,14 +29,14 @@
 						</select>
 					</div>
 
-					<div class="form-group" id="class_selector_group" style="display: none;">
+					<div class="form-group" id="class_selector_group" style="display: none">
 						<label for="class_selector">Válassz osztályt</label>
 						<select id="class_selector" name="class_id">
 							<option value="">— Válassz osztályt —</option>
 						</select>
 					</div>
 
-					<div class="form-group" id="recipient_group" style="display: none;">
+					<div class="form-group" id="recipient_group" style="display: none">
 						<label for="recipient">Címzett</label>
 						<select id="recipient" name="receiver_id" required>
 							<option value="">— Válassz címzettet —</option>
@@ -81,7 +81,7 @@
 					});
 
 					// Tanárok betöltése
-					const teachersResp = await fetch("/api/messages/users");
+					const teachersResp = await fetch("/api/teacher/messages/users");
 					const teachersData = await teachersResp.json();
 					allTeachers = (teachersData.users || []).filter((u) => u.role === "teacher");
 				} catch (error) {
@@ -195,7 +195,7 @@
 					try {
 						let successCount = 0;
 						for (const student of students) {
-							const resp = await fetch("/api/messages/send", {
+							const resp = await fetch("/api/teacher/messages/send", {
 								method: "POST",
 								headers: { "Content-Type": "application/json" },
 								body: JSON.stringify({
@@ -221,7 +221,7 @@
 					}
 
 					try {
-						const resp = await fetch("/api/messages/send", {
+						const resp = await fetch("/api/teacher/messages/send", {
 							method: "POST",
 							headers: { "Content-Type": "application/json" },
 							body: JSON.stringify({
