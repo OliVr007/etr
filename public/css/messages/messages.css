@@ -3,6 +3,21 @@
 	padding: 0;
 	box-sizing: border-box;
 	font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+	-ms-overflow-style: none;
+	scrollbar-width: none;
+}
+
+*::-webkit-scrollbar {
+	display: none;
+}
+
+html {
+	-ms-overflow-style: none;
+	scrollbar-width: none;
+}
+
+html::-webkit-scrollbar {
+	display: none;
 }
 
 body {
@@ -13,13 +28,19 @@ body {
 	flex-direction: column;
 	min-height: 100vh;
 	overflow-x: hidden;
-	overflow-y: hidden;
+	-ms-overflow-style: none;
+	scrollbar-width: none;
+}
+
+body::-webkit-scrollbar {
+	display: none;
 }
 
 .container {
 	max-width: 1400px;
 	margin: 0 auto;
 	padding: 0 20px;
+	width: 100%;
 }
 
 /* Header styles */
@@ -141,6 +162,7 @@ nav {
 .messages-container {
 	padding: 30px 0;
 	flex: 1;
+	overflow-y: auto;
 }
 
 .messages-header {
@@ -208,49 +230,221 @@ nav {
 	box-shadow: 0 4px 12px rgba(18, 130, 162, 0.3);
 }
 
+/* ============================================
+   ÜZENETEK LISTA - ÚJ DIZÁJN
+   ============================================ */
+
 .messages-list {
-	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-	gap: 18px;
+	display: block;
+	width: 100%;
 }
 
 .message-card {
 	background: white;
-	padding: 22px;
-	border-radius: 12px;
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-	transition: all 0.3s;
+	border-radius: 16px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+	transition: all 0.25s ease;
 	cursor: pointer;
+	overflow: hidden;
+	border: 1px solid #e2e8f0;
+	width: 100%;
+	margin-bottom: 16px;
+	display: block;
+}
+
+.message-card:last-child {
+	margin-bottom: 0;
 }
 
 .message-card:hover {
-	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-	transform: translateY(-2px);
+	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+	transform: translateY(-3px);
+	border-color: #1282a2;
+}
+
+.message-card-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	padding: 20px 24px 14px;
+	gap: 16px;
+	background: linear-gradient(to bottom, #f8fafc, transparent);
+	width: 100%;
+}
+
+.message-card-header-left {
+	flex: 1;
+	min-width: 0;
 }
 
 .message-card h2 {
-	margin-bottom: 10px;
-	font-size: 1.3rem;
-	color: #001f54;
+	font-size: 1.15rem;
 	font-weight: 600;
+	color: #001f54;
+	margin: 0 0 10px 0;
+	line-height: 1.4;
+	word-wrap: break-word;
 }
 
-.message-card p {
-	color: #475569;
-	font-size: 1rem;
-	line-height: 1.5;
-	margin-bottom: 12px;
+.message-sender {
+	display: flex;
+	align-items: center;
+	gap: 10px;
 }
 
-.message-card .date {
-	font-size: 0.9rem;
-	color: #1282a2;
-	margin-top: 12px;
-	display: block;
+.message-sender-avatar {
+	width: 36px;
+	height: 36px;
+	border-radius: 50%;
+	background: linear-gradient(135deg, #1282a2, #034078);
+	color: white;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 0.85rem;
+	font-weight: 600;
+	flex-shrink: 0;
+	box-shadow: 0 2px 8px rgba(18, 130, 162, 0.3);
+}
+
+.message-sender-name {
 	font-weight: 500;
+	color: #334155;
+	font-size: 0.95rem;
 }
 
-/* Mobile Styles */
+.message-sender-label {
+	color: #64748b;
+	font-size: 0.85rem;
+}
+
+.message-date {
+	font-size: 0.8rem;
+	color: #64748b;
+	white-space: nowrap;
+	padding: 6px 12px;
+	background: #f1f5f9;
+	border-radius: 20px;
+	font-weight: 500;
+	flex-shrink: 0;
+}
+
+.message-card-body {
+	padding: 0 24px 20px;
+	width: 100%;
+}
+
+.message-content {
+	color: #475569;
+	font-size: 0.95rem;
+	line-height: 1.7;
+	position: relative;
+	overflow: hidden;
+	transition: max-height 0.35s ease;
+}
+
+.message-content.collapsed {
+	max-height: 5.1em;
+}
+
+.message-content.collapsed::after {
+	content: "";
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	height: 2.5em;
+	background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
+	pointer-events: none;
+}
+
+.message-content.expanded {
+	max-height: 2000px;
+}
+
+.message-content.expanded::after {
+	display: none;
+}
+
+.message-content p {
+	margin: 0;
+	white-space: pre-wrap;
+	word-wrap: break-word;
+}
+
+.message-expand-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	margin-top: 14px;
+	padding: 8px 16px;
+	background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+	border: none;
+	border-radius: 20px;
+	color: #1282a2;
+	font-size: 0.85rem;
+	font-weight: 600;
+	cursor: pointer;
+	transition: all 0.25s;
+}
+
+.message-expand-btn:hover {
+	background: linear-gradient(135deg, #e2e8f0, #cbd5e1);
+	color: #034078;
+	transform: translateY(-1px);
+}
+
+.message-expand-btn svg {
+	width: 16px;
+	height: 16px;
+	transition: transform 0.3s ease;
+}
+
+.message-expand-btn.expanded svg {
+	transform: rotate(180deg);
+}
+
+/* Üres állapot */
+.messages-empty {
+	text-align: center;
+	padding: 80px 20px;
+	color: #64748b;
+}
+
+.messages-empty-icon {
+	width: 100px;
+	height: 100px;
+	margin: 0 auto 24px;
+	background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.messages-empty-icon svg {
+	width: 48px;
+	height: 48px;
+	color: #94a3b8;
+}
+
+.messages-empty h3 {
+	font-size: 1.25rem;
+	font-weight: 600;
+	color: #334155;
+	margin-bottom: 8px;
+}
+
+.messages-empty p {
+	font-size: 0.95rem;
+	color: #94a3b8;
+}
+
+/* ============================================
+   MOBIL RESZPONZÍV
+   ============================================ */
+
 @media (max-width: 768px) {
 	.container {
 		padding: 0 15px;
@@ -321,20 +515,47 @@ nav {
 		padding: 10px 16px;
 		font-size: 0.9rem;
 	}
-	.messages-list {
-		gap: 15px;
-	}
 
 	.message-card {
-		padding: 18px;
+		margin-bottom: 14px;
+	}
+
+	.message-card-header {
+		padding: 16px 18px 12px;
+		flex-wrap: wrap;
 	}
 
 	.message-card h2 {
-		font-size: 1.15rem;
+		font-size: 1.05rem;
+		margin-bottom: 8px;
 	}
 
-	.message-card p {
-		font-size: 0.95rem;
+	.message-card-body {
+		padding: 0 18px 16px;
+	}
+
+	.message-content {
+		font-size: 0.9rem;
+	}
+
+	.message-date {
+		font-size: 0.75rem;
+		padding: 5px 10px;
+	}
+
+	.message-sender-avatar {
+		width: 32px;
+		height: 32px;
+		font-size: 0.8rem;
+	}
+
+	.message-sender-name {
+		font-size: 0.9rem;
+	}
+
+	.message-expand-btn {
+		padding: 7px 14px;
+		font-size: 0.8rem;
 	}
 }
 
@@ -366,25 +587,44 @@ nav {
 		font-size: 0.85rem;
 	}
 
-	.messages-list {
-		gap: 12px;
+	.message-card {
+		margin-bottom: 12px;
 	}
 
-	.message-card {
-		padding: 15px;
+	.message-card-header {
+		padding: 14px 14px 10px;
+	}
+
+	.message-card-body {
+		padding: 0 14px 14px;
 	}
 
 	.message-card h2 {
-		font-size: 1.05rem;
-		margin-bottom: 8px;
+		font-size: 1rem;
 	}
 
-	.message-card p {
-		font-size: 0.9rem;
+	.message-content {
+		font-size: 0.875rem;
 	}
 
-	.message-card .date {
-		font-size: 0.85rem;
+	.message-sender-avatar {
+		width: 28px;
+		height: 28px;
+		font-size: 0.75rem;
+	}
+
+	.messages-empty {
+		padding: 50px 15px;
+	}
+
+	.messages-empty-icon {
+		width: 80px;
+		height: 80px;
+	}
+
+	.messages-empty-icon svg {
+		width: 36px;
+		height: 36px;
 	}
 }
 
@@ -416,10 +656,13 @@ nav {
 
 	.message-card:hover {
 		transform: none;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+		border-color: #e2e8f0;
 	}
 
 	.message-card:active {
-		transform: scale(0.98);
+		transform: scale(0.99);
+		border-color: #1282a2;
 	}
 
 	.messages-tabs .tab:hover {
@@ -428,5 +671,13 @@ nav {
 
 	.messages-tabs .tab:active {
 		background: #d4d4d4;
+	}
+
+	.message-expand-btn:hover {
+		transform: none;
+	}
+
+	.message-expand-btn:active {
+		transform: scale(0.97);
 	}
 }

@@ -52,6 +52,30 @@
 		</main>
 
 		<script>
+			function escapeHtml(text) {
+				const div = document.createElement("div");
+				div.textContent = text;
+				return div.innerHTML;
+			}
+
+			function toggleExpand(contentId, button, event) {
+				event.stopPropagation();
+				const content = document.getElementById(contentId);
+				const isExpanded = content.classList.contains("expanded");
+
+				if (isExpanded) {
+					content.classList.remove("expanded");
+					content.classList.add("collapsed");
+					button.classList.remove("expanded");
+					button.querySelector("span").textContent = "Továbbiak";
+				} else {
+					content.classList.remove("collapsed");
+					content.classList.add("expanded");
+					button.classList.add("expanded");
+					button.querySelector("span").textContent = "Kevesebb";
+				}
+			}
+
 			async function loadMessages() {
 				try {
 					const resp = await fetch("/api/teacher/messages/received");
@@ -62,7 +86,17 @@
 					messagesContainer.innerHTML = "";
 
 					if (messages.length === 0) {
-						messagesContainer.innerHTML = '<p style="text-align: center; color: #666; padding: 2rem;">Még nincs üzenet</p>';
+						messagesContainer.innerHTML = `
+							<div class="messages-empty">
+								<div class="messages-empty-icon">
+									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+										<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+									</svg>
+								</div>
+								<h3>Nincs üzenet</h3>
+								<p>Még nem érkezett beérkező üzenet</p>
+							</div>
+						`;
 						return;
 					}
 
@@ -70,25 +104,51 @@
 						const msgCard = document.createElement("div");
 						msgCard.classList.add("message-card");
 
-						const title = document.createElement("h2");
-						title.textContent = msg.title;
+						const senderName = `${msg.sender.last_name} ${msg.sender.first_name}`;
+						const initials = msg.sender.last_name.charAt(0) + msg.sender.first_name.charAt(0);
 
-						const sender = document.createElement("p");
-						sender.innerHTML = `<strong>Feladó:</strong> ${msg.sender.last_name} ${msg.sender.first_name}`;
-						sender.style.fontSize = "0.9rem";
-						sender.style.color = "#666";
+						const date = new Date(msg.created_at);
+						const formattedDate = date.toLocaleDateString("hu-HU", {
+							year: "numeric",
+							month: "short",
+							day: "numeric",
+						});
 
-						const content = document.createElement("p");
-						content.textContent = msg.content;
+						const isLong = msg.content.length > 150;
+						const contentId = `content-${msg.id}`;
 
-						const date = document.createElement("span");
-						date.classList.add("date");
-						date.textContent = new Date(msg.created_at).toLocaleDateString("hu-HU");
-
-						msgCard.appendChild(title);
-						msgCard.appendChild(sender);
-						msgCard.appendChild(content);
-						msgCard.appendChild(date);
+						msgCard.innerHTML = `
+							<div class="message-card-header">
+								<div class="message-card-header-left">
+									<h2>${escapeHtml(msg.title)}</h2>
+									<div class="message-sender">
+										<div class="message-sender-avatar">${initials}</div>
+										<div>
+											<div class="message-sender-name">${escapeHtml(senderName)}</div>
+											<div class="message-sender-label">Feladó</div>
+										</div>
+									</div>
+								</div>
+								<span class="message-date">${formattedDate}</span>
+							</div>
+							<div class="message-card-body">
+								<div class="message-content ${isLong ? "collapsed" : ""}" id="${contentId}">
+									<p>${escapeHtml(msg.content)}</p>
+								</div>
+								${
+									isLong
+										? `
+									<button class="message-expand-btn" onclick="toggleExpand('${contentId}', this, event)">
+										<span>Továbbiak</span>
+										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+											<polyline points="6 9 12 15 18 9"></polyline>
+										</svg>
+									</button>
+								`
+										: ""
+								}
+							</div>
+						`;
 
 						messagesContainer.appendChild(msgCard);
 					});
