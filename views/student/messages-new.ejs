@@ -10,75 +10,105 @@
 		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 	</head>
 	<body>
-		<main class="container messages-container">
+		<main>
 			<section class="new-message-wrapper">
-				<a href="/messages" class="back-link"> ← Vissza az üzenetekhez </a>
-				<header class="new-message-header">
-					<h2>Új üzenet írása</h2>
-					<p>Küldj üzenetet diáknak vagy tanárnak</p>
-				</header>
+				<div class="message-form-header">
+					<a href="/messages" class="back-link">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+						</svg>
+						Vissza
+					</a>
+					<header class="new-message-header">
+						<h2>Új üzenet</h2>
+						<p>Küldj üzenetet diáknak vagy tanárnak</p>
+					</header>
+				</div>
 
-				<form class="new-message-form" id="messageForm">
-					<div class="form-group">
-						<label for="recipient">Címzett *</label>
-						<select id="recipient" name="receiver_id" required>
-							<option value="">— Válassz címzettet —</option>
-						</select>
-					</div>
+				<div class="form-content">
+					<form class="new-message-form" id="messageForm">
+						<div class="form-group">
+							<label for="recipient">Címzett <span class="required-star">*</span></label>
+							<select id="recipient" name="receiver_id" required>
+								<option value="">— Válassz címzettet —</option>
+							</select>
+						</div>
 
-					<div class="form-group">
-						<label for="subject">Tárgy *</label>
-						<input type="text" id="subject" name="title" placeholder="Pl. ZH időpont" required />
-					</div>
+						<div class="form-group">
+							<label for="subject">Tárgy <span class="required-star">*</span></label>
+							<input type="text" id="subject" name="title" placeholder="Pl. ZH időpont" required />
+						</div>
 
-					<div class="form-group">
-						<label for="content">Üzenet *</label>
-						<textarea id="content" name="content" rows="7" placeholder="Írd le részletesen az üzeneted…" required></textarea>
-					</div>
+						<div class="form-group">
+							<label for="content">Üzenet <span class="required-star">*</span></label>
+							<textarea id="content" name="content" placeholder="Írd le az üzeneted..." required oninput="updateCharCounter()"></textarea>
+							<div class="textarea-footer">
+								<span class="char-counter" id="charCounter"><span id="charCount">0</span> / 5000</span>
+								<button type="button" class="clear-btn" onclick="clearText()">Törlés</button>
+							</div>
+						</div>
 
-					<div class="form-actions">
-						<button type="button" class="secondary-btn" onclick="window.close()">Mégse</button>
-						<button type="submit" class="primary-btn">Üzenet küldése</button>
-					</div>
-				</form>
+						<div class="form-actions">
+							<button type="button" class="secondary-btn" onclick="window.close()">Mégse</button>
+							<button type="submit" class="primary-btn">Küldés</button>
+						</div>
+					</form>
+				</div>
 			</section>
 		</main>
 
 		<script>
+			const MAX_CHARS = 5000;
+
 			async function loadUsers() {
 				try {
 					const resp = await fetch("/api/messages/users");
 					const data = await resp.json();
 					const users = data.users || [];
-
 					const select = document.getElementById("recipient");
 
-					users.forEach((user) => {
-						const option = document.createElement("option");
-						option.value = user.id;
-
-						let roleText = "";
-						if (user.role === "teacher") roleText = "tanár";
-						else if (user.role === "student") roleText = "diák";
-						else if (user.role === "admin") roleText = "admin";
-
-						option.textContent = `${user.last_name} ${user.first_name} (${roleText})`;
-						select.appendChild(option);
-					});
+					// Csak tanárok szűrése
+					users
+						.filter((user) => user.role === "teacher")
+						.forEach((user) => {
+							const option = document.createElement("option");
+							option.value = user.id;
+							option.textContent = `${user.last_name} ${user.first_name}`;
+							select.appendChild(option);
+						});
 				} catch (error) {
-					console.error("Hiba a felhasználók betöltésekor:", error);
+					console.error("Hiba:", error);
 					alert("Hiba történt a címzettek betöltésekor");
+				}
+			}
+
+			function updateCharCounter() {
+				const textarea = document.getElementById("content");
+				const counter = document.getElementById("charCounter");
+				const countSpan = document.getElementById("charCount");
+				const length = textarea.value.length;
+
+				countSpan.textContent = length;
+				counter.classList.remove("warning", "danger");
+
+				if (length > MAX_CHARS * 0.9) counter.classList.add("danger");
+				else if (length > MAX_CHARS * 0.7) counter.classList.add("warning");
+			}
+
+			function clearText() {
+				if (document.getElementById("content").value && confirm("Biztosan törlöd az üzenetet?")) {
+					document.getElementById("content").value = "";
+					updateCharCounter();
 				}
 			}
 
 			document.getElementById("messageForm").addEventListener("submit", async (e) => {
 				e.preventDefault();
 
-				const formData = new FormData(e.target);
 				const data = {
-					receiver_id: formData.get("receiver_id"),
-					title: formData.get("title"),
-					content: formData.get("content"),
+					receiver_id: document.getElementById("recipient").value,
+					title: document.getElementById("subject").value,
+					content: document.getElementById("content").value,
 				};
 
 				if (!data.receiver_id || !data.title || !data.content) {
@@ -86,25 +116,26 @@
 					return;
 				}
 
+				if (data.content.length > MAX_CHARS) {
+					alert(`Maximum ${MAX_CHARS} karakter engedélyezett.`);
+					return;
+				}
+
 				try {
 					const resp = await fetch("/api/messages/send", {
 						method: "POST",
-						headers: {
-							"Content-Type": "application/json",
-						},
+						headers: { "Content-Type": "application/json" },
 						body: JSON.stringify(data),
 					});
 
-					const result = await resp.json();
-
 					if (resp.ok) {
-						alert("Üzenet sikeresen elküldve!");
+						alert("Üzenet elküldve!");
 						window.close();
 					} else {
-						alert(result.error || "Hiba történt az üzenet küldésekor");
+						const result = await resp.json();
+						alert(result.error || "Hiba történt");
 					}
 				} catch (error) {
-					console.error("Hiba az üzenet küldésekor:", error);
 					alert("Hiba történt az üzenet küldésekor");
 				}
 			});
