@@ -36,9 +36,17 @@ header {
 }
 
 .logout-btn {
-	padding: 10px;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 10px 16px;
 	border-radius: 8px;
-	transition: background-color 0.3s;
+	transition: all 0.3s ease;
+	text-decoration: none;
+	color: #fefcfb;
+	font-weight: 500;
+	font-size: 1.05rem;
+	min-height: 44px;
 }
 
 .logout-btn:hover {
