@@ -1,8 +1,10 @@
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
-const { getIronSession } = require("iron-session");
 const { PrismaClient } = require("./generated/prisma");
+
+// Session helper
+const { getSessionByPath, getSessionByRole } = require("./routes/helpers/sessionHelper");
 
 // Middleware importálása
 const { requireAdmin } = require("./routes/middleware/requireAdmin");
@@ -65,42 +67,7 @@ const { submitHomework } = require("./routes/api/submitHomework");
 const { deleteHomework } = require("./routes/api/deleteHomework");
 
 const app = express();
-const port = 3000;
-
-const SESSION_PASSWORD = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-
-// Cookie nevek szerepkör szerint
-const SESSION_COOKIES = {
-	student: "session_student",
-	teacher: "session_teacher",
-	admin: "session_admin",
-};
-
-// Session opciók generálása
-const getSessionOptions = (cookieName) => ({
-	password: SESSION_PASSWORD,
-	cookieName: cookieName,
-	cookieOptions: { secure: false },
-});
-
-// Session lekérése útvonal alapján
-async function getSessionByPath(req, res) {
-	const path = req.path;
-
-	if (path.startsWith("/admin") || path.startsWith("/api/admin")) {
-		return await getIronSession(req, res, getSessionOptions(SESSION_COOKIES.admin));
-	} else if (path.startsWith("/teacher") || path.startsWith("/api/teacher")) {
-		return await getIronSession(req, res, getSessionOptions(SESSION_COOKIES.teacher));
-	} else {
-		return await getIronSession(req, res, getSessionOptions(SESSION_COOKIES.student));
-	}
-}
-
-// Session lekérése szerepkör alapján (login-hoz exportálva)
-async function getSessionByRole(req, res, role) {
-	const cookieName = SESSION_COOKIES[role] || SESSION_COOKIES.student;
-	return await getIronSession(req, res, getSessionOptions(cookieName));
-}
+const port = process.env.PORT || 3000;
 
 // Prisma Client inicializálása
 const db = new PrismaClient();
