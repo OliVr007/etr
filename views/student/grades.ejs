@@ -57,17 +57,28 @@
 					<tr>
 						<td colspan="16" style="text-align: center; padding: 2rem">Még nincsenek értékelések</td>
 					</tr>
-					<% } else { %> <% let rowIndex = 1; function getMonthIndex(date) { const month = new Date(date).getMonth(); if (month === 0) return 4; if (month === 1) return 7; if (month === 2) return 8; if (month === 3) return 9; if (month === 4) return 10; if (month === 5) return 11; if (month === 8) return 0; if (month === 9) return 1; if (month === 10) return 2; if (month === 11) return 3; return -1; } function calculateAverage(grades) { if (!grades || grades.length === 0) return 0; const sum = grades.reduce((acc, g) => acc + parseFloat(g.grade_value), 0); return (sum / grades.length).toFixed(2); } function getGradeClass(gradeValue) { const num = parseFloat(gradeValue); if (num === 5) return 'g5'; if (num === 4) return 'g4'; if (num === 3) return 'g3'; if (num === 2) return 'g2'; if (num === 1) return 'g1'; return ''; } %> <% Object.keys(gradesBySubject).sort().forEach(subjectName => { %> <% const subjectGrades = gradesBySubject[subjectName]; const gradesByMonth =
+					<% } else { %> <% let rowIndex = 1; function getMonthIndex(date) { const month = new Date(date).getMonth(); if (month === 0) return 4; if (month === 1) return 7; if (month === 2) return 8; if (month === 3) return 9; if (month === 4) return 10; if (month === 5) return 11; if (month === 8) return 0; if (month === 9) return 1; if (month === 10) return 2; if (month === 11) return 3; return -1; } function calculateAverage(grades) { if (!grades || grades.length === 0) return 0; const sum = grades.reduce((acc, g) => acc + parseFloat(g.grade_value), 0); return (sum / grades.length).toFixed(2); } function getGradeClass(gradeValue) { const num = parseFloat(gradeValue); if (num === 5) return 'g5'; if (num === 4) return 'g4'; if (num === 3) return 'g3'; if (num === 2) return 'g2'; if (num === 1) return 'g1'; return ''; } function getGradeTypeLabel(type) { const map = { dolgozat: 'Dolgozat', felelet: 'Felelet', h_zi: 'Gyakorlati feladat', projekt: 'Projekt' }; return map[type] || type; } %> <% Object.keys(gradesBySubject).sort().forEach(subjectName => { %> <% const subjectGrades = gradesBySubject[subjectName]; const gradesByMonth =
 					Array(12).fill(null).map(() => []); subjectGrades.forEach(grade => { const monthIdx = getMonthIndex(grade.grade_date); if (monthIdx >= 0) { gradesByMonth[monthIdx].push(grade); } }); const average = calculateAverage(subjectGrades); %>
 
-					<tr>
+					<tr class="<%= rowIndex === 1 ? 'first-row' : '' %>">
 						<td><%= rowIndex++ %></td>
 						<td><%= subjectName %></td>
 
 						<% gradesByMonth.forEach((monthGrades, idx) => { %>
 						<td>
 							<% if (monthGrades.length > 0) { %> <% monthGrades.forEach(grade => { %>
-							<span class="<%= getGradeClass(grade.grade_value) %>" title="<%= grade.description %> (<%= grade.grade_type %>)"> <%= grade.grade_value %> </span>
+							<span class="grade-cell <%= getGradeClass(grade.grade_value) %>">
+								<%= grade.grade_value %>
+								<div class="grade-tooltip">
+									<div class="tooltip-date"><%= new Date(grade.grade_date).toLocaleDateString('hu-HU') %></div>
+									<div class="tooltip-type"><%= getGradeTypeLabel(grade.grade_type) %></div>
+									<% if (grade.description) { %>
+									<div class="tooltip-desc">Téma: <%= grade.description %></div>
+									<% } %>
+									<div class="tooltip-weight">Súly: <%= (grade.weight || 1) * 100 %>%</div>
+									<div class="tooltip-teacher"><%= grade.users_grades_teacher_idTousers.last_name %> <%= grade.users_grades_teacher_idTousers.first_name %></div>
+								</div>
+							</span>
 							<% }); %> <% } %>
 						</td>
 						<% }); %>

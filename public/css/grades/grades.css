@@ -162,10 +162,9 @@ nav {
 	font-size: 1rem;
 	background: #fff;
 	border-radius: 10px;
-	overflow: hidden;
+	overflow: visible;
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
-
 .grades-table thead {
 	background: #034078;
 	color: #fff;
@@ -185,6 +184,8 @@ nav {
 	background: #d3e7ff;
 	text-align: center;
 	font-weight: 600;
+	overflow: visible;
+	position: relative;
 }
 
 .grades-table tbody tr:nth-child(even) {
@@ -359,4 +360,92 @@ nav {
 	.logout-btn:active {
 		background-color: rgba(255, 255, 255, 0.2);
 	}
+}
+/* Grade tooltip */
+.grade-cell {
+	position: relative;
+	display: inline-block;
+	cursor: pointer;
+	padding: 2px 6px;
+	border-radius: 4px;
+	transition: transform 0.2s;
+}
+
+.grade-cell:hover {
+	transform: scale(1.15);
+	z-index: 50;
+}
+
+.grade-tooltip {
+	display: none;
+	position: absolute;
+	bottom: calc(100% + 10px);
+	left: 50%;
+	transform: translateX(-50%);
+	background: white;
+	border-left: 4px solid #1282a2;
+	padding: 12px 16px;
+	border-radius: 8px;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+	white-space: nowrap;
+	z-index: 100;
+	pointer-events: none;
+	min-width: 180px;
+	text-align: left;
+}
+
+.grade-tooltip::after {
+	content: "";
+	position: absolute;
+	top: 100%;
+	left: 50%;
+	transform: translateX(-50%);
+	border: 7px solid transparent;
+	border-top-color: white;
+}
+.first-row .grade-tooltip {
+	bottom: auto;
+	top: calc(100% + 10px);
+}
+.first-row .grade-tooltip::after {
+	top: auto;
+	bottom: 100%;
+	border-top-color: transparent;
+	border-bottom-color: white;
+}
+
+.grade-cell:hover .grade-tooltip {
+	display: block;
+}
+
+.tooltip-date {
+	font-size: 0.85rem;
+	color: #475569;
+	margin-bottom: 6px;
+}
+
+.tooltip-type {
+	font-size: 0.9rem;
+	font-weight: 600;
+	color: #0a1128;
+	margin-bottom: 4px;
+}
+
+.tooltip-desc {
+	font-size: 0.85rem;
+	color: #475569;
+	margin-bottom: 4px;
+}
+
+.tooltip-weight {
+	font-size: 0.85rem;
+	color: #475569;
+	margin-bottom: 4px;
+}
+
+.tooltip-teacher {
+	font-size: 0.85rem;
+	color: #034078;
+	font-weight: 600;
+	margin-top: 4px;
 }

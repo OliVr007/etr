@@ -33,7 +33,7 @@ const { messagesNew } = require("./routes/student/messagesNew");
 const { routeTeacher } = require("./routes/teacher/root");
 const { rootTeacherClasses } = require("./routes/teacher/classes");
 const { studentforClass } = require("./routes/teacher/getStudentForClass");
-const { gradePage } = require("./routes/teacher/gradingPage");
+const { gradePage, getGradingData, saveGrades, updateGrade, deleteGrade } = require("./routes/teacher/gradingPage");
 const { teacherLegacyRoot } = require("./routes/teacher/legacyRoot");
 const { teacherMessages } = require("./routes/teacher/messages");
 const { teacherMessagesSent } = require("./routes/teacher/messagesSent");
@@ -119,6 +119,14 @@ app.get("/teacher/messages/sent", requireTeacher, teacherMessagesSent);
 app.get("/teacher/messages/new", requireTeacher, teacherMessagesNew);
 app.get("/teacher/homework", requireTeacher, teacherHomework);
 app.get("/teacherui", requireTeacher, teacherLegacyRoot); // Legacy átirányítás
+
+// ========================================
+// TEACHER API ROUTES - Grading (Értékelés)
+// ========================================
+app.get("/api/teacher/grading/:classId/:subjectId", requireTeacher, getGradingData);
+app.post("/api/teacher/grading/save", requireTeacher, saveGrades);
+app.put("/api/teacher/grading/:gradeId", requireTeacher, updateGrade);
+app.delete("/api/teacher/grading/:gradeId", requireTeacher, deleteGrade);
 
 // ========================================
 // STUDENT ROUTES
