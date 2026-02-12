@@ -14,8 +14,8 @@
 						<img src="/icons/icon-128.webp" alt="Iskola logo" />
 					</div>
 					<div class="user-info">
-						<span>Bejelentkezve: <%= first_name %></span>
 						<a href="/logout" class="logout-btn">
+							<span>Kijelentkezés</span>
 							<img src="/icons/logouticon.svg" alt="Kijelentkezés" title="Kijelentkezés" />
 						</a>
 					</div>
@@ -267,7 +267,7 @@
 					</div>
 					<div class="form-group">
 						<label for="add_email">Email</label>
-						<input type="email" id="add_email" name="email" />
+						<input type="email" id="add_email" name="email" required/>
 					</div>
 					<div class="form-group">
 						<label for="add_role">Szerepkör *</label>
@@ -324,7 +324,7 @@
 					</div>
 					<div class="form-group">
 						<label for="edit_email">Email</label>
-						<input type="email" id="edit_email" name="email" />
+						<input type="email" id="edit_email" name="email" required/>
 					</div>
 					<div class="form-group">
 						<label for="edit_role">Szerepkör *</label>

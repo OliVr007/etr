@@ -131,7 +131,7 @@ model timetable {
 model users {
   id                                   Int                @id @default(autoincrement())
   username                             String             @unique(map: "username") @db.VarChar(50)
-  email                                String             @unique(map: "email") @db.VarChar(100)
+  email                                String?            @unique(map: "email") @db.VarChar(100)
   password_hash                        String             @db.VarChar(255)
   first_name                           String             @db.VarChar(50)
   last_name                            String             @db.VarChar(50)
@@ -154,6 +154,7 @@ model users {
   timetable                            timetable[]
   homework             homework[]
   homework_submissions homework_submissions[]
+  
 }
 
 model messages {

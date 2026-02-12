@@ -12,7 +12,7 @@ async function createUser(req, res) {
 		}
 
 		// Ha diák és nincs osztály megadva, hiba
-		if (role === 'student' && !class_id) {
+		if (role === "student" && !class_id) {
 			return res.status(400).json({ error: "Diák felhasználóhoz kötelező osztályt megadni" });
 		}
 
@@ -35,13 +35,13 @@ async function createUser(req, res) {
 				password_hash: hashedPassword,
 				first_name: first_name,
 				last_name: last_name,
-				email: email || null,
+				email: email || `${username}@placeholder.local`,
 				role: role,
 			},
 		});
 
 		// Ha diák, akkor osztályba is beírjuk
-		if (role === 'student' && class_id) {
+		if (role === "student" && class_id) {
 			await db.student_classes.create({
 				data: {
 					student_id: newUser.id,
