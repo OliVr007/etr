@@ -14,7 +14,7 @@
 						<img src="/icons/icon-128.webp" alt="Iskola logo" />
 					</div>
 					<div class="user-info">
-						<span>Bejelentkezve: <%= first_name %> </span>
+						<span>Bejelentkezve: <%= first_name %></span>
 						<a href="/logout" class="logout-btn">
 							<img src="/icons/logouticon.svg" alt="Kijelentkezés" title="Kijelentkezés" />
 						</a>
@@ -24,49 +24,58 @@
 		</header>
 
 		<main class="container">
+			<!-- Statisztikák -->
 			<section class="stats-section">
 				<h2>Statisztikák</h2>
 				<div class="stats-grid">
-					<div class="stat-card">
+					<div class="stat-card" onclick="switchTab('users')">
 						<div class="stat-icon">👥</div>
 						<div class="stat-info">
 							<h3><%= stats.totalUsers %></h3>
-							<p>Összes felhasználó</p>
+							<p>Felhasználók</p>
 						</div>
 					</div>
-					<div class="stat-card">
-						<div class="stat-icon">🎓</div>
+					<div class="stat-card" onclick="switchTab('classes')">
+						<div class="stat-icon">🏫</div>
 						<div class="stat-info">
-							<h3><%= stats.students %></h3>
-							<p>Diákok</p>
+							<h3><%= stats.totalClasses %></h3>
+							<p>Osztályok</p>
 						</div>
 					</div>
-					<div class="stat-card">
-						<div class="stat-icon">👨‍🏫</div>
+					<div class="stat-card" onclick="switchTab('subjects')">
+						<div class="stat-icon">📚</div>
 						<div class="stat-info">
-							<h3><%= stats.teachers %></h3>
-							<p>Tanárok</p>
+							<h3><%= stats.totalSubjects %></h3>
+							<p>Tantárgyak</p>
 						</div>
 					</div>
-					<div class="stat-card">
-						<div class="stat-icon">⚙️</div>
+					<div class="stat-card" onclick="switchTab('assignments')">
+						<div class="stat-icon">🔗</div>
 						<div class="stat-info">
-							<h3><%= stats.admins %></h3>
-							<p>Adminisztrátorok</p>
+							<h3><%= stats.totalAssignments %></h3>
+							<p>Hozzárendelések</p>
 						</div>
 					</div>
 				</div>
 			</section>
 
-			<div class="content-grid">
-				<section class="users-section">
+			<!-- Tab navigáció -->
+			<div class="tab-nav">
+				<button class="tab-btn active" data-tab="users" onclick="switchTab('users')">👥 Felhasználók</button>
+				<button class="tab-btn" data-tab="classes" onclick="switchTab('classes')">🏫 Osztályok</button>
+				<button class="tab-btn" data-tab="subjects" onclick="switchTab('subjects')">📚 Tantárgyak</button>
+				<button class="tab-btn" data-tab="assignments" onclick="switchTab('assignments')">🔗 Hozzárendelések</button>
+			</div>
+
+			<!-- ==================== FELHASZNÁLÓK TAB ==================== -->
+			<div class="tab-content active" id="tab-users">
+				<section class="content-section">
 					<div class="section-header">
 						<h2>Felhasználó kezelés</h2>
 						<button class="btn-primary" onclick="openAddUserModal()"><span>➕</span> Új felhasználó</button>
 					</div>
-
 					<div class="table-container">
-						<table class="users-table">
+						<table class="data-table">
 							<thead>
 								<tr>
 									<th>ID</th>
@@ -102,15 +111,17 @@
 						</table>
 					</div>
 				</section>
+			</div>
 
-				<section class="classes-section">
+			<!-- ==================== OSZTÁLYOK TAB ==================== -->
+			<div class="tab-content" id="tab-classes">
+				<section class="content-section">
 					<div class="section-header">
 						<h2>Osztály kezelés</h2>
 						<button class="btn-primary" onclick="openAddClassModal()"><span>➕</span> Új osztály</button>
 					</div>
-
 					<div class="table-container">
-						<table class="users-table">
+						<table class="data-table">
 							<thead>
 								<tr>
 									<th>ID</th>
@@ -118,6 +129,7 @@
 									<th>Tanév</th>
 									<th>Osztályfőnök</th>
 									<th>Terem</th>
+									<th>Műveletek</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -128,6 +140,94 @@
 									<td><%= cls.academic_year %></td>
 									<td><%= cls.users ? cls.users.last_name + ' ' + cls.users.first_name : '-' %></td>
 									<td><%= cls.room_number || '-' %></td>
+									<td class="action-buttons">
+										<button class="btn-edit" onclick="openEditClassModal(<%= cls.id %>)" title="Szerkesztés">✏️</button>
+										<button class="btn-delete" onclick="deleteClass(<%= cls.id %>, '<%= cls.class_name %>')" title="Törlés">🗑️</button>
+									</td>
+								</tr>
+								<% }); %>
+							</tbody>
+						</table>
+					</div>
+				</section>
+			</div>
+
+			<!-- ==================== TANTÁRGYAK TAB ==================== -->
+			<div class="tab-content" id="tab-subjects">
+				<section class="content-section">
+					<div class="section-header">
+						<h2>Tantárgy kezelés</h2>
+						<button class="btn-primary" onclick="openAddSubjectModal()"><span>➕</span> Új tantárgy</button>
+					</div>
+					<div class="table-container">
+						<table class="data-table">
+							<thead>
+								<tr>
+									<th>ID</th>
+									<th>Kód</th>
+									<th>Tantárgy neve</th>
+									<th>Kredit</th>
+									<th>Státusz</th>
+									<th>Leírás</th>
+									<th>Műveletek</th>
+								</tr>
+							</thead>
+							<tbody>
+								<% subjects.forEach(sub => { %>
+								<tr>
+									<td><%= sub.id %></td>
+									<td><code><%= sub.subject_code %></code></td>
+									<td><%= sub.subject_name %></td>
+									<td><%= sub.credits || 1 %></td>
+									<td>
+										<span class="status-badge <%= sub.is_active ? 'active' : 'inactive' %>">
+											<%= sub.is_active ? 'Aktív' : 'Inaktív' %>
+										</span>
+									</td>
+									<td class="desc-cell"><%= sub.description || '-' %></td>
+									<td class="action-buttons">
+										<button class="btn-edit" onclick="openEditSubjectModal(<%= sub.id %>)" title="Szerkesztés">✏️</button>
+										<button class="btn-delete" onclick="deleteSubject(<%= sub.id %>, '<%= sub.subject_name %>')" title="Törlés">🗑️</button>
+									</td>
+								</tr>
+								<% }); %>
+							</tbody>
+						</table>
+					</div>
+				</section>
+			</div>
+
+			<!-- ==================== HOZZÁRENDELÉSEK TAB ==================== -->
+			<div class="tab-content" id="tab-assignments">
+				<section class="content-section">
+					<div class="section-header">
+						<h2>Tanár-Tantárgy hozzárendelés</h2>
+						<button class="btn-primary" onclick="openAddAssignmentModal()"><span>➕</span> Új hozzárendelés</button>
+					</div>
+					<div class="table-container">
+						<table class="data-table">
+							<thead>
+								<tr>
+									<th>ID</th>
+									<th>Tanár</th>
+									<th>Tantárgy</th>
+									<th>Osztály</th>
+									<th>Tanév</th>
+									<th>Műveletek</th>
+								</tr>
+							</thead>
+							<tbody>
+								<% teacherSubjects.forEach(ts => { %>
+								<tr>
+									<td><%= ts.id %></td>
+									<td><%= ts.users.last_name %> <%= ts.users.first_name %></td>
+									<td><%= ts.subjects.subject_name %> (<%= ts.subjects.subject_code %>)</td>
+									<td><%= ts.classes.class_name %></td>
+									<td><%= ts.academic_year %></td>
+									<td class="action-buttons">
+										<button class="btn-edit" onclick="openEditAssignmentModal(<%= ts.id %>, <%= ts.users.id %>, <%= ts.subjects.id %>, <%= ts.classes.id %>, '<%= ts.academic_year %>')" title="Szerkesztés">✏️</button>
+										<button class="btn-delete" onclick="deleteAssignment(<%= ts.id %>, '<%= ts.users.last_name %> - <%= ts.subjects.subject_name %> - <%= ts.classes.class_name %>')" title="Törlés">🗑️</button>
+									</td>
 								</tr>
 								<% }); %>
 							</tbody>
@@ -137,12 +237,14 @@
 			</div>
 		</main>
 
+		<!-- ==================== MODÁLOK ==================== -->
+
 		<!-- Add User Modal -->
 		<div id="addUserModal" class="modal">
 			<div class="modal-content">
 				<div class="modal-header">
 					<h3>Új felhasználó hozzáadása</h3>
-					<button class="close-btn" onclick="closeAddUserModal()">&times;</button>
+					<button class="close-btn" onclick="closeModal('addUserModal')">&times;</button>
 				</div>
 				<form id="addUserForm" onsubmit="addUser(event)">
 					<div class="form-group">
@@ -186,7 +288,7 @@
 						</select>
 					</div>
 					<div class="form-actions">
-						<button type="button" class="btn-secondary" onclick="closeAddUserModal()">Mégse</button>
+						<button type="button" class="btn-secondary" onclick="closeModal('addUserModal')">Mégse</button>
 						<button type="submit" class="btn-primary">Létrehozás</button>
 					</div>
 				</form>
@@ -198,7 +300,7 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<h3>Felhasználó szerkesztése</h3>
-					<button class="close-btn" onclick="closeEditUserModal()">&times;</button>
+					<button class="close-btn" onclick="closeModal('editUserModal')">&times;</button>
 				</div>
 				<form id="editUserForm" onsubmit="updateUser(event)">
 					<input type="hidden" id="edit_user_id" />
@@ -221,7 +323,7 @@
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="edit_email">Email *</label>
+						<label for="edit_email">Email</label>
 						<input type="email" id="edit_email" name="email" />
 					</div>
 					<div class="form-group">
@@ -242,7 +344,7 @@
 						</select>
 					</div>
 					<div class="form-actions">
-						<button type="button" class="btn-secondary" onclick="closeEditUserModal()">Mégse</button>
+						<button type="button" class="btn-secondary" onclick="closeModal('editUserModal')">Mégse</button>
 						<button type="submit" class="btn-primary">Mentés</button>
 					</div>
 				</form>
@@ -254,20 +356,20 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<h3>Új osztály létrehozása</h3>
-					<button class="close-btn" onclick="closeAddClassModal()">&times;</button>
+					<button class="close-btn" onclick="closeModal('addClassModal')">&times;</button>
 				</div>
 				<form id="addClassForm" onsubmit="addClass(event)">
 					<div class="form-group">
-						<label for="class_name">Osztály neve *</label>
-						<input type="text" id="class_name" name="class_name" placeholder="pl. 9.A" required />
+						<label for="add_class_name">Osztály neve *</label>
+						<input type="text" id="add_class_name" name="class_name" placeholder="pl. 9.A" required />
 					</div>
 					<div class="form-group">
-						<label for="academic_year">Tanév *</label>
-						<input type="text" id="academic_year" name="academic_year" placeholder="2024/2025" required />
+						<label for="add_academic_year">Tanév *</label>
+						<input type="text" id="add_academic_year" name="academic_year" placeholder="2024/2025" required />
 					</div>
 					<div class="form-group">
-						<label for="class_teacher_id">Osztályfőnök</label>
-						<select id="class_teacher_id" name="class_teacher_id">
+						<label for="add_class_teacher_id">Osztályfőnök</label>
+						<select id="add_class_teacher_id" name="class_teacher_id">
 							<option value="">Nincs megadva</option>
 							<% teachers.forEach(t => { %>
 							<option value="<%= t.id %>"><%= t.last_name %> <%= t.first_name %></option>
@@ -275,23 +377,261 @@
 						</select>
 					</div>
 					<div class="form-group">
-						<label for="room_number">Terem</label>
-						<input type="text" id="room_number" name="room_number" placeholder="pl. 101" />
+						<label for="add_room_number">Terem</label>
+						<input type="text" id="add_room_number" name="room_number" placeholder="pl. 101" />
 					</div>
 					<div class="form-actions">
-						<button type="button" class="btn-secondary" onclick="closeAddClassModal()">Mégse</button>
+						<button type="button" class="btn-secondary" onclick="closeModal('addClassModal')">Mégse</button>
 						<button type="submit" class="btn-primary">Létrehozás</button>
 					</div>
 				</form>
 			</div>
 		</div>
 
-		<script>
-			function toggleClassSelector(mode) {
-				const roleSelect = document.getElementById(`${mode}_role`);
-				const classGroup = document.getElementById(`${mode}_class_group`);
-				const classSelect = document.getElementById(`${mode}_class`);
+		<!-- Edit Class Modal -->
+		<div id="editClassModal" class="modal">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3>Osztály szerkesztése</h3>
+					<button class="close-btn" onclick="closeModal('editClassModal')">&times;</button>
+				</div>
+				<form id="editClassForm" onsubmit="updateClass(event)">
+					<input type="hidden" id="edit_class_id" />
+					<div class="form-group">
+						<label for="edit_class_name">Osztály neve *</label>
+						<input type="text" id="edit_class_name" name="class_name" required />
+					</div>
+					<div class="form-group">
+						<label for="edit_academic_year">Tanév *</label>
+						<input type="text" id="edit_academic_year" name="academic_year" required />
+					</div>
+					<div class="form-group">
+						<label for="edit_class_teacher_id">Osztályfőnök</label>
+						<select id="edit_class_teacher_id" name="class_teacher_id">
+							<option value="">Nincs megadva</option>
+							<% teachers.forEach(t => { %>
+							<option value="<%= t.id %>"><%= t.last_name %> <%= t.first_name %></option>
+							<% }); %>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="edit_room_number">Terem</label>
+						<input type="text" id="edit_room_number" name="room_number" />
+					</div>
+					<div class="form-actions">
+						<button type="button" class="btn-secondary" onclick="closeModal('editClassModal')">Mégse</button>
+						<button type="submit" class="btn-primary">Mentés</button>
+					</div>
+				</form>
+			</div>
+		</div>
 
+		<!-- Add Subject Modal -->
+		<div id="addSubjectModal" class="modal">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3>Új tantárgy létrehozása</h3>
+					<button class="close-btn" onclick="closeModal('addSubjectModal')">&times;</button>
+				</div>
+				<form id="addSubjectForm" onsubmit="addSubject(event)">
+					<div class="form-row">
+						<div class="form-group">
+							<label for="add_subject_code">Tantárgy kód *</label>
+							<input type="text" id="add_subject_code" name="subject_code" placeholder="pl. MAT" required />
+						</div>
+						<div class="form-group">
+							<label for="add_subject_name">Tantárgy neve *</label>
+							<input type="text" id="add_subject_name" name="subject_name" placeholder="pl. Matematika" required />
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="add_subject_credits">Kredit</label>
+						<input type="number" id="add_subject_credits" name="credits" value="1" min="1" max="10" />
+					</div>
+					<div class="form-group">
+						<label for="add_subject_description">Leírás</label>
+						<textarea id="add_subject_description" name="description" rows="3" placeholder="Opcionális leírás..."></textarea>
+					</div>
+					<div class="form-actions">
+						<button type="button" class="btn-secondary" onclick="closeModal('addSubjectModal')">Mégse</button>
+						<button type="submit" class="btn-primary">Létrehozás</button>
+					</div>
+				</form>
+			</div>
+		</div>
+
+		<!-- Edit Subject Modal -->
+		<div id="editSubjectModal" class="modal">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3>Tantárgy szerkesztése</h3>
+					<button class="close-btn" onclick="closeModal('editSubjectModal')">&times;</button>
+				</div>
+				<form id="editSubjectForm" onsubmit="updateSubject(event)">
+					<input type="hidden" id="edit_subject_id" />
+					<div class="form-row">
+						<div class="form-group">
+							<label for="edit_subject_code">Tantárgy kód *</label>
+							<input type="text" id="edit_subject_code" name="subject_code" required />
+						</div>
+						<div class="form-group">
+							<label for="edit_subject_name">Tantárgy neve *</label>
+							<input type="text" id="edit_subject_name" name="subject_name" required />
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group">
+							<label for="edit_subject_credits">Kredit</label>
+							<input type="number" id="edit_subject_credits" name="credits" min="1" max="10" />
+						</div>
+						<div class="form-group">
+							<label for="edit_subject_active">Státusz</label>
+							<select id="edit_subject_active" name="is_active">
+								<option value="true">Aktív</option>
+								<option value="false">Inaktív</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="edit_subject_description">Leírás</label>
+						<textarea id="edit_subject_description" name="description" rows="3"></textarea>
+					</div>
+					<div class="form-actions">
+						<button type="button" class="btn-secondary" onclick="closeModal('editSubjectModal')">Mégse</button>
+						<button type="submit" class="btn-primary">Mentés</button>
+					</div>
+				</form>
+			</div>
+		</div>
+
+		<!-- Add Assignment Modal -->
+		<div id="addAssignmentModal" class="modal">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3>Új tanár-tantárgy hozzárendelés</h3>
+					<button class="close-btn" onclick="closeModal('addAssignmentModal')">&times;</button>
+				</div>
+				<form id="addAssignmentForm" onsubmit="addAssignment(event)">
+					<div class="form-group">
+						<label for="add_ts_teacher">Tanár *</label>
+						<select id="add_ts_teacher" name="teacher_id" required>
+							<option value="">Válassz tanárt...</option>
+							<% teachers.forEach(t => { %>
+							<option value="<%= t.id %>"><%= t.last_name %> <%= t.first_name %></option>
+							<% }); %>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="add_ts_subject">Tantárgy *</label>
+						<select id="add_ts_subject" name="subject_id" required>
+							<option value="">Válassz tantárgyat...</option>
+							<% subjects.forEach(sub => { %>
+							<option value="<%= sub.id %>"><%= sub.subject_name %> (<%= sub.subject_code %>)</option>
+							<% }); %>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="add_ts_class">Osztály *</label>
+						<select id="add_ts_class" name="class_id" required>
+							<option value="">Válassz osztályt...</option>
+							<% classes.forEach(cls => { %>
+							<option value="<%= cls.id %>"><%= cls.class_name %></option>
+							<% }); %>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="add_ts_year">Tanév *</label>
+						<input type="text" id="add_ts_year" name="academic_year" placeholder="2024/2025" required />
+					</div>
+					<div class="form-actions">
+						<button type="button" class="btn-secondary" onclick="closeModal('addAssignmentModal')">Mégse</button>
+						<button type="submit" class="btn-primary">Létrehozás</button>
+					</div>
+				</form>
+			</div>
+		</div>
+
+		<!-- Edit Assignment Modal -->
+		<div id="editAssignmentModal" class="modal">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3>Hozzárendelés szerkesztése</h3>
+					<button class="close-btn" onclick="closeModal('editAssignmentModal')">&times;</button>
+				</div>
+				<form id="editAssignmentForm" onsubmit="updateAssignment(event)">
+					<input type="hidden" id="edit_ts_id" />
+					<div class="form-group">
+						<label for="edit_ts_teacher">Tanár *</label>
+						<select id="edit_ts_teacher" name="teacher_id" required>
+							<option value="">Válassz tanárt...</option>
+							<% teachers.forEach(t => { %>
+							<option value="<%= t.id %>"><%= t.last_name %> <%= t.first_name %></option>
+							<% }); %>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="edit_ts_subject">Tantárgy *</label>
+						<select id="edit_ts_subject" name="subject_id" required>
+							<option value="">Válassz tantárgyat...</option>
+							<% subjects.forEach(sub => { %>
+							<option value="<%= sub.id %>"><%= sub.subject_name %> (<%= sub.subject_code %>)</option>
+							<% }); %>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="edit_ts_class">Osztály *</label>
+						<select id="edit_ts_class" name="class_id" required>
+							<option value="">Válassz osztályt...</option>
+							<% classes.forEach(cls => { %>
+							<option value="<%= cls.id %>"><%= cls.class_name %></option>
+							<% }); %>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="edit_ts_year">Tanév *</label>
+						<input type="text" id="edit_ts_year" name="academic_year" required />
+					</div>
+					<div class="form-actions">
+						<button type="button" class="btn-secondary" onclick="closeModal('editAssignmentModal')">Mégse</button>
+						<button type="submit" class="btn-primary">Mentés</button>
+					</div>
+				</form>
+			</div>
+		</div>
+
+		<script>
+			// ==================== TAB KEZELÉS ====================
+			function switchTab(tabName) {
+				document.querySelectorAll('.tab-btn').forEach(btn => {
+					btn.classList.toggle('active', btn.dataset.tab === tabName);
+				});
+				document.querySelectorAll('.tab-content').forEach(content => {
+					content.classList.toggle('active', content.id === 'tab-' + tabName);
+				});
+			}
+
+			// ==================== MODÁL KEZELÉS ====================
+			function closeModal(modalId) {
+				document.getElementById(modalId).style.display = "none";
+				const form = document.getElementById(modalId).querySelector('form');
+				if (form) form.reset();
+				const addClassGroup = document.getElementById("add_class_group");
+				const editClassGroup = document.getElementById("edit_class_group");
+				if (addClassGroup) addClassGroup.style.display = "none";
+				if (editClassGroup) editClassGroup.style.display = "none";
+			}
+
+			window.onclick = function(event) {
+				document.querySelectorAll('.modal').forEach(modal => {
+					if (event.target === modal) closeModal(modal.id);
+				});
+			};
+
+			// ==================== FELHASZNÁLÓ KEZELÉS ====================
+			function toggleClassSelector(mode) {
+				const roleSelect = document.getElementById(mode + '_role');
+				const classGroup = document.getElementById(mode + '_class_group');
+				const classSelect = document.getElementById(mode + '_class');
 				if (roleSelect.value === 'student') {
 					classGroup.style.display = 'flex';
 					classSelect.required = true;
@@ -306,17 +646,10 @@
 				document.getElementById("addUserModal").style.display = "flex";
 			}
 
-			function closeAddUserModal() {
-				document.getElementById("addUserModal").style.display = "none";
-				document.getElementById("addUserForm").reset();
-				document.getElementById("add_class_group").style.display = "none";
-			}
-
 			async function openEditUserModal(userId) {
 				try {
-					const response = await fetch(`/api/admin/users/${userId}`);
+					const response = await fetch('/api/admin/users/' + userId);
 					const user = await response.json();
-
 					if (response.ok) {
 						document.getElementById("edit_user_id").value = user.id;
 						document.getElementById("edit_username").value = user.username;
@@ -325,7 +658,6 @@
 						document.getElementById("edit_email").value = user.email || "";
 						document.getElementById("edit_role").value = user.role;
 						document.getElementById("edit_password").value = "";
-
 						if (user.role === 'student') {
 							document.getElementById("edit_class_group").style.display = "flex";
 							document.getElementById("edit_class").required = true;
@@ -334,7 +666,6 @@
 							document.getElementById("edit_class_group").style.display = "none";
 							document.getElementById("edit_class").required = false;
 						}
-
 						document.getElementById("editUserModal").style.display = "flex";
 					} else {
 						alert("Hiba történt a felhasználó betöltésekor");
@@ -345,32 +676,23 @@
 				}
 			}
 
-			function closeEditUserModal() {
-				document.getElementById("editUserModal").style.display = "none";
-				document.getElementById("editUserForm").reset();
-				document.getElementById("edit_class_group").style.display = "none";
-			}
-
 			async function addUser(event) {
 				event.preventDefault();
 				const formData = new FormData(event.target);
 				const data = Object.fromEntries(formData);
-
 				try {
 					const response = await fetch("/api/admin/users", {
 						method: "POST",
 						headers: { "Content-Type": "application/json" },
 						body: JSON.stringify(data),
 					});
-
 					const result = await response.json();
-
 					if (response.ok) {
 						alert("Felhasználó sikeresen létrehozva!");
-						closeAddUserModal();
+						closeModal('addUserModal');
 						location.reload();
 					} else {
-						alert(result.error || "Hiba történt a felhasználó létrehozásakor");
+						alert(result.error || "Hiba történt");
 					}
 				} catch (error) {
 					console.error("Hiba:", error);
@@ -383,22 +705,19 @@
 				const userId = document.getElementById("edit_user_id").value;
 				const formData = new FormData(event.target);
 				const data = Object.fromEntries(formData);
-
 				try {
-					const response = await fetch(`/api/admin/users/${userId}`, {
+					const response = await fetch('/api/admin/users/' + userId, {
 						method: "PUT",
 						headers: { "Content-Type": "application/json" },
 						body: JSON.stringify(data),
 					});
-
 					const result = await response.json();
-
 					if (response.ok) {
 						alert("Felhasználó sikeresen frissítve!");
-						closeEditUserModal();
+						closeModal('editUserModal');
 						location.reload();
 					} else {
-						alert(result.error || "Hiba történt a felhasználó frissítésekor");
+						alert(result.error || "Hiba történt");
 					}
 				} catch (error) {
 					console.error("Hiba:", error);
@@ -407,22 +726,15 @@
 			}
 
 			async function deleteUser(userId, username) {
-				if (!confirm(`Biztosan törölni szeretnéd ezt a felhasználót: ${username}?`)) {
-					return;
-				}
-
+				if (!confirm('Biztosan törölni szeretnéd: ' + username + '?')) return;
 				try {
-					const response = await fetch(`/api/admin/users/${userId}`, {
-						method: "DELETE",
-					});
-
+					const response = await fetch('/api/admin/users/' + userId, { method: "DELETE" });
 					const result = await response.json();
-
 					if (response.ok) {
 						alert("Felhasználó sikeresen törölve!");
 						location.reload();
 					} else {
-						alert(result.error || "Hiba történt a felhasználó törlésekor");
+						alert(result.error || "Hiba történt");
 					}
 				} catch (error) {
 					console.error("Hiba:", error);
@@ -430,35 +742,48 @@
 				}
 			}
 
+			// ==================== OSZTÁLY KEZELÉS ====================
 			function openAddClassModal() {
 				document.getElementById("addClassModal").style.display = "flex";
 			}
 
-			function closeAddClassModal() {
-				document.getElementById("addClassModal").style.display = "none";
-				document.getElementById("addClassForm").reset();
+			async function openEditClassModal(classId) {
+				try {
+					const response = await fetch('/api/admin/classes/' + classId);
+					const cls = await response.json();
+					if (response.ok) {
+						document.getElementById("edit_class_id").value = cls.id;
+						document.getElementById("edit_class_name").value = cls.class_name;
+						document.getElementById("edit_academic_year").value = cls.academic_year;
+						document.getElementById("edit_class_teacher_id").value = cls.class_teacher_id || "";
+						document.getElementById("edit_room_number").value = cls.room_number || "";
+						document.getElementById("editClassModal").style.display = "flex";
+					} else {
+						alert("Hiba történt az osztály betöltésekor");
+					}
+				} catch (error) {
+					console.error("Hiba:", error);
+					alert("Hiba történt az osztály betöltésekor");
+				}
 			}
 
 			async function addClass(event) {
 				event.preventDefault();
 				const formData = new FormData(event.target);
 				const data = Object.fromEntries(formData);
-
 				try {
 					const response = await fetch("/api/admin/classes", {
 						method: "POST",
 						headers: { "Content-Type": "application/json" },
 						body: JSON.stringify(data),
 					});
-
 					const result = await response.json();
-
 					if (response.ok) {
 						alert("Osztály sikeresen létrehozva!");
-						closeAddClassModal();
+						closeModal('addClassModal');
 						location.reload();
 					} else {
-						alert(result.error || "Hiba történt az osztály létrehozásakor");
+						alert(result.error || "Hiba történt");
 					}
 				} catch (error) {
 					console.error("Hiba:", error);
@@ -466,14 +791,219 @@
 				}
 			}
 
-			window.onclick = function (event) {
-				const addModal = document.getElementById("addUserModal");
-				const editModal = document.getElementById("editUserModal");
-				const addClassModal = document.getElementById("addClassModal");
-				if (event.target === addModal) closeAddUserModal();
-				if (event.target === editModal) closeEditUserModal();
-				if (event.target === addClassModal) closeAddClassModal();
-			};
+			async function updateClass(event) {
+				event.preventDefault();
+				const classId = document.getElementById("edit_class_id").value;
+				const formData = new FormData(event.target);
+				const data = Object.fromEntries(formData);
+				try {
+					const response = await fetch('/api/admin/classes/' + classId, {
+						method: "PUT",
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify(data),
+					});
+					const result = await response.json();
+					if (response.ok) {
+						alert("Osztály sikeresen frissítve!");
+						closeModal('editClassModal');
+						location.reload();
+					} else {
+						alert(result.error || "Hiba történt");
+					}
+				} catch (error) {
+					console.error("Hiba:", error);
+					alert("Hiba történt az osztály frissítésekor");
+				}
+			}
+
+			async function deleteClass(classId, className) {
+				if (!confirm('Biztosan törölni szeretnéd az osztályt: ' + className + '?\nEz törli az összes kapcsolódó adatot is!')) return;
+				try {
+					const response = await fetch('/api/admin/classes/' + classId, { method: "DELETE" });
+					const result = await response.json();
+					if (response.ok) {
+						alert("Osztály sikeresen törölve!");
+						location.reload();
+					} else {
+						alert(result.error || "Hiba történt");
+					}
+				} catch (error) {
+					console.error("Hiba:", error);
+					alert("Hiba történt az osztály törlésekor");
+				}
+			}
+
+			// ==================== TANTÁRGY KEZELÉS ====================
+			function openAddSubjectModal() {
+				document.getElementById("addSubjectModal").style.display = "flex";
+			}
+
+			async function openEditSubjectModal(subjectId) {
+				try {
+					const response = await fetch('/api/admin/subjects/' + subjectId);
+					const sub = await response.json();
+					if (response.ok) {
+						document.getElementById("edit_subject_id").value = sub.id;
+						document.getElementById("edit_subject_code").value = sub.subject_code;
+						document.getElementById("edit_subject_name").value = sub.subject_name;
+						document.getElementById("edit_subject_credits").value = sub.credits || 1;
+						document.getElementById("edit_subject_active").value = sub.is_active ? "true" : "false";
+						document.getElementById("edit_subject_description").value = sub.description || "";
+						document.getElementById("editSubjectModal").style.display = "flex";
+					} else {
+						alert("Hiba történt a tantárgy betöltésekor");
+					}
+				} catch (error) {
+					console.error("Hiba:", error);
+					alert("Hiba történt a tantárgy betöltésekor");
+				}
+			}
+
+			async function addSubject(event) {
+				event.preventDefault();
+				const formData = new FormData(event.target);
+				const data = Object.fromEntries(formData);
+				try {
+					const response = await fetch("/api/admin/subjects", {
+						method: "POST",
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify(data),
+					});
+					const result = await response.json();
+					if (response.ok) {
+						alert("Tantárgy sikeresen létrehozva!");
+						closeModal('addSubjectModal');
+						location.reload();
+					} else {
+						alert(result.error || "Hiba történt");
+					}
+				} catch (error) {
+					console.error("Hiba:", error);
+					alert("Hiba történt a tantárgy létrehozásakor");
+				}
+			}
+
+			async function updateSubject(event) {
+				event.preventDefault();
+				const subjectId = document.getElementById("edit_subject_id").value;
+				const formData = new FormData(event.target);
+				const data = Object.fromEntries(formData);
+				try {
+					const response = await fetch('/api/admin/subjects/' + subjectId, {
+						method: "PUT",
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify(data),
+					});
+					const result = await response.json();
+					if (response.ok) {
+						alert("Tantárgy sikeresen frissítve!");
+						closeModal('editSubjectModal');
+						location.reload();
+					} else {
+						alert(result.error || "Hiba történt");
+					}
+				} catch (error) {
+					console.error("Hiba:", error);
+					alert("Hiba történt a tantárgy frissítésekor");
+				}
+			}
+
+			async function deleteSubject(subjectId, subjectName) {
+				if (!confirm('Biztosan törölni szeretnéd: ' + subjectName + '?\nEz törli az összes kapcsolódó jegyet, hiányzást és hozzárendelést is!')) return;
+				try {
+					const response = await fetch('/api/admin/subjects/' + subjectId, { method: "DELETE" });
+					const result = await response.json();
+					if (response.ok) {
+						alert("Tantárgy sikeresen törölve!");
+						location.reload();
+					} else {
+						alert(result.error || "Hiba történt");
+					}
+				} catch (error) {
+					console.error("Hiba:", error);
+					alert("Hiba történt a tantárgy törlésekor");
+				}
+			}
+
+			// ==================== HOZZÁRENDELÉS KEZELÉS ====================
+			function openAddAssignmentModal() {
+				document.getElementById("addAssignmentModal").style.display = "flex";
+			}
+
+			function openEditAssignmentModal(id, teacherId, subjectId, classId, academicYear) {
+				document.getElementById("edit_ts_id").value = id;
+				document.getElementById("edit_ts_teacher").value = teacherId;
+				document.getElementById("edit_ts_subject").value = subjectId;
+				document.getElementById("edit_ts_class").value = classId;
+				document.getElementById("edit_ts_year").value = academicYear;
+				document.getElementById("editAssignmentModal").style.display = "flex";
+			}
+
+			async function addAssignment(event) {
+				event.preventDefault();
+				const formData = new FormData(event.target);
+				const data = Object.fromEntries(formData);
+				try {
+					const response = await fetch("/api/admin/teacher-subjects", {
+						method: "POST",
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify(data),
+					});
+					const result = await response.json();
+					if (response.ok) {
+						alert("Hozzárendelés sikeresen létrehozva!");
+						closeModal('addAssignmentModal');
+						location.reload();
+					} else {
+						alert(result.error || "Hiba történt");
+					}
+				} catch (error) {
+					console.error("Hiba:", error);
+					alert("Hiba történt a hozzárendelés létrehozásakor");
+				}
+			}
+
+			async function updateAssignment(event) {
+				event.preventDefault();
+				const assignmentId = document.getElementById("edit_ts_id").value;
+				const formData = new FormData(event.target);
+				const data = Object.fromEntries(formData);
+				try {
+					const response = await fetch('/api/admin/teacher-subjects/' + assignmentId, {
+						method: "PUT",
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify(data),
+					});
+					const result = await response.json();
+					if (response.ok) {
+						alert("Hozzárendelés sikeresen frissítve!");
+						closeModal('editAssignmentModal');
+						location.reload();
+					} else {
+						alert(result.error || "Hiba történt");
+					}
+				} catch (error) {
+					console.error("Hiba:", error);
+					alert("Hiba történt a hozzárendelés frissítésekor");
+				}
+			}
+
+			async function deleteAssignment(assignmentId, label) {
+				if (!confirm('Biztosan törölni szeretnéd: ' + label + '?')) return;
+				try {
+					const response = await fetch('/api/admin/teacher-subjects/' + assignmentId, { method: "DELETE" });
+					const result = await response.json();
+					if (response.ok) {
+						alert("Hozzárendelés sikeresen törölve!");
+						location.reload();
+					} else {
+						alert(result.error || "Hiba történt");
+					}
+				} catch (error) {
+					console.error("Hiba:", error);
+					alert("Hiba történt a hozzárendelés törlésekor");
+				}
+			}
 		</script>
 	</body>
 </html>

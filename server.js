@@ -18,6 +18,11 @@ const { createUser } = require("./routes/admin/createUser");
 const { updateUser } = require("./routes/admin/updateUser");
 const { deleteUser } = require("./routes/admin/deleteUser");
 const { createClass } = require("./routes/admin/createClass");
+const { getClass } = require("./routes/admin/getClass");
+const { updateClass } = require("./routes/admin/updateClass");
+const { deleteClass } = require("./routes/admin/deleteClass");
+const { getSubject, createSubject, updateSubject, deleteSubject } = require("./routes/admin/subjects");
+const { createTeacherSubject, updateTeacherSubject, deleteTeacherSubject } = require("./routes/admin/teacherSubjects");
 
 // Student routes
 const { studentIndex } = require("./routes/student/index");
@@ -105,6 +110,16 @@ app.post("/api/admin/users", requireAdmin, createUser);
 app.put("/api/admin/users/:id", requireAdmin, updateUser);
 app.delete("/api/admin/users/:id", requireAdmin, deleteUser);
 app.post("/api/admin/classes", requireAdmin, createClass);
+app.get("/api/admin/classes/:id", requireAdmin, getClass);
+app.put("/api/admin/classes/:id", requireAdmin, updateClass);
+app.delete("/api/admin/classes/:id", requireAdmin, deleteClass);
+app.get("/api/admin/subjects/:id", requireAdmin, getSubject);
+app.post("/api/admin/subjects", requireAdmin, createSubject);
+app.put("/api/admin/subjects/:id", requireAdmin, updateSubject);
+app.delete("/api/admin/subjects/:id", requireAdmin, deleteSubject);
+app.post("/api/admin/teacher-subjects", requireAdmin, createTeacherSubject);
+app.put("/api/admin/teacher-subjects/:id", requireAdmin, updateTeacherSubject);
+app.delete("/api/admin/teacher-subjects/:id", requireAdmin, deleteTeacherSubject);
 
 // ========================================
 // TEACHER ROUTES
