@@ -31,7 +31,6 @@ const { messagesNew } = require("./routes/student/messagesNew");
 
 // Teacher routes
 const { routeTeacher } = require("./routes/teacher/root");
-const { rootTeacherClasses } = require("./routes/teacher/classes");
 const { studentforClass } = require("./routes/teacher/getStudentForClass");
 const { gradePage, getGradingData, saveGrades, updateGrade, deleteGrade } = require("./routes/teacher/gradingPage");
 const { teacherLegacyRoot } = require("./routes/teacher/legacyRoot");
@@ -111,7 +110,6 @@ app.post("/api/admin/classes", requireAdmin, createClass);
 // TEACHER ROUTES
 // ========================================
 app.get("/teacher", requireTeacher, routeTeacher);
-app.get("/teacher/classes", requireTeacher, rootTeacherClasses);
 app.get("/api/teacher/class/:classId/subject/:subjectId/students", requireTeacher, studentforClass);
 app.get("/teacher/grading", requireTeacher, gradePage);
 app.get("/teacher/messages", requireTeacher, teacherMessages);
