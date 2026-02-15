@@ -26,18 +26,11 @@ async function gradePage(req, res) {
 		const db = req.db;
 		const teacherId = req.session.id;
 
-		let teacherClasses = await db.timetable.findMany({
+		// Csak teacher_subjects táblából kérdezünk le
+		const teacherClasses = await db.teacher_subjects.findMany({
 			where: { teacher_id: teacherId },
 			include: { classes: true, subjects: true },
-			distinct: ["class_id", "subject_id"],
 		});
-
-		if (teacherClasses.length === 0) {
-			teacherClasses = await db.teacher_subjects.findMany({
-				where: { teacher_id: teacherId },
-				include: { classes: true, subjects: true },
-			});
-		}
 
 		const occupations = [];
 		const seen = new Set();
@@ -82,9 +75,15 @@ async function getGradingData(req, res) {
 		const classId = parseInt(req.params.classId);
 		const subjectId = parseInt(req.params.subjectId);
 
+		// JAVÍTVA: nem kérünk academic_year-t, csak a szükséges mezőket
 		const studentClasses = await db.student_classes.findMany({
 			where: { class_id: classId, is_active: true },
-			include: {
+			select: {
+				id: true,
+				student_id: true,
+				class_id: true,
+				enrollment_date: true,
+				is_active: true,
 				users: { select: { id: true, first_name: true, last_name: true } },
 			},
 		});

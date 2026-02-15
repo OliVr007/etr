@@ -8,25 +8,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model absences {
-  id                               Int       @id @default(autoincrement())
-  student_id                       Int
-  subject_id                       Int
-  teacher_id                       Int
-  absence_date                     DateTime  @db.Date
-  lesson_number                    Int
-  is_excused                       Boolean?  @default(false)
-  excuse_note                      String?   @db.Text
-  created_at                       DateTime? @default(now()) @db.DateTime(0)
-  users_absences_student_idTousers users     @relation("absences_student_idTousers", fields: [student_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "absences_ibfk_1")
-  subjects                         subjects  @relation(fields: [subject_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "absences_ibfk_2")
-  users_absences_teacher_idTousers users     @relation("absences_teacher_idTousers", fields: [teacher_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "absences_ibfk_3")
-
-  @@index([student_id], map: "student_id")
-  @@index([subject_id], map: "subject_id")
-  @@index([teacher_id], map: "teacher_id")
-}
-
 model classes {
   id               Int                @id @default(autoincrement())
   class_name       String             @db.VarChar(20)
@@ -35,12 +16,11 @@ model classes {
   class_teacher_id Int?
   room_number      String?            @db.VarChar(10)
   users            users?             @relation(fields: [class_teacher_id], references: [id], onUpdate: Restrict, map: "classes_ibfk_1")
+  homework         homework[]
   student_classes  student_classes[]
   teacher_subjects teacher_subjects[]
-  timetable        timetable[]
 
   @@index([class_teacher_id], map: "class_teacher_id")
-  homework             homework[]
 }
 
 model grades {
@@ -68,7 +48,6 @@ model student_classes {
   id              Int      @id @default(autoincrement())
   student_id      Int
   class_id        Int
-  academic_year   String   @db.VarChar(9)
   enrollment_date DateTime @db.Date
   is_active       Boolean? @default(true)
   users           users    @relation(fields: [student_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "student_classes_ibfk_1")
@@ -86,10 +65,9 @@ model subjects {
   created_at       DateTime?          @default(now()) @db.DateTime(0)
   credits          Int?               @default(1)
   description      String?            @db.Text
-  absences         absences[]
   grades           grades[]
+  homework         homework[]
   teacher_subjects teacher_subjects[]
-  timetable        timetable[]
 }
 
 model teacher_subjects {
@@ -108,53 +86,29 @@ model teacher_subjects {
   @@index([teacher_id], map: "teacher_id")
 }
 
-model timetable {
-  id            Int       @id @default(autoincrement())
-  class_id      Int
-  subject_id    Int
-  teacher_id    Int
-  day_of_week   Int       @db.TinyInt
-  lesson_number Int
-  room_number   String?   @db.VarChar(10)
-  academic_year String    @db.VarChar(9)
-  valid_from    DateTime  @db.Date
-  valid_to      DateTime? @db.Date
-  classes       classes   @relation(fields: [class_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "timetable_ibfk_1")
-  subjects      subjects  @relation(fields: [subject_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "timetable_ibfk_2")
-  users         users     @relation(fields: [teacher_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "timetable_ibfk_3")
-
-  @@index([class_id], map: "class_id")
-  @@index([subject_id], map: "subject_id")
-  @@index([teacher_id], map: "teacher_id")
-}
-
 model users {
-  id                                   Int                @id @default(autoincrement())
-  username                             String             @unique(map: "username") @db.VarChar(50)
-  email                                String?            @unique(map: "email") @db.VarChar(100)
-  password_hash                        String             @db.VarChar(255)
-  first_name                           String             @db.VarChar(50)
-  last_name                            String             @db.VarChar(50)
+  id                                   Int                    @id @default(autoincrement())
+  username                             String                 @unique(map: "username") @db.VarChar(50)
+  email                                String                 @unique(map: "email") @db.VarChar(100)
+  password_hash                        String                 @db.VarChar(255)
+  first_name                           String                 @db.VarChar(50)
+  last_name                            String                 @db.VarChar(50)
   role                                 users_role
-  is_active                            Boolean?           @default(true)
-  created_at                           DateTime?          @default(now()) @db.DateTime(0)
-  date_of_birth                        DateTime?          @db.Date
-  last_login                           DateTime?          @db.DateTime(0)
-  phone                                String?            @db.VarChar(20)
-  profile_image                        String?            @db.VarChar(255)
-  absences_absences_student_idTousers  absences[]         @relation("absences_student_idTousers")
-  absences_absences_teacher_idTousers  absences[]         @relation("absences_teacher_idTousers")
+  is_active                            Boolean?               @default(true)
+  created_at                           DateTime?              @default(now()) @db.DateTime(0)
+  date_of_birth                        DateTime?              @db.Date
+  last_login                           DateTime?              @db.DateTime(0)
+  phone                                String?                @db.VarChar(20)
+  profile_image                        String?                @db.VarChar(255)
   classes                              classes[]
-  grades_grades_student_idTousers      grades[]           @relation("grades_student_idTousers")
-  grades_grades_teacher_idTousers      grades[]           @relation("grades_teacher_idTousers")
-  messages_messages_sender_idTousers   messages[]         @relation("messages_sender_idTousers")
-  messages_messages_receiver_idTousers messages[]         @relation("messages_receiver_idTousers")
+  grades_grades_student_idTousers      grades[]               @relation("grades_student_idTousers")
+  grades_grades_teacher_idTousers      grades[]               @relation("grades_teacher_idTousers")
+  homework                             homework[]
+  homework_submissions                 homework_submissions[]
+  messages_messages_sender_idTousers   messages[]             @relation("messages_sender_idTousers")
+  messages_messages_receiver_idTousers messages[]             @relation("messages_receiver_idTousers")
   student_classes                      student_classes[]
   teacher_subjects                     teacher_subjects[]
-  timetable                            timetable[]
-  homework             homework[]
-  homework_submissions homework_submissions[]
-  
 }
 
 model messages {
@@ -173,23 +127,22 @@ model messages {
 }
 
 model homework {
-  id          Int       @id @default(autoincrement())
+  id          Int                    @id @default(autoincrement())
   teacher_id  Int?
   class_id    Int?
-  student_id  Int?
-  subject     String?   @db.VarChar(100)
-  title       String?   @db.VarChar(255)
-  description String?   @db.Text
-  due_date    DateTime? @db.Date
-  created_at  DateTime? @db.Timestamp(0)
-
-  users       users?    @relation(fields: [teacher_id], references: [id], onDelete: Cascade)
-  classes     classes?  @relation(fields: [class_id], references: [id], onDelete: Cascade)
+  subject_id  Int?
+  title       String?                @db.VarChar(255)
+  description String?                @db.Text
+  due_date    DateTime?              @db.Date
+  created_at  DateTime?              @db.Timestamp(0)
+  subjects    subjects?              @relation(fields: [subject_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk_homework_subject")
+  classes     classes?               @relation(fields: [class_id], references: [id], onDelete: Cascade)
+  users       users?                 @relation(fields: [teacher_id], references: [id], onDelete: Cascade)
   submissions homework_submissions[]
 
   @@index([teacher_id])
   @@index([class_id])
-  @@index([student_id])
+  @@index([subject_id], map: "fk_homework_subject")
 }
 
 model homework_submissions {
@@ -199,9 +152,8 @@ model homework_submissions {
   status       homework_submissions_status?
   submitted_at DateTime?                    @db.Timestamp(0)
   reviewed_at  DateTime?                    @db.Timestamp(0)
-
-  homework     homework? @relation(fields: [homework_id], references: [id], onDelete: Cascade)
-  users        users?    @relation(fields: [student_id], references: [id], onDelete: Cascade)
+  homework     homework?                    @relation(fields: [homework_id], references: [id], onDelete: Cascade)
+  users        users?                       @relation(fields: [student_id], references: [id], onDelete: Cascade)
 
   @@index([homework_id])
   @@index([student_id])

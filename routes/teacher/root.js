@@ -1,142 +1,72 @@
-// Tanári főoldal - áttekintés (hasonlóan a diák index-hez)
+// Tanári főoldal
 async function routeTeacher(req, res) {
 	try {
 		const db = req.db;
 		const teacherId = req.session.id;
 
-		// Mai nap meghatározása
-		const today = new Date();
-		const dayOfWeek = today.getDay() === 0 ? 7 : today.getDay(); // 1 = hétfő, 7 = vasárnap
-
-		// Mai órák lekérése az órarendből
-		const todayLessons = await db.timetable.findMany({
+		// Legutóbbi értékelések lekérése
+		const recentGradesData = await db.grades.findMany({
 			where: {
 				teacher_id: teacherId,
-				day_of_week: dayOfWeek,
 			},
 			include: {
-				classes: true,
+				users_grades_student_idTousers: {
+					select: {
+						first_name: true,
+						last_name: true,
+					},
+				},
 				subjects: true,
 			},
 			orderBy: {
-				lesson_number: "asc",
+				grade_date: "desc",
 			},
+			take: 5,
 		});
 
-		// Óraidők definiálása
-		const lessonTimes = {
-			1: { start: "8:00", end: "8:45" },
-			2: { start: "9:00", end: "9:45" },
-			3: { start: "10:00", end: "10:45" },
-			4: { start: "11:00", end: "11:45" },
-			5: { start: "12:00", end: "12:45" },
-			6: { start: "13:00", end: "13:45" },
-			7: { start: "14:00", end: "14:45" },
-			8: { start: "15:00", end: "15:45" },
-		};
-
-		// Mai órák formázása
-		const formattedLessons = todayLessons.map((lesson) => {
-			const time = lessonTimes[lesson.lesson_number] || { start: "?", end: "?" };
+		// Értékelések formázása
+		const recentGrades = recentGradesData.map((grade) => {
+			const student = grade.users_grades_student_idTousers;
 			return {
-				subject_name: lesson.subjects.subject_name,
-				class_name: lesson.classes.class_name,
-				start_time: time.start,
-				end_time: time.end,
-				room_number: lesson.room_number || "N/A",
-				lesson_number: lesson.lesson_number,
+				student_name: `${student.last_name} ${student.first_name}`,
+				subject_name: grade.subjects.subject_name,
+				class_name: grade.grade_type,
+				grade: grade.grade_value,
+				grade_date: grade.grade_date,
 			};
 		});
 
-		// Osztályok áttekintése (egyedi osztály-tantárgy kombinációk)
-		// Először próbáljuk a timetable-ből, ha nincs, akkor teacher_subjects-ből
-		let teacherClasses = await db.timetable.findMany({
+		// Legutóbbi házi feladatok lekérése
+		const recentHomeworkData = await db.homework.findMany({
 			where: {
 				teacher_id: teacherId,
 			},
 			include: {
 				classes: true,
-				subjects: true,
+				subjects: true, // JAVÍTVA: subjects tábla hozzáadva
 			},
-			distinct: ["class_id", "subject_id"],
+			orderBy: {
+				created_at: "desc",
+			},
+			take: 5,
 		});
 
-		// Ha nincs a timetable-ben, próbáljuk a teacher_subjects táblából
-		if (teacherClasses.length === 0) {
-			teacherClasses = await db.teacher_subjects.findMany({
-				where: {
-					teacher_id: teacherId,
-				},
-				include: {
-					classes: true,
-					subjects: true,
-				},
-			});
-		}
-
-		const classesOverview = [];
-		const seen = new Set();
-
-		for (const tc of teacherClasses) {
-			const key = `${tc.class_id}-${tc.subject_id}`;
-			if (!seen.has(key)) {
-				seen.add(key);
-
-				// Diákok száma ebben az osztályban
-				const studentCount = await db.student_classes.count({
-					where: {
-						class_id: tc.class_id,
-						is_active: true,
-					},
-				});
-
-				// Átlag jegy ehhez az osztályhoz és tantárgyhoz
-				const studentIds = await db.student_classes.findMany({
-					where: {
-						class_id: tc.class_id,
-						is_active: true,
-					},
-					select: { student_id: true },
-				});
-
-				let averageGrade = 0;
-				let gradeLabel = "N/A";
-
-				if (studentIds.length > 0) {
-					const grades = await db.grades.findMany({
-						where: {
-							subject_id: tc.subject_id,
-							student_id: {
-								in: studentIds.map((sc) => sc.student_id),
-							},
-						},
-						select: {
-							grade_value: true,
-						},
-					});
-
-					if (grades.length > 0) {
-						const sum = grades.reduce((acc, g) => acc + parseFloat(g.grade_value), 0);
-						averageGrade = (sum / grades.length).toFixed(2);
-
-						if (averageGrade >= 4.5) gradeLabel = "Kiváló";
-						else if (averageGrade >= 3.5) gradeLabel = "Jó";
-						else if (averageGrade >= 2.5) gradeLabel = "Közepes";
-						else gradeLabel = "Elégséges";
-					}
-				}
-
-				classesOverview.push({
-					class_id: tc.class_id,
-					class_name: tc.classes.class_name,
-					subject_id: tc.subject_id,
-					subject_name: tc.subjects.subject_name,
-					student_count: studentCount,
-					average_grade: averageGrade,
-					grade_label: gradeLabel,
-				});
+		// Házi feladatok formázása
+		const recentHomework = recentHomeworkData.map((hw) => {
+			const now = new Date();
+			const dueDate = new Date(hw.due_date);
+			let status = "Aktív";
+			if (dueDate < now) {
+				status = "Lejárt";
 			}
-		}
+			return {
+				title: hw.title || "Névtelen feladat",
+				subject_name: hw.subjects?.subject_name || "N/A", // JAVÍTVA: hw.subject helyett hw.subjects?.subject_name
+				class_name: hw.classes?.class_name || "N/A",
+				due_date: hw.due_date,
+				status: status,
+			};
+		});
 
 		// Legutóbbi üzenetek lekérése
 		const recentMessages = await db.messages.findMany({
@@ -174,9 +104,8 @@ async function routeTeacher(req, res) {
 
 		// Statisztikák
 		const stats = {
-			totalClasses: classesOverview.length,
-			totalStudents: classesOverview.reduce((sum, c) => sum + c.student_count, 0),
-			todayLessonsCount: formattedLessons.length,
+			totalClasses: 0,
+			totalStudents: 0,
 			unreadMessagesCount: recentMessages.filter((m) => !m.is_read).length,
 		};
 
@@ -184,8 +113,8 @@ async function routeTeacher(req, res) {
 			username: req.session.username,
 			first_name: req.session.first_name,
 			last_name: req.session.last_name,
-			todayLessons: formattedLessons,
-			classesOverview: classesOverview,
+			recentGrades: recentGrades,
+			recentHomework: recentHomework,
 			recentMessages: formattedMessages,
 			stats: stats,
 		});
@@ -195,13 +124,12 @@ async function routeTeacher(req, res) {
 			username: req.session.username,
 			first_name: req.session.first_name,
 			last_name: req.session.last_name,
-			todayLessons: [],
-			classesOverview: [],
+			recentGrades: [],
+			recentHomework: [],
 			recentMessages: [],
 			stats: {
 				totalClasses: 0,
 				totalStudents: 0,
-				todayLessonsCount: 0,
 				unreadMessagesCount: 0,
 			},
 		});

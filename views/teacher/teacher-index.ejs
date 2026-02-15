@@ -42,92 +42,69 @@
 
 			<div class="carousel-container">
 				<div class="carousel-track">
-					<!-- 1. Mai órák -->
+					<!-- 1. Legutóbbi értékelések -->
 					<div class="carousel-slide">
 						<div class="carousel-card">
 							<div class="card-header">
-								<h3>Mai órák</h3>
-								<div class="card-badge"><%= todayLessons.length %> db</div>
+								<h3>Legutóbbi értékelések</h3>
+								<div class="card-badge"><%= recentGrades.length %> db</div>
 							</div>
 							<div class="card-content">
-								<% if (todayLessons.length > 0) { %>
-									<% todayLessons.forEach((lesson, index) => { %>
-										<% 
-											let status = "";
-											const now = new Date();
-											const currentHour = now.getHours();
-											const currentMin = now.getMinutes();
-											const [startHour, startMin] = lesson.start_time.split(':').map(Number);
-											const [endHour, endMin] = lesson.end_time.split(':').map(Number);
-											
-											const currentMinutes = currentHour * 60 + currentMin;
-											const startMinutes = startHour * 60 + startMin;
-											const endMinutes = endHour * 60 + endMin;
-											
-											if (currentMinutes < startMinutes) {
-												if (index === 0 || (index > 0 && currentMinutes >= (todayLessons[index-1] ? parseInt(todayLessons[index-1].end_time.split(':')[0]) * 60 + parseInt(todayLessons[index-1].end_time.split(':')[1]) : 0))) {
-													status = "Következő";
-												} else {
-													status = "Később";
-												}
-											} else if (currentMinutes >= startMinutes && currentMinutes <= endMinutes) {
-												status = "Folyamatban";
-											} else {
-												status = "Befejezett";
-											}
-										%>
+								<% if (recentGrades.length > 0) { %>
+									<% recentGrades.slice(0, 5).forEach(grade => { %>
 										<div class="card-item">
 											<div class="item-main">
-												<div class="item-title"><%= lesson.subject_name %> - <%= lesson.class_name %></div>
-												<div class="item-date"><%= lesson.start_time %> - <%= lesson.end_time %> • <%= lesson.room_number %> terem</div>
+												<div class="item-title"><%= grade.student_name %> - <%= grade.subject_name %></div>
+												<div class="item-date"><%= new Date(grade.grade_date).toLocaleDateString('hu-HU', { year: 'numeric', month: 'short', day: 'numeric' }) %> • <%= grade.class_name %></div>
 											</div>
-											<div class="item-value"><%= status %></div>
+											<div class="item-value"><%= grade.grade %></div>
 										</div>
 									<% }); %>
 								<% } else { %>
 									<div class="card-item">
 										<div class="item-main">
-											<div class="item-title">Nincs órád ma</div>
-											<div class="item-date">Pihenj!</div>
+											<div class="item-title">Még nincs értékelés</div>
+											<div class="item-date">Adj osztályzatot a tanulóknak</div>
 										</div>
 									</div>
 								<% } %>
 							</div>
 							<div class="card-footer">
-								<a href="/teacher/schedule" class="view-all">Teljes órarend →</a>
+								<a href="/teacher/grading" class="view-all">Összes értékelés →</a>
 							</div>
 						</div>
 					</div>
 
-					<!-- 2. Osztályok áttekintése -->
+					<!-- 2. Legutóbbi házi feladatok -->
 					<div class="carousel-slide">
 						<div class="carousel-card">
 							<div class="card-header">
-								<h3>Osztályok áttekintése</h3>
-								<div class="card-badge"><%= classesOverview.length %> osztály</div>
+								<h3>Legutóbbi házi feladatok</h3>
+								<div class="card-badge"><%= recentHomework.length %> db</div>
 							</div>
 							<div class="card-content">
-								<% if (classesOverview.length > 0) { %>
-									<% classesOverview.slice(0, 5).forEach(classData => { %>
+								<% if (recentHomework.length > 0) { %>
+									<% recentHomework.slice(0, 5).forEach(hw => { %>
 										<div class="card-item">
 											<div class="item-main">
-												<div class="item-title"><%= classData.class_name %> - <%= classData.subject_name %></div>
-												<div class="item-date"><%= classData.student_count %> tanuló • Átlag: <%= classData.average_grade %></div>
+												<div class="item-title"><%= hw.title %></div>
+												<div class="item-date"><%= hw.subject_name %> • <%= hw.class_name %></div>
+												<div class="item-desc">Határidő: <%= new Date(hw.due_date).toLocaleDateString('hu-HU', { year: 'numeric', month: 'short', day: 'numeric' }) %></div>
 											</div>
-											<div class="item-value"><%= classData.grade_label %></div>
+											<div class="item-value"><%= hw.status %></div>
 										</div>
 									<% }); %>
 								<% } else { %>
 									<div class="card-item">
 										<div class="item-main">
-											<div class="item-title">Még nincs hozzárendelt osztály</div>
-											<div class="item-date">Hamarosan érkezik</div>
+											<div class="item-title">Nincs kiadott házi feladat</div>
+											<div class="item-date">Adj fel új feladatot</div>
 										</div>
 									</div>
 								<% } %>
 							</div>
 							<div class="card-footer">
-								<a href="/teacher/classes" class="view-all">Összes osztály →</a>
+								<a href="/teacher/homework" class="view-all">Összes házi feladat →</a>
 							</div>
 						</div>
 					</div>

@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link rel="stylesheet" href="/css/teacher/teacher-homerwork.css" />
+		<link rel="stylesheet" href="/css/teacher/teacher-homework.css" />
 		<title>Házi feladatok - Tanári felület</title>
 	</head>
 	<body>
@@ -34,21 +34,21 @@
 			</div>
 		</nav>
 
-		<main class="container">
-			<section class="homework-section">
-				<div class="section-header">
-					<h1>Házi feladatok kezelése</h1>
-					<button class="primary-btn" onclick="openNewHomeworkModal()">+ Új házi feladat</button>
-				</div>
+		<main class="container homework-container">
+			<div class="homework-header">
+				<h1>Házi feladatok</h1>
+				<button class="new-homework-btn" onclick="openNewHomeworkModal()">+ Új házi feladat</button>
+			</div>
 
-				<div class="tabs">
-					<button class="tab-btn active" data-tab="pending">Beadásra vár</button>
-					<button class="tab-btn" data-tab="submitted">Ellenőrzésre vár</button>
-					<button class="tab-btn" data-tab="accepted">Elfogadott</button>
-				</div>
+			<div class="homework-tabs">
+				<button class="tab active" data-tab="pending">Beadásra vár</button>
+				<button class="tab" data-tab="submitted">Ellenőrzésre vár</button>
+				<button class="tab" data-tab="accepted">Elfogadott</button>
+			</div>
 
-				<div class="homework-list" id="homework-list"></div>
-			</section>
+			<div class="homework-list" id="homework-list">
+				<p style="text-align: center; color: #666; padding: 2rem">Betöltés...</p>
+			</div>
 		</main>
 
 		<!-- Modal -->
@@ -111,6 +111,30 @@
 			let classStudents = {};
 			let allHomeworks = [];
 
+			function escapeHtml(text) {
+				const div = document.createElement("div");
+				div.textContent = text;
+				return div.innerHTML;
+			}
+
+			function toggleExpand(contentId, button, event) {
+				event.stopPropagation();
+				const content = document.getElementById(contentId);
+				const isExpanded = content.classList.contains("expanded");
+
+				if (isExpanded) {
+					content.classList.remove("expanded");
+					content.classList.add("collapsed");
+					button.classList.remove("expanded");
+					button.querySelector("span").textContent = "Továbbiak";
+				} else {
+					content.classList.remove("collapsed");
+					content.classList.add("expanded");
+					button.classList.add("expanded");
+					button.querySelector("span").textContent = "Kevesebb";
+				}
+			}
+
 			document.addEventListener("DOMContentLoaded", () => {
 				loadClasses();
 				loadHomeworks();
@@ -160,46 +184,114 @@
 
 			function renderHomeworks() {
 				const container = document.getElementById("homework-list");
-				const activeTab = document.querySelector(".tab-btn.active").dataset.tab;
+				const activeTab = document.querySelector(".tab.active").dataset.tab;
 
 				const statusText = {
-					pending: "Folyamatban",
-					submitted: "Ellenőrzés alatt...",
-					accepted: "Kész",
+					pending: "Beadásra vár",
+					submitted: "Ellenőrzésre vár",
+					accepted: "Elfogadott",
 				};
 
 				let html = "";
+				let itemIndex = 0;
 
 				allHomeworks.forEach((hw) => {
 					hw.submissions.forEach((sub) => {
 						if (sub.status !== activeTab) return;
 
-						const dueDate = new Date(hw.due_date).toLocaleDateString("hu-HU");
+						const dueDate = new Date(hw.due_date).toLocaleDateString("hu-HU", {
+							year: "numeric",
+							month: "long",
+							day: "numeric",
+						});
+
+						const contentId = "homework-content-" + itemIndex;
+						const needsExpand = hw.description && hw.description.length > 150;
+						itemIndex++;
 
 						html += `
-							<div class="homework-card ${sub.status}">
-								<div class="homework-info">
-									<h3>${hw.subject} – ${hw.title}</h3>
-									<p class="student-name">${sub.student_name}</p>
-									<p class="due-date">Határidő: ${dueDate}</p>
-									<p class="description">${hw.description}</p>
-									<span class="status-badge ${sub.status}">${statusText[sub.status]}</span>
+							<div class="homework-item">
+								<div class="homework-item-header">
+									<div class="homework-meta">
+										<span class="homework-subject">${escapeHtml(hw.subject)}</span>
+										<span class="homework-date">Határidő: ${dueDate}</span>
+									</div>
+									<div class="homework-badge ${sub.status}">${statusText[sub.status]}</div>
 								</div>
-								<div class="homework-actions">
-									${sub.status === "submitted" ? `<button class="accept-btn" onclick="acceptHomework(${sub.id})">✓ Elfogadás</button>` : ""}
+								<h3 class="homework-title">${escapeHtml(hw.title)}</h3>
+								<div class="homework-recipient">
+									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+										<path d="M10 8a3 3 0 100-6 3 3 0 000 6zM3.465 14.493a1.23 1.23 0 00.41 1.412A9.957 9.957 0 0010 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 00-13.074.003z" />
+									</svg>
+									<span>${escapeHtml(sub.student_name)}</span>
 								</div>
+								${
+									hw.description
+										? `
+									<div class="homework-content ${needsExpand ? "collapsed" : ""}" id="${contentId}">
+										<p>${escapeHtml(hw.description)}</p>
+									</div>
+									${
+										needsExpand
+											? `
+										<button class="expand-btn" onclick="toggleExpand('${contentId}', this, event)">
+											<span>Továbbiak</span>
+											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+												<path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+											</svg>
+										</button>
+									`
+											: ""
+									}
+								`
+										: ""
+								}
+								${
+									sub.status === "submitted"
+										? `
+									<div class="homework-actions">
+										<button class="accept-btn" onclick="acceptHomework(${sub.id})">
+											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+												<path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
+											</svg>
+											Elfogadás
+										</button>
+									</div>
+								`
+										: ""
+								}
 							</div>
 						`;
 					});
 				});
 
-				container.innerHTML = html || '<p class="empty-message">Nincs házi feladat ebben a kategóriában.</p>';
+				if (!html) {
+					const emptyTexts = {
+						pending: { title: "Nincs beadásra váró házi feladat", desc: "Az új házi feladatok itt fognak megjelenni" },
+						submitted: { title: "Nincs ellenőrzésre váró beadás", desc: "A beadott házi feladatok itt fognak megjelenni" },
+						accepted: { title: "Nincs elfogadott házi feladat", desc: "Az elfogadott beadások itt fognak megjelenni" },
+					};
+
+					html = `
+						<div class="homework-empty">
+							<div class="homework-empty-icon">
+								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+									<path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25z" />
+								</svg>
+							</div>
+							<h3>${emptyTexts[activeTab].title}</h3>
+							<p>${emptyTexts[activeTab].desc}</p>
+						</div>
+					`;
+				}
+
+				container.innerHTML = html;
 			}
 
 			function setupTabs() {
-				document.querySelectorAll(".tab-btn").forEach((btn) => {
+				document.querySelectorAll(".tab").forEach((btn) => {
 					btn.addEventListener("click", () => {
-						document.querySelectorAll(".tab-btn").forEach((b) => b.classList.remove("active"));
+						document.querySelectorAll(".tab").forEach((b) => b.classList.remove("active"));
 						btn.classList.add("active");
 						renderHomeworks();
 					});
@@ -223,13 +315,13 @@
 				const studentGroup = document.getElementById("student_group");
 
 				if (type === "class") {
-					classGroup.style.display = "flex";
+					classGroup.style.display = "block";
 					studentGroup.style.display = "none";
 					document.getElementById("class_id").required = true;
 					document.getElementById("student_id").required = false;
 				} else if (type === "student") {
-					classGroup.style.display = "flex";
-					studentGroup.style.display = "flex";
+					classGroup.style.display = "block";
+					studentGroup.style.display = "block";
 					document.getElementById("class_id").required = true;
 					document.getElementById("student_id").required = true;
 				} else {
