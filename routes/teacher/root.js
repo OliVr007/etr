@@ -21,7 +21,7 @@ async function routeTeacher(req, res) {
 			orderBy: {
 				grade_date: "desc",
 			},
-			take: 5,
+			take: 3,
 		});
 
 		// Értékelések formázása

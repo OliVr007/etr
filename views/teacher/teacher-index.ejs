@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link rel="stylesheet" href="/css/teacher/teacher-index.css" />
+		<link rel="stylesheet" href="/css/index/index.css" />
 		<title>Tanári felület - Elektronikus tanulmányi rendszer</title>
 	</head>
 	<body>
@@ -42,31 +42,28 @@
 
 			<div class="carousel-container">
 				<div class="carousel-track">
-					<!-- 1. Legutóbbi értékelések -->
+					<!-- 1. Legutóbbi értékelés -->
 					<div class="carousel-slide">
 						<div class="carousel-card">
 							<div class="card-header">
-								<h3>Legutóbbi értékelések</h3>
+								<h3>Legutóbbi értékelés</h3>
 								<div class="card-badge"><%= recentGrades.length %> db</div>
 							</div>
 							<div class="card-content">
-								<% if (recentGrades.length > 0) { %>
-									<% recentGrades.slice(0, 5).forEach(grade => { %>
-										<div class="card-item">
-											<div class="item-main">
-												<div class="item-title"><%= grade.student_name %> - <%= grade.subject_name %></div>
-												<div class="item-date"><%= new Date(grade.grade_date).toLocaleDateString('hu-HU', { year: 'numeric', month: 'short', day: 'numeric' }) %> • <%= grade.class_name %></div>
-											</div>
-											<div class="item-value"><%= grade.grade %></div>
-										</div>
-									<% }); %>
-								<% } else { %>
-									<div class="card-item">
-										<div class="item-main">
-											<div class="item-title">Még nincs értékelés</div>
-											<div class="item-date">Adj osztályzatot a tanulóknak</div>
-										</div>
+								<% if (recentGrades.length > 0) { %> <% recentGrades.slice(0, 3).forEach(grade => { %>
+								<div class="card-item">
+									<div class="item-main">
+										<div class="item-title"><%= grade.subject_name %> - <%= grade.class_name %></div>
+										<div class="item-date"><%= new Date(grade.grade_date).toLocaleDateString('hu-HU') %></div>
 									</div>
+									<div class="item-value"><%= grade.grade %></div>
+								</div>
+								<% }); %> <% } else { %>
+								<div class="card-item">
+									<div class="item-main">
+										<div class="item-title">Még nincs értékelés</div>
+									</div>
+								</div>
 								<% } %>
 							</div>
 							<div class="card-footer">
@@ -75,32 +72,28 @@
 						</div>
 					</div>
 
-					<!-- 2. Legutóbbi házi feladatok -->
+					<!-- 2. Házi feladatok -->
 					<div class="carousel-slide">
 						<div class="carousel-card">
 							<div class="card-header">
-								<h3>Legutóbbi házi feladatok</h3>
+								<h3>Házi feladatok</h3>
 								<div class="card-badge"><%= recentHomework.length %> db</div>
 							</div>
 							<div class="card-content">
-								<% if (recentHomework.length > 0) { %>
-									<% recentHomework.slice(0, 5).forEach(hw => { %>
-										<div class="card-item">
-											<div class="item-main">
-												<div class="item-title"><%= hw.title %></div>
-												<div class="item-date"><%= hw.subject_name %> • <%= hw.class_name %></div>
-												<div class="item-desc">Határidő: <%= new Date(hw.due_date).toLocaleDateString('hu-HU', { year: 'numeric', month: 'short', day: 'numeric' }) %></div>
-											</div>
-											<div class="item-value"><%= hw.status %></div>
-										</div>
-									<% }); %>
-								<% } else { %>
-									<div class="card-item">
-										<div class="item-main">
-											<div class="item-title">Nincs kiadott házi feladat</div>
-											<div class="item-date">Adj fel új feladatot</div>
-										</div>
+								<% if (recentHomework.length > 0) { %> <% recentHomework.slice(0, 3).forEach(hw => { %>
+								<div class="card-item">
+									<div class="item-main">
+										<div class="item-title"><%= hw.title %></div>
+										<div class="item-date"><%= hw.subject_name %> • <%= hw.class_name %></div>
 									</div>
+								</div>
+								<% }); %> <% } else { %>
+								<div class="card-item">
+									<div class="item-main">
+										<div class="item-title">Még nincs házi feladat</div>
+										<div class="item-date">Hamarosan érkezik</div>
+									</div>
+								</div>
 								<% } %>
 							</div>
 							<div class="card-footer">
@@ -117,23 +110,20 @@
 								<div class="card-badge"><%= recentMessages.length %> db</div>
 							</div>
 							<div class="card-content">
-								<% if (recentMessages.length > 0) { %>
-									<% recentMessages.forEach(msg => { %>
-										<div class="card-item <%= !msg.is_read ? 'unread' : '' %>">
-											<div class="item-main">
-												<div class="item-title"><%= msg.sender_name %></div>
-												<div class="item-date"><%= new Date(msg.sent_at).toLocaleDateString('hu-HU', { year: 'numeric', month: 'short', day: 'numeric' }) %></div>
-												<div class="item-desc"><%= msg.subject %>: <%= msg.content_preview %></div>
-											</div>
-										</div>
-									<% }); %>
-								<% } else { %>
-									<div class="card-item">
-										<div class="item-main">
-											<div class="item-title">Nincs új üzenet</div>
-											<div class="item-date">A beérkező mappád üres</div>
-										</div>
+								<% if (recentMessages.length > 0) { %> <% recentMessages.forEach(msg => { %>
+								<div class="card-item">
+									<div class="item-main">
+										<div class="item-title"><%= msg.sender_name %></div>
+										<div class="item-date"><%= new Date(msg.sent_at).toLocaleDateString('hu-HU') %></div>
 									</div>
+								</div>
+								<% }); %> <% } else { %>
+								<div class="card-item">
+									<div class="item-main">
+										<div class="item-title">Még nincs üzenet</div>
+										<div class="item-date">A postafiókod üres</div>
+									</div>
+								</div>
 								<% } %>
 							</div>
 							<div class="card-footer">
@@ -190,6 +180,7 @@
 				nextButton.addEventListener("click", (e) => {
 					const nextIndex = currentIndex < slides.length - 1 ? currentIndex + 1 : 0;
 					const targetSlide = slides[nextIndex];
+
 					moveToSlide(track, slides[currentIndex], targetSlide);
 					currentIndex = nextIndex;
 					updateIndicators(currentIndex);
@@ -198,6 +189,7 @@
 				prevButton.addEventListener("click", (e) => {
 					const prevIndex = currentIndex > 0 ? currentIndex - 1 : slides.length - 1;
 					const targetSlide = slides[prevIndex];
+
 					moveToSlide(track, slides[currentIndex], targetSlide);
 					currentIndex = prevIndex;
 					updateIndicators(currentIndex);
