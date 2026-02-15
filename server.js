@@ -61,6 +61,7 @@ const { getTeacherReceivedMessages } = require("./routes/api/teacher/getReceived
 const { getTeacherSentMessages } = require("./routes/api/teacher/getSentMessages");
 const { getTeacherClasses } = require("./routes/api/teacher/getTeacherClasses");
 const { getStudentsForClass } = require("./routes/api/teacher/getStudentsForClass");
+const { getSubjectsForClass } = require("./routes/api/teacher/getSubjectsForClass");
 
 // Homework API routes
 const { createHomework } = require("./routes/api/teacher/createHomework");
@@ -177,6 +178,7 @@ app.get("/api/teacher/messages/users", requireTeacher, getAllUsers);
 app.post("/api/teacher/messages/send", requireTeacher, sendMessage);
 app.get("/api/teacher/classes", requireTeacher, getTeacherClasses);
 app.get("/api/teacher/class/:classId/students", requireTeacher, getStudentsForClass);
+app.get("/api/teacher/class/:classId/subjects", requireTeacher, getSubjectsForClass);
 
 // ========================================
 // TEACHER API ROUTES - Homework

@@ -78,9 +78,11 @@
 						<select id="student_id"></select>
 					</div>
 
-					<div class="form-group">
-						<label for="subject">Tantárgy</label>
-						<input type="text" id="subject" placeholder="pl. Matematika" required />
+					<div class="form-group" id="subject_group" style="display: none">
+						<label for="subject_id">Tantárgy</label>
+						<select id="subject_id" required>
+							<option value="">— Előbb válassz osztályt —</option>
+						</select>
 					</div>
 
 					<div class="form-group">
@@ -112,6 +114,7 @@
 			let allHomeworks = [];
 
 			function escapeHtml(text) {
+				if (!text) return "";
 				const div = document.createElement("div");
 				div.textContent = text;
 				return div.innerHTML;
@@ -151,6 +154,28 @@
 					classSelect.innerHTML = '<option value="">— Válassz osztályt —</option>';
 					classes.forEach((cls) => {
 						classSelect.innerHTML += `<option value="${cls.id}">${cls.name}</option>`;
+					});
+				} catch (error) {
+					console.error("Hiba:", error);
+				}
+			}
+
+			async function loadSubjectsForClass(classId) {
+				const subjectSelect = document.getElementById("subject_id");
+
+				if (!classId) {
+					subjectSelect.innerHTML = '<option value="">— Előbb válassz osztályt —</option>';
+					return;
+				}
+
+				try {
+					const resp = await fetch(`/api/teacher/class/${classId}/subjects`);
+					const data = await resp.json();
+					const subjects = data.subjects || [];
+
+					subjectSelect.innerHTML = '<option value="">— Válassz tantárgyat —</option>';
+					subjects.forEach((sub) => {
+						subjectSelect.innerHTML += `<option value="${sub.id}">${sub.subject_name}</option>`;
 					});
 				} catch (error) {
 					console.error("Hiba:", error);
@@ -207,13 +232,14 @@
 
 						const contentId = "homework-content-" + itemIndex;
 						const needsExpand = hw.description && hw.description.length > 150;
+						const subjectName = hw.subject || "Ismeretlen tantárgy";
 						itemIndex++;
 
 						html += `
 							<div class="homework-item">
 								<div class="homework-item-header">
 									<div class="homework-meta">
-										<span class="homework-subject">${escapeHtml(hw.subject)}</span>
+										<span class="homework-subject">${escapeHtml(subjectName)}</span>
 										<span class="homework-date">Határidő: ${dueDate}</span>
 									</div>
 									<div class="homework-badge ${sub.status}">${statusText[sub.status]}</div>
@@ -307,26 +333,32 @@
 				document.getElementById("homeworkForm").reset();
 				document.getElementById("class_group").style.display = "none";
 				document.getElementById("student_group").style.display = "none";
+				document.getElementById("subject_group").style.display = "none";
+				document.getElementById("subject_id").innerHTML = '<option value="">— Előbb válassz osztályt —</option>';
 			}
 
 			document.getElementById("assignment_type").addEventListener("change", function () {
 				const type = this.value;
 				const classGroup = document.getElementById("class_group");
 				const studentGroup = document.getElementById("student_group");
+				const subjectGroup = document.getElementById("subject_group");
 
 				if (type === "class") {
 					classGroup.style.display = "block";
 					studentGroup.style.display = "none";
+					subjectGroup.style.display = "block";
 					document.getElementById("class_id").required = true;
 					document.getElementById("student_id").required = false;
 				} else if (type === "student") {
 					classGroup.style.display = "block";
 					studentGroup.style.display = "block";
+					subjectGroup.style.display = "block";
 					document.getElementById("class_id").required = true;
 					document.getElementById("student_id").required = true;
 				} else {
 					classGroup.style.display = "none";
 					studentGroup.style.display = "none";
+					subjectGroup.style.display = "none";
 				}
 			});
 
@@ -334,6 +366,9 @@
 				const classId = this.value;
 				const studentSelect = document.getElementById("student_id");
 				const assignmentType = document.getElementById("assignment_type").value;
+
+				// Tantárgyak betöltése az osztályhoz
+				await loadSubjectsForClass(classId);
 
 				if (assignmentType === "student" && classId) {
 					const students = await loadStudentsForClass(classId);
@@ -349,7 +384,7 @@
 
 				const type = document.getElementById("assignment_type").value;
 				const data = {
-					subject: document.getElementById("subject").value,
+					subject_id: document.getElementById("subject_id").value,
 					title: document.getElementById("title").value,
 					description: document.getElementById("description").value,
 					due_date: document.getElementById("due_date").value,

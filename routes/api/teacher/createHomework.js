@@ -2,10 +2,10 @@ async function createHomework(req, res) {
 	if (!req.session.id) return res.status(401).json({ error: "unauthorized" });
 
 	try {
-		const { class_id, student_id, subject, title, description, due_date } = req.body;
+		const { class_id, student_id, subject_id, title, description, due_date } = req.body;
 
 		// Validáció
-		if (!subject || !title || !description || !due_date) {
+		if (!subject_id || !title || !description || !due_date) {
 			return res.status(400).json({ error: "Hiányzó mezők" });
 		}
 
@@ -13,38 +13,47 @@ async function createHomework(req, res) {
 			return res.status(400).json({ error: "Válassz osztályt vagy diákot" });
 		}
 
-		// Házi feladat létrehozása
-		const homework = await req.db.homework.create({
-			data: {
-				teacher_id: req.session.id,
-				class_id: class_id ? parseInt(class_id) : null,
-				student_id: student_id ? parseInt(student_id) : null,
-				subject,
-				title,
-				description,
-				due_date: new Date(due_date),
+		// Házi feladat létrehozása relációkkal
+		const homeworkData = {
+			users: {
+				connect: { id: req.session.id },
 			},
+			subjects: {
+				connect: { id: parseInt(subject_id) },
+			},
+			title,
+			description,
+			due_date: new Date(due_date),
+		};
+
+		// Osztály kapcsolása ha van
+		if (class_id) {
+			homeworkData.classes = {
+				connect: { id: parseInt(class_id) },
+			};
+		}
+
+		const homework = await req.db.homework.create({
+			data: homeworkData,
 		});
 
 		// Submission rekordok létrehozása a diákoknak
 		if (class_id) {
-			// Egész osztálynak
 			const students = await req.db.student_classes.findMany({
 				where: { class_id: parseInt(class_id), is_active: true },
 				select: { student_id: true },
 			});
 
-			for (const student of students) {
-				await req.db.homework_submissions.create({
-					data: {
+			if (students.length > 0) {
+				await req.db.homework_submissions.createMany({
+					data: students.map((student) => ({
 						homework_id: homework.id,
 						student_id: student.student_id,
 						status: "pending",
-					},
+					})),
 				});
 			}
 		} else if (student_id) {
-			// Egy diáknak
 			await req.db.homework_submissions.create({
 				data: {
 					homework_id: homework.id,

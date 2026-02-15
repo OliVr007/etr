@@ -523,9 +523,9 @@ main {
 }
 
 .existing-grades {
-	display: flex;
+	display: grid;
+	grid-template-columns: repeat(4, auto);
 	gap: 4px;
-	flex-wrap: wrap;
 	justify-content: center;
 }
 
