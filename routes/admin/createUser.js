@@ -46,7 +46,6 @@ async function createUser(req, res) {
 				data: {
 					student_id: newUser.id,
 					class_id: parseInt(class_id),
-					academic_year: "2024/2025",
 					enrollment_date: new Date(),
 					is_active: true,
 				},

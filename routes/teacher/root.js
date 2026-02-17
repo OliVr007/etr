@@ -55,14 +55,12 @@ async function routeTeacher(req, res) {
 		const recentHomework = recentHomeworkData.map((hw) => {
 			const now = new Date();
 			const dueDate = new Date(hw.due_date);
-			let status = "Aktív";
-			if (dueDate < now) {
-				status = "Lejárt";
-			}
+			let status = dueDate < now ? "Lejárt" : "Aktív";
+
 			return {
 				title: hw.title || "Névtelen feladat",
-				subject_name: hw.subjects?.subject_name || "N/A", // JAVÍTVA: hw.subject helyett hw.subjects?.subject_name
-				class_name: hw.classes?.class_name || "N/A",
+				subject_name: hw.subjects?.subject_name || "Ismeretlen tantárgy",
+				class_name: hw.classes?.class_name || "Egyéni feladat",
 				due_date: hw.due_date,
 				status: status,
 			};
