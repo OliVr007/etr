@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/admin/admin-index.css" />
+    <title>Admin - Hozzárendelések</title>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-section">
+                    <img src="/icons/icon-128.webp" alt="Iskola logo" />
+                </div>
+                <div class="user-info">
+                    <a href="/logout" class="logout-btn">
+                        <span>Kijelentkezés</span>
+                        <img src="/icons/logouticon.svg" alt="Kijelentkezés" />
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="stats-section">
+            <h2>Statisztikák</h2>
+            <div class="stats-grid">
+                <div class="stat-card" onclick="location.href='/admin'">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-info"><h3><%= stats.totalUsers %></h3><p>Felhasználók</p></div>
+                </div>
+                <div class="stat-card" onclick="location.href='/admin/classes'">
+                    <div class="stat-icon">🏫</div>
+                    <div class="stat-info"><h3><%= stats.totalClasses %></h3><p>Osztályok</p></div>
+                </div>
+                <div class="stat-card" onclick="location.href='/admin/subjects'">
+                    <div class="stat-icon">📚</div>
+                    <div class="stat-info"><h3><%= stats.totalSubjects %></h3><p>Tantárgyak</p></div>
+                </div>
+                <div class="stat-card" onclick="location.href='/admin/assignments'">
+                    <div class="stat-icon">🔗</div>
+                    <div class="stat-info"><h3><%= stats.totalAssignments %></h3><p>Hozzárendelések</p></div>
+                </div>
+            </div>
+        </section>
+
+        <div class="tab-nav">
+            <a href="/admin" class="tab-btn">👥 Felhasználók</a>
+            <a href="/admin/classes" class="tab-btn">🏫 Osztályok</a>
+            <a href="/admin/subjects" class="tab-btn">📚 Tantárgyak</a>
+            <a href="/admin/assignments" class="tab-btn active">🔗 Hozzárendelések</a>
+        </div>
+
+        <div class="tab-content active" id="tab-assignments">
+            <section class="content-section">
+                <div class="section-header">
+                    <h2>Tanár-Tantárgy hozzárendelés</h2>
+                    <button class="btn-primary" onclick="openAddAssignmentModal()"><span>➕</span> Új hozzárendelés</button>
+                </div>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th><th>Tanár</th><th>Tantárgy</th>
+                                <th>Osztály</th><th>Tanév</th><th>Műveletek</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% teacherSubjects.forEach(ts => { %>
+                            <tr>
+                                <td><%= ts.id %></td>
+                                <td><%= ts.users.last_name %> <%= ts.users.first_name %></td>
+                                <td><%= ts.subjects.subject_name %> (<%= ts.subjects.subject_code %>)</td>
+                                <td><%= ts.classes.class_name %></td>
+                                <td><%= ts.academic_year %></td>
+                                <td class="action-buttons">
+                                    <button class="btn-edit" onclick="openEditAssignmentModal(<%= ts.id %>, <%= ts.users.id %>, <%= ts.subjects.id %>, <%= ts.classes.id %>, '<%= ts.academic_year %>')">✏️</button>
+                                    <button class="btn-delete" onclick="deleteAssignment(<%= ts.id %>, '<%= ts.users.last_name %> - <%= ts.subjects.subject_name %> - <%= ts.classes.class_name %>')">🗑️</button>
+                                </td>
+                            </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Add Assignment Modal -->
+    <div id="addAssignmentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Új tanár-tantárgy hozzárendelés</h3>
+                <button class="close-btn" onclick="closeModal('addAssignmentModal')">&times;</button>
+            </div>
+            <form onsubmit="addAssignment(event)">
+                <div class="form-group">
+                    <label>Tanár *</label>
+                    <select id="add_ts_teacher" name="teacher_id" required>
+                        <option value="">Válassz tanárt...</option>
+                        <% teachers.forEach(t => { %>
+                        <option value="<%= t.id %>"><%= t.last_name %> <%= t.first_name %></option>
+                        <% }); %>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Tantárgy *</label>
+                    <select id="add_ts_subject" name="subject_id" required>
+                        <option value="">Válassz tantárgyat...</option>
+                        <% subjects.forEach(sub => { %>
+                        <option value="<%= sub.id %>"><%= sub.subject_name %> (<%= sub.subject_code %>)</option>
+                        <% }); %>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Osztály *</label>
+                    <select id="add_ts_class" name="class_id" required>
+                        <option value="">Válassz osztályt...</option>
+                        <% classes.forEach(cls => { %>
+                        <option value="<%= cls.id %>"><%= cls.class_name %></option>
+                        <% }); %>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Tanév *</label>
+                    <input type="text" id="add_ts_year" name="academic_year" placeholder="2024/2025" required />
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeModal('addAssignmentModal')">Mégse</button>
+                    <button type="submit" class="btn-primary">Létrehozás</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Assignment Modal -->
+    <div id="editAssignmentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Hozzárendelés szerkesztése</h3>
+                <button class="close-btn" onclick="closeModal('editAssignmentModal')">&times;</button>
+            </div>
+            <form onsubmit="updateAssignment(event)">
+                <input type="hidden" id="edit_ts_id" />
+                <div class="form-group">
+                    <label>Tanár *</label>
+                    <select id="edit_ts_teacher" name="teacher_id" required>
+                        <option value="">Válassz tanárt...</option>
+                        <% teachers.forEach(t => { %>
+                        <option value="<%= t.id %>"><%= t.last_name %> <%= t.first_name %></option>
+                        <% }); %>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Tantárgy *</label>
+                    <select id="edit_ts_subject" name="subject_id" required>
+                        <option value="">Válassz tantárgyat...</option>
+                        <% subjects.forEach(sub => { %>
+                        <option value="<%= sub.id %>"><%= sub.subject_name %> (<%= sub.subject_code %>)</option>
+                        <% }); %>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Osztály *</label>
+                    <select id="edit_ts_class" name="class_id" required>
+                        <option value="">Válassz osztályt...</option>
+                        <% classes.forEach(cls => { %>
+                        <option value="<%= cls.id %>"><%= cls.class_name %></option>
+                        <% }); %>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Tanév *</label>
+                    <input type="text" id="edit_ts_year" name="academic_year" required />
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeModal('editAssignmentModal')">Mégse</button>
+                    <button type="submit" class="btn-primary">Mentés</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = "none";
+            const form = document.getElementById(modalId).querySelector('form');
+            if (form) form.reset();
+        }
+        window.onclick = (e) => {
+            document.querySelectorAll('.modal').forEach(m => { if (e.target === m) closeModal(m.id); });
+        };
+        function openAddAssignmentModal() { document.getElementById("addAssignmentModal").style.display = "flex"; }
+        function openEditAssignmentModal(id, teacherId, subjectId, classId, academicYear) {
+            document.getElementById("edit_ts_id").value = id;
+            document.getElementById("edit_ts_teacher").value = teacherId;
+            document.getElementById("edit_ts_subject").value = subjectId;
+            document.getElementById("edit_ts_class").value = classId;
+            document.getElementById("edit_ts_year").value = academicYear;
+            document.getElementById("editAssignmentModal").style.display = "flex";
+        }
+        async function addAssignment(event) {
+            event.preventDefault();
+            const res = await fetch("/api/admin/teacher-subjects", {
+                method: "POST", headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(Object.fromEntries(new FormData(event.target))),
+            });
+            const result = await res.json();
+            if (res.ok) { alert("Hozzárendelés sikeresen létrehozva!"); closeModal('addAssignmentModal'); location.reload(); }
+            else alert(result.error || "Hiba történt");
+        }
+        async function updateAssignment(event) {
+            event.preventDefault();
+            const assignmentId = document.getElementById("edit_ts_id").value;
+            const res = await fetch('/api/admin/teacher-subjects/' + assignmentId, {
+                method: "PUT", headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(Object.fromEntries(new FormData(event.target))),
+            });
+            const result = await res.json();
+            if (res.ok) { alert("Hozzárendelés sikeresen frissítve!"); closeModal('editAssignmentModal'); location.reload(); }
+            else alert(result.error || "Hiba történt");
+        }
+        async function deleteAssignment(assignmentId, label) {
+            if (!confirm('Biztosan törölni szeretnéd: ' + label + '?')) return;
+            const res = await fetch('/api/admin/teacher-subjects/' + assignmentId, { method: "DELETE" });
+            const result = await res.json();
+            if (res.ok) { alert("Hozzárendelés sikeresen törölve!"); location.reload(); }
+            else alert(result.error || "Hiba történt");
+        }
+    </script>
+</body>
+</html>

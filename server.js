@@ -12,7 +12,10 @@ const { requireTeacher } = require("./routes/middleware/requireTeacher");
 const { requireAuth } = require("./routes/middleware/requireAuth");
 
 // Admin routes
-const { adminIndex } = require("./routes/admin/index");
+const { adminUsers } = require("./routes/admin/adminUsers");
+const { adminClasses } = require("./routes/admin/adminClasses");
+const { adminSubjects } = require("./routes/admin/adminSubjects");
+const { adminAssignments } = require("./routes/admin/adminAssignments");
 const { getUser } = require("./routes/admin/getUser");
 const { createUser } = require("./routes/admin/createUser");
 const { updateUser } = require("./routes/admin/updateUser");
@@ -90,10 +93,7 @@ app.use(bodyParser.json());
 app.use(async (req, res, next) => {
 	req.session = await getSessionByPath(req, res);
 	req.getSessionByRole = (role) => getSessionByRole(req, res, role);
-
-	// DB elérhetővé tétele minden route-ban
 	req.db = db;
-
 	await next();
 });
 
@@ -105,7 +105,10 @@ app.get("/", requireAuth, studentIndex);
 // ========================================
 // ADMIN ROUTES
 // ========================================
-app.get("/admin", requireAdmin, adminIndex);
+app.get("/admin", requireAdmin, adminUsers);
+app.get("/admin/classes", requireAdmin, adminClasses);
+app.get("/admin/subjects", requireAdmin, adminSubjects);
+app.get("/admin/assignments", requireAdmin, adminAssignments);
 app.get("/api/admin/users/:id", requireAdmin, getUser);
 app.post("/api/admin/users", requireAdmin, createUser);
 app.put("/api/admin/users/:id", requireAdmin, updateUser);
@@ -132,7 +135,7 @@ app.get("/teacher/messages", requireTeacher, teacherMessages);
 app.get("/teacher/messages/sent", requireTeacher, teacherMessagesSent);
 app.get("/teacher/messages/new", requireTeacher, teacherMessagesNew);
 app.get("/teacher/homework", requireTeacher, teacherHomework);
-app.get("/teacherui", requireTeacher, teacherLegacyRoot); // Legacy átirányítás
+app.get("/teacherui", requireTeacher, teacherLegacyRoot);
 
 // ========================================
 // TEACHER API ROUTES - Grading (Értékelés)
@@ -147,8 +150,6 @@ app.delete("/api/teacher/grading/:gradeId", requireTeacher, deleteGrade);
 // ========================================
 app.get("/tasks", requireAuth, studentTasks);
 app.get("/grades", requireAuth, studentGrades);
-
-// Student message pages
 app.get("/messages", requireAuth, messagesReceived);
 app.get("/messages/sent", requireAuth, messagesSent);
 app.get("/messages/new", requireAuth, messagesNew);

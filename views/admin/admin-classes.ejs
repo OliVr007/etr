@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/admin/admin-index.css" />
+    <title>Admin - Osztályok</title>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-section">
+                    <img src="/icons/icon-128.webp" alt="Iskola logo" />
+                </div>
+                <div class="user-info">
+                    <a href="/logout" class="logout-btn">
+                        <span>Kijelentkezés</span>
+                        <img src="/icons/logouticon.svg" alt="Kijelentkezés" />
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="stats-section">
+            <h2>Statisztikák</h2>
+            <div class="stats-grid">
+                <div class="stat-card" onclick="location.href='/admin'">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-info"><h3><%= stats.totalUsers %></h3><p>Felhasználók</p></div>
+                </div>
+                <div class="stat-card" onclick="location.href='/admin/classes'">
+                    <div class="stat-icon">🏫</div>
+                    <div class="stat-info"><h3><%= stats.totalClasses %></h3><p>Osztályok</p></div>
+                </div>
+                <div class="stat-card" onclick="location.href='/admin/subjects'">
+                    <div class="stat-icon">📚</div>
+                    <div class="stat-info"><h3><%= stats.totalSubjects %></h3><p>Tantárgyak</p></div>
+                </div>
+                <div class="stat-card" onclick="location.href='/admin/assignments'">
+                    <div class="stat-icon">🔗</div>
+                    <div class="stat-info"><h3><%= stats.totalAssignments %></h3><p>Hozzárendelések</p></div>
+                </div>
+            </div>
+        </section>
+
+        <div class="tab-nav">
+            <a href="/admin" class="tab-btn">👥 Felhasználók</a>
+            <a href="/admin/classes" class="tab-btn active">🏫 Osztályok</a>
+            <a href="/admin/subjects" class="tab-btn">📚 Tantárgyak</a>
+            <a href="/admin/assignments" class="tab-btn">🔗 Hozzárendelések</a>
+        </div>
+
+        <div class="tab-content active" id="tab-classes">
+            <section class="content-section">
+                <div class="section-header">
+                    <h2>Osztály kezelés</h2>
+                    <button class="btn-primary" onclick="openAddClassModal()"><span>➕</span> Új osztály</button>
+                </div>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th><th>Osztály neve</th><th>Tanév</th>
+                                <th>Osztályfőnök</th><th>Terem</th><th>Műveletek</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% classes.forEach(cls => { %>
+                            <tr>
+                                <td><%= cls.id %></td>
+                                <td><%= cls.class_name %></td>
+                                <td><%= cls.academic_year %></td>
+                                <td><%= cls.users ? cls.users.last_name + ' ' + cls.users.first_name : '-' %></td>
+                                <td><%= cls.room_number || '-' %></td>
+                                <td class="action-buttons">
+                                    <button class="btn-edit" onclick="openEditClassModal(<%= cls.id %>)">✏️</button>
+                                    <button class="btn-delete" onclick="deleteClass(<%= cls.id %>, '<%= cls.class_name %>')">🗑️</button>
+                                </td>
+                            </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Add Class Modal -->
+    <div id="addClassModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Új osztály létrehozása</h3>
+                <button class="close-btn" onclick="closeModal('addClassModal')">&times;</button>
+            </div>
+            <form onsubmit="addClass(event)">
+                <div class="form-group">
+                    <label>Osztály neve *</label>
+                    <input type="text" id="add_class_name" name="class_name" placeholder="pl. 9.A" required />
+                </div>
+                <div class="form-group">
+                    <label>Tanév *</label>
+                    <input type="text" id="add_academic_year" name="academic_year" placeholder="2024/2025" required />
+                </div>
+                <div class="form-group">
+                    <label>Osztályfőnök</label>
+                    <select id="add_class_teacher_id" name="class_teacher_id">
+                        <option value="">Nincs megadva</option>
+                        <% teachers.forEach(t => { %>
+                        <option value="<%= t.id %>"><%= t.last_name %> <%= t.first_name %></option>
+                        <% }); %>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Terem</label>
+                    <input type="text" id="add_room_number" name="room_number" placeholder="pl. 101" />
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeModal('addClassModal')">Mégse</button>
+                    <button type="submit" class="btn-primary">Létrehozás</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Class Modal -->
+    <div id="editClassModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Osztály szerkesztése</h3>
+                <button class="close-btn" onclick="closeModal('editClassModal')">&times;</button>
+            </div>
+            <form onsubmit="updateClass(event)">
+                <input type="hidden" id="edit_class_id" />
+                <div class="form-group">
+                    <label>Osztály neve *</label>
+                    <input type="text" id="edit_class_name" name="class_name" required />
+                </div>
+                <div class="form-group">
+                    <label>Tanév *</label>
+                    <input type="text" id="edit_academic_year" name="academic_year" required />
+                </div>
+                <div class="form-group">
+                    <label>Osztályfőnök</label>
+                    <select id="edit_class_teacher_id" name="class_teacher_id">
+                        <option value="">Nincs megadva</option>
+                        <% teachers.forEach(t => { %>
+                        <option value="<%= t.id %>"><%= t.last_name %> <%= t.first_name %></option>
+                        <% }); %>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Terem</label>
+                    <input type="text" id="edit_room_number" name="room_number" />
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeModal('editClassModal')">Mégse</button>
+                    <button type="submit" class="btn-primary">Mentés</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = "none";
+            const form = document.getElementById(modalId).querySelector('form');
+            if (form) form.reset();
+        }
+        window.onclick = (e) => {
+            document.querySelectorAll('.modal').forEach(m => { if (e.target === m) closeModal(m.id); });
+        };
+        function openAddClassModal() { document.getElementById("addClassModal").style.display = "flex"; }
+        async function openEditClassModal(classId) {
+            const response = await fetch('/api/admin/classes/' + classId);
+            const cls = await response.json();
+            if (!response.ok) return alert("Hiba történt az osztály betöltésekor");
+            document.getElementById("edit_class_id").value = cls.id;
+            document.getElementById("edit_class_name").value = cls.class_name;
+            document.getElementById("edit_academic_year").value = cls.academic_year;
+            document.getElementById("edit_class_teacher_id").value = cls.class_teacher_id || "";
+            document.getElementById("edit_room_number").value = cls.room_number || "";
+            document.getElementById("editClassModal").style.display = "flex";
+        }
+        async function addClass(event) {
+            event.preventDefault();
+            const res = await fetch("/api/admin/classes", {
+                method: "POST", headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(Object.fromEntries(new FormData(event.target))),
+            });
+            const result = await res.json();
+            if (res.ok) { alert("Osztály sikeresen létrehozva!"); closeModal('addClassModal'); location.reload(); }
+            else alert(result.error || "Hiba történt");
+        }
+        async function updateClass(event) {
+            event.preventDefault();
+            const classId = document.getElementById("edit_class_id").value;
+            const res = await fetch('/api/admin/classes/' + classId, {
+                method: "PUT", headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(Object.fromEntries(new FormData(event.target))),
+            });
+            const result = await res.json();
+            if (res.ok) { alert("Osztály sikeresen frissítve!"); closeModal('editClassModal'); location.reload(); }
+            else alert(result.error || "Hiba történt");
+        }
+        async function deleteClass(classId, className) {
+            if (!confirm('Biztosan törölni szeretnéd: ' + className + '?')) return;
+            const res = await fetch('/api/admin/classes/' + classId, { method: "DELETE" });
+            const result = await res.json();
+            if (res.ok) { alert("Osztály sikeresen törölve!"); location.reload(); }
+            else alert(result.error || "Hiba történt");
+        }
+    </script>
+</body>
+</html>
