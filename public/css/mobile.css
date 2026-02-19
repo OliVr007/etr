@@ -1,0 +1,1159 @@
+/* ============================================
+   MOBILE.CSS - Közös mobil nézet stílusok
+   Minden oldalhoz hozzá kell adni!
+   ============================================ */
+
+/* ==========================================
+   KONZISZTENS MEGJELENÉS MINDEN ESZKÖZÖN
+   ========================================== */
+html {
+	-webkit-text-size-adjust: 100%;
+	-moz-text-size-adjust: 100%;
+	text-size-adjust: 100%;
+}
+
+*,
+*::before,
+*::after {
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+img {
+	max-width: 100%;
+	height: auto;
+}
+
+input,
+select,
+textarea,
+button {
+	font-size: 16px;
+}
+
+/* ==========================================
+   HAMBURGER GOMB
+   ========================================== */
+.hamburger-btn {
+	display: none;
+	background: none;
+	border: none;
+	cursor: pointer;
+	padding: 8px;
+	min-width: 44px;
+	min-height: 44px;
+	align-items: center;
+	justify-content: center;
+	z-index: 1100;
+	position: relative;
+}
+
+.hamburger-icon {
+	display: flex;
+	flex-direction: column;
+	gap: 7px;
+	width: 30px;
+}
+
+.hamburger-icon span {
+	display: block;
+	height: 3px;
+	width: 100%;
+	background-color: #fefcfb;
+	border-radius: 2px;
+	transition: all 0.3s ease;
+	transform-origin: center;
+}
+
+/* Hamburger → X animáció */
+.hamburger-btn.active .hamburger-icon span:nth-child(1) {
+	transform: translateY(10px) rotate(45deg);
+}
+
+.hamburger-btn.active .hamburger-icon span:nth-child(2) {
+	opacity: 0;
+	transform: scaleX(0);
+}
+
+.hamburger-btn.active .hamburger-icon span:nth-child(3) {
+	transform: translateY(-10px) rotate(-45deg);
+}
+
+/* ==========================================
+   MOBIL NAVIGÁCIÓ OVERLAY
+   ========================================== */
+.mobile-nav-overlay {
+	display: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(10, 17, 40, 0.6);
+	z-index: 999;
+	opacity: 0;
+	transition: opacity 0.3s ease;
+	backdrop-filter: blur(4px);
+	-webkit-backdrop-filter: blur(4px);
+}
+
+.mobile-nav-overlay.active {
+	opacity: 1;
+}
+
+/* ==========================================
+   MOBIL NAVIGÁCIÓ DRAWER
+   ========================================== */
+.mobile-nav-drawer {
+	display: none;
+	position: fixed;
+	top: 0;
+	right: -280px;
+	width: 280px;
+	height: 100%;
+	background: linear-gradient(180deg, #0a1128 0%, #001f54 40%, #034078 100%);
+	z-index: 1000;
+	transition: right 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+	overflow-y: auto;
+	box-shadow: -4px 0 20px rgba(0, 0, 0, 0.3);
+	padding-top: 80px;
+}
+
+.mobile-nav-drawer.active {
+	right: 0;
+}
+
+.mobile-nav-drawer .mobile-nav-links {
+	display: flex;
+	flex-direction: column;
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+
+.mobile-nav-drawer .mobile-nav-links a {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 16px 24px;
+	color: #fefcfb;
+	text-decoration: none;
+	font-size: 1rem;
+	font-weight: 500;
+	transition: all 0.2s ease;
+	border-left: 3px solid transparent;
+}
+
+.mobile-nav-drawer .mobile-nav-links a:hover,
+.mobile-nav-drawer .mobile-nav-links a:active {
+	background-color: rgba(255, 255, 255, 0.1);
+	border-left-color: #1282a2;
+}
+
+.mobile-nav-drawer .mobile-nav-links a.active {
+	background-color: rgba(18, 130, 162, 0.3);
+	border-left-color: #1282a2;
+	font-weight: 600;
+}
+
+.mobile-nav-drawer .mobile-nav-links a .nav-icon {
+	font-size: 1.2rem;
+	width: 28px;
+	text-align: center;
+}
+
+/* Drawer alján kijelentkezés */
+.mobile-nav-drawer .mobile-nav-logout {
+	margin-top: auto;
+	padding: 20px 24px;
+	border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mobile-nav-drawer .mobile-nav-logout a {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	color: #ff6b6b;
+	text-decoration: none;
+	font-weight: 600;
+	font-size: 0.95rem;
+	padding: 12px 0;
+	transition: color 0.2s;
+}
+
+.mobile-nav-drawer .mobile-nav-logout a:hover {
+	color: #ff4444;
+}
+
+.mobile-nav-drawer .mobile-nav-logout a img {
+	width: 20px;
+	height: 20px;
+	filter: brightness(0) saturate(100%) invert(52%) sepia(79%) saturate(1641%) hue-rotate(326deg) brightness(101%) contrast(101%);
+}
+
+/* ==========================================
+   BODY SCROLL LOCK
+   ========================================== */
+body.mobile-nav-open {
+	overflow: hidden;
+	position: fixed;
+	width: 100%;
+}
+
+/* ==========================================
+   JEGYEK - KÁRTYA NÉZET (alapból rejtett)
+   ========================================== */
+.grades-card-view {
+	display: none;
+}
+
+/* ==========================================
+   768px BREAKPOINT - Tablet & Mobile
+   ========================================== */
+@media (max-width: 768px) {
+	/* Header layout fix */
+	.header-content {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 0;
+	}
+
+	.logo-section img {
+		width: auto;
+		height: auto;
+		aspect-ratio: auto;
+	}
+
+	/* Hamburger megjelenítése, jobbra igazítás */
+	.hamburger-btn {
+		display: flex;
+		margin-left: auto;
+	}
+
+	/* Drawer engedélyezése */
+	.mobile-nav-drawer {
+		display: block;
+	}
+
+	/* Overlay csak active állapotban */
+	.mobile-nav-overlay {
+		display: none;
+	}
+
+	.mobile-nav-overlay.active {
+		display: block;
+		opacity: 1;
+	}
+
+	/* Eredeti nav elrejtése */
+	body > nav,
+	header + nav {
+		display: none !important;
+	}
+
+	.mobile-nav-drawer .mobile-nav-links {
+		display: flex !important;
+		flex-direction: column;
+	}
+
+	/* User info elrejtése mobilon */
+	.user-info span,
+	.logout-btn span,
+	.logout-btn {
+		display: none;
+	}
+
+	/* Container padding */
+	.container {
+		padding: 0 16px;
+	}
+
+	/* ==========================================
+	   DIÁK FŐOLDAL (student/index)
+	   ========================================== */
+	.welcome-section {
+		padding: 20px 16px;
+		margin-bottom: 20px;
+		border-radius: 12px;
+	}
+
+	.welcome-section h2 {
+		font-size: 1.5rem;
+	}
+
+	.welcome-section p {
+		font-size: 0.95rem;
+	}
+
+	.carousel-container {
+		border-radius: 12px;
+		box-shadow: 0 4px 16px rgba(0, 31, 84, 0.1);
+	}
+
+	.carousel-card {
+		border-radius: 12px;
+	}
+
+	.card-header {
+		padding: 18px 16px 12px;
+	}
+
+	.card-header h3 {
+		font-size: 1.1rem;
+	}
+
+	.card-badge {
+		font-size: 0.8rem;
+		padding: 5px 10px;
+	}
+
+	.card-content {
+		padding: 16px;
+		max-height: 400px;
+	}
+
+	.card-footer {
+		padding: 14px 16px;
+	}
+
+	.card-item {
+		padding: 12px 0;
+		flex-direction: column;
+		gap: 6px;
+	}
+
+	.item-value {
+		text-align: left;
+		font-size: 1.2rem;
+	}
+
+	.item-type {
+		text-align: left;
+	}
+
+	.carousel-controls {
+		margin-top: 30px;
+		margin-bottom: 30px;
+		gap: 12px;
+	}
+
+	.carousel-btn {
+		width: 44px;
+		height: 44px;
+		font-size: 1rem;
+	}
+
+	/* ==========================================
+	   JEGYEK OLDAL - KÁRTYA NÉZET
+	   ========================================== */
+	.grades-table-container {
+		margin: 16px auto;
+		padding: 12px;
+	}
+
+	.grades-table-container h2 {
+		font-size: 1.5rem;
+		margin-bottom: 20px;
+	}
+
+	.table-wrapper,
+	.grades-table {
+		display: none !important;
+	}
+
+	.grades-card-view {
+		display: flex;
+		flex-direction: column;
+		gap: 14px;
+		padding: 0 4px;
+	}
+
+	.grade-subject-card {
+		background: #ffffff;
+		border-radius: 14px;
+		box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
+		overflow: hidden;
+		border: 1px solid #e2e8f0;
+	}
+
+	.grade-subject-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 16px 18px;
+		cursor: pointer;
+		transition: background-color 0.2s;
+		-webkit-tap-highlight-color: transparent;
+	}
+
+	.grade-subject-header:active {
+		background-color: #f8fafc;
+	}
+
+	.grade-subject-name {
+		font-weight: 600;
+		font-size: 1rem;
+		color: #0a1128;
+		flex: 1;
+		margin-right: 12px;
+	}
+
+	.grade-subject-avg {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+	}
+
+	.grade-avg-value {
+		font-weight: 700;
+		font-size: 1.15rem;
+		min-width: 40px;
+		text-align: center;
+		padding: 4px 10px;
+		border-radius: 8px;
+		background: #f1f5f9;
+	}
+
+	.grade-avg-value.avg-excellent {
+		color: #16a34a;
+		background: #dcfce7;
+	}
+	.grade-avg-value.avg-good {
+		color: #2563eb;
+		background: #dbeafe;
+	}
+	.grade-avg-value.avg-medium {
+		color: #ca8a04;
+		background: #fef9c3;
+	}
+	.grade-avg-value.avg-poor {
+		color: #ea580c;
+		background: #ffedd5;
+	}
+	.grade-avg-value.avg-fail {
+		color: #dc2626;
+		background: #fee2e2;
+	}
+
+	.grade-chevron {
+		width: 20px;
+		height: 20px;
+		transition: transform 0.3s ease;
+		color: #94a3b8;
+	}
+
+	.grade-subject-card.open .grade-chevron {
+		transform: rotate(180deg);
+	}
+
+	.grade-subject-body {
+		max-height: 0;
+		overflow: hidden;
+		transition: max-height 0.35s ease;
+	}
+
+	.grade-subject-card.open .grade-subject-body {
+		max-height: 2000px;
+	}
+
+	.grade-subject-content {
+		padding: 0 18px 16px;
+	}
+
+	.grade-month-group {
+		margin-bottom: 12px;
+	}
+
+	.grade-month-group:last-child {
+		margin-bottom: 0;
+	}
+
+	.grade-month-label {
+		font-size: 0.8rem;
+		font-weight: 600;
+		color: #64748b;
+		text-transform: uppercase;
+		letter-spacing: 0.5px;
+		padding-bottom: 6px;
+		margin-bottom: 8px;
+		border-bottom: 1px solid #f1f5f9;
+	}
+
+	.grade-entry {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 10px 0;
+		border-bottom: 1px solid #f8fafc;
+	}
+
+	.grade-entry:last-child {
+		border-bottom: none;
+	}
+
+	.grade-entry-info {
+		flex: 1;
+	}
+
+	.grade-entry-type {
+		font-size: 0.9rem;
+		font-weight: 500;
+		color: #334155;
+	}
+
+	.grade-entry-details {
+		font-size: 0.8rem;
+		color: #94a3b8;
+		margin-top: 2px;
+	}
+
+	.grade-entry-value {
+		font-weight: 700;
+		font-size: 1.3rem;
+		min-width: 36px;
+		height: 36px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 8px;
+		margin-left: 12px;
+	}
+
+	.grade-entry-value.g5 {
+		color: #16a34a;
+		background: #dcfce7;
+	}
+	.grade-entry-value.g4 {
+		color: #2563eb;
+		background: #dbeafe;
+	}
+	.grade-entry-value.g3 {
+		color: #ca8a04;
+		background: #fef9c3;
+	}
+	.grade-entry-value.g2 {
+		color: #ea580c;
+		background: #ffedd5;
+	}
+	.grade-entry-value.g1 {
+		color: #dc2626;
+		background: #fee2e2;
+	}
+
+	.grade-empty-card {
+		text-align: center;
+		padding: 14px;
+		color: #94a3b8;
+		font-size: 0.9rem;
+	}
+
+	.grade-summary-row {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 12px 0 0;
+		margin-top: 8px;
+		border-top: 2px solid #f1f5f9;
+	}
+
+	.grade-summary-label {
+		font-size: 0.85rem;
+		color: #64748b;
+		font-weight: 600;
+	}
+
+	.grade-summary-value {
+		font-weight: 700;
+		font-size: 1.1rem;
+	}
+
+	/* ==========================================
+	   FELADATOK OLDAL (tasks)
+	   ========================================== */
+	main {
+		padding: 20px 0;
+	}
+
+	.tasks-container h1 {
+		font-size: 1.5rem;
+		margin-bottom: 20px;
+	}
+
+	.task-list {
+		grid-template-columns: 1fr;
+		gap: 14px;
+	}
+
+	.task-card {
+		padding: 16px;
+	}
+
+	.task-card h2 {
+		font-size: 1.05rem;
+	}
+
+	.task-card p {
+		font-size: 0.9rem;
+	}
+
+	.task-actions {
+		flex-direction: column;
+		gap: 8px;
+	}
+
+	.done-btn,
+	.delete-btn {
+		width: 100%;
+		padding: 12px;
+		justify-content: center;
+	}
+
+	/* ==========================================
+	   ÜZENETEK OLDAL (messages)
+	   ========================================== */
+	.messages-container {
+		padding: 20px 0;
+	}
+
+	.messages-header {
+		flex-direction: column;
+		align-items: stretch;
+		gap: 12px;
+		margin-bottom: 20px;
+	}
+
+	.messages-header h1 {
+		font-size: 1.5rem;
+	}
+
+	.new-message-btn {
+		width: 100%;
+		text-align: center;
+	}
+
+	.messages-tabs {
+		gap: 8px;
+		margin-bottom: 20px;
+	}
+
+	.messages-tabs .tab {
+		flex: 1;
+		justify-content: center;
+		padding: 10px 14px;
+		font-size: 0.9rem;
+	}
+
+	.message-card {
+		border-radius: 12px;
+		margin-bottom: 12px;
+	}
+
+	.message-card-header {
+		padding: 14px 16px;
+	}
+
+	.message-subject {
+		font-size: 1rem;
+	}
+
+	.message-meta {
+		font-size: 0.8rem;
+	}
+
+	.message-card-body {
+		padding: 0 16px 14px;
+	}
+
+	.message-preview {
+		font-size: 0.85rem;
+	}
+
+	/* ==========================================
+	   TANÁRI ÉRTÉKELÉS (teacher/grading)
+	   ========================================== */
+	.grading-page-title {
+		font-size: 1.4rem;
+		margin-bottom: 18px;
+	}
+
+	.grading-setup {
+		padding: 16px;
+		border-radius: 10px;
+	}
+
+	.setup-row {
+		flex-direction: column;
+		gap: 12px;
+	}
+
+	.setup-group {
+		min-width: 100%;
+	}
+
+	.setup-group select,
+	.setup-group input {
+		font-size: 0.95rem;
+	}
+
+	.grading-type-tabs {
+		width: 100%;
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+	}
+
+	.type-tab {
+		padding: 8px 14px;
+		font-size: 0.85rem;
+		white-space: nowrap;
+	}
+
+	.grading-panel-header {
+		padding: 12px 14px;
+		flex-direction: column;
+		align-items: stretch;
+		gap: 10px;
+	}
+
+	.panel-actions {
+		justify-content: stretch;
+	}
+
+	.panel-actions .btn {
+		flex: 1;
+		justify-content: center;
+		font-size: 0.85rem;
+	}
+
+	.grading-table-wrapper {
+		margin: 0 -16px;
+		padding: 0 16px;
+	}
+
+	.grading-table th,
+	.grading-table td {
+		padding: 10px 6px;
+		font-size: 0.85rem;
+	}
+
+	.grade-btn {
+		width: 32px;
+		height: 32px;
+		font-size: 0.85rem;
+	}
+
+	.grade-badge {
+		width: 26px;
+		height: 26px;
+		font-size: 0.75rem;
+	}
+
+	/* ==========================================
+	   TANÁRI HÁZI FELADAT (teacher/homework)
+	   ========================================== */
+	.homework-header {
+		flex-direction: column;
+		align-items: stretch;
+		gap: 12px;
+		margin-bottom: 18px;
+	}
+
+	.homework-header h1 {
+		font-size: 1.4rem;
+	}
+
+	.new-homework-btn {
+		width: 100%;
+		text-align: center;
+	}
+
+	.homework-tabs {
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+		gap: 0;
+	}
+
+	.homework-tabs .tab {
+		padding: 12px 16px;
+		font-size: 0.9rem;
+		white-space: nowrap;
+	}
+
+	.homework-item {
+		padding: 16px;
+		border-radius: 10px;
+	}
+
+	.homework-item-header {
+		flex-direction: column;
+		gap: 8px;
+	}
+
+	.homework-title {
+		font-size: 1.05rem;
+	}
+
+	/* Házi feladat modal */
+	.modal {
+		padding: 10px;
+	}
+
+	.modal-content {
+		max-height: 95vh;
+		border-radius: 12px;
+		width: 100%;
+	}
+
+	.modal-header {
+		padding: 16px 18px;
+	}
+
+	.modal-header h2,
+	.modal-header h3 {
+		font-size: 1.2rem;
+	}
+
+	.form-group {
+		margin-bottom: 16px;
+	}
+
+	.form-group input,
+	.form-group select,
+	.form-group textarea {
+		font-size: 1rem;
+		padding: 12px 14px;
+	}
+
+	/* ==========================================
+	   ADMIN OLDALAK
+	   ========================================== */
+	.stats-grid {
+		grid-template-columns: repeat(2, 1fr);
+		gap: 12px;
+	}
+
+	.stat-card {
+		padding: 16px;
+	}
+
+	.stat-icon {
+		width: 48px;
+		height: 48px;
+		font-size: 1.6rem;
+	}
+
+	.stat-info h3 {
+		font-size: 1.5rem;
+	}
+
+	.stat-info p {
+		font-size: 0.8rem;
+	}
+
+	.tab-nav {
+		display: flex;
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+		gap: 0;
+		border-radius: 10px 10px 0 0;
+	}
+
+	.tab-btn {
+		padding: 12px 14px;
+		font-size: 0.8rem;
+		white-space: nowrap;
+		flex-shrink: 0;
+	}
+
+	.content-section {
+		padding: 16px;
+		border-radius: 0 0 10px 10px;
+	}
+
+	.section-header {
+		flex-direction: column;
+		align-items: stretch;
+		gap: 10px;
+	}
+
+	.section-header h2 {
+		font-size: 1.2rem;
+	}
+
+	.btn-primary {
+		width: 100%;
+		justify-content: center;
+	}
+
+	.table-container {
+		margin: 0 -16px;
+		padding: 0 16px;
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+	}
+
+	.data-table {
+		font-size: 0.8rem;
+		min-width: 600px;
+	}
+
+	.data-table th,
+	.data-table td {
+		padding: 10px 8px;
+	}
+
+	.form-row {
+		grid-template-columns: 1fr;
+		gap: 0;
+	}
+
+	.form-actions {
+		flex-direction: column-reverse;
+	}
+
+	.form-actions button {
+		width: 100%;
+		justify-content: center;
+	}
+
+	/* ==========================================
+	   ÚJ ÜZENET OLDAL (messages/new)
+	   ========================================== */
+	.new-message-wrapper {
+		padding: 16px;
+		margin: 16px auto;
+	}
+
+	.message-form-header {
+		margin-bottom: 20px;
+	}
+
+	.new-message-header h2 {
+		font-size: 1.4rem;
+	}
+
+	.form-content {
+		padding: 0;
+	}
+
+	/* ==========================================
+	   TOAST ÜZENETEK
+	   ========================================== */
+	.toast {
+		top: 10px;
+		right: 10px;
+		left: 10px;
+		padding: 12px 18px;
+		font-size: 0.9rem;
+	}
+}
+
+/* ==========================================
+   480px BREAKPOINT - Kis mobil
+   ========================================== */
+@media (max-width: 480px) {
+	.container {
+		padding: 0 12px;
+	}
+
+	/* Diák főoldal */
+	.welcome-section {
+		padding: 16px 12px;
+		margin-bottom: 16px;
+	}
+
+	.welcome-section h2 {
+		font-size: 1.3rem;
+	}
+
+	.welcome-section p {
+		font-size: 0.85rem;
+	}
+
+	.card-header {
+		padding: 14px 12px 10px;
+	}
+
+	.card-header h3 {
+		font-size: 1rem;
+	}
+
+	.card-content {
+		padding: 12px;
+		max-height: 360px;
+	}
+
+	.card-footer {
+		padding: 12px;
+	}
+
+	.item-title {
+		font-size: 0.85rem;
+	}
+
+	.item-date {
+		font-size: 0.75rem;
+	}
+
+	.carousel-controls {
+		margin-top: 25px;
+		margin-bottom: 25px;
+	}
+
+	/* Jegyek */
+	.grades-table-container {
+		padding: 8px;
+	}
+
+	.grades-table-container h2 {
+		font-size: 1.3rem;
+	}
+
+	/* Feladatok */
+	.tasks-container h1 {
+		font-size: 1.3rem;
+	}
+
+	.task-card {
+		padding: 14px;
+	}
+
+	.task-card h2 {
+		font-size: 1rem;
+	}
+
+	/* Üzenetek */
+	.messages-header h1 {
+		font-size: 1.3rem;
+	}
+
+	.messages-tabs .tab {
+		padding: 10px 10px;
+		font-size: 0.85rem;
+	}
+
+	/* Admin */
+	.stats-grid {
+		grid-template-columns: 1fr;
+		gap: 10px;
+	}
+
+	.stat-card {
+		padding: 14px;
+		flex-direction: row;
+		gap: 12px;
+	}
+
+	.stat-icon {
+		width: 44px;
+		height: 44px;
+		font-size: 1.4rem;
+	}
+
+	.stat-info h3 {
+		font-size: 1.4rem;
+	}
+
+	.tab-btn {
+		padding: 10px 12px;
+		font-size: 0.75rem;
+	}
+
+	.data-table {
+		font-size: 0.75rem;
+		min-width: 500px;
+	}
+
+	.data-table th,
+	.data-table td {
+		padding: 8px 6px;
+	}
+
+	/* Tanári értékelés */
+	.grading-page-title {
+		font-size: 1.2rem;
+	}
+
+	.grade-btn {
+		width: 28px;
+		height: 28px;
+		font-size: 0.8rem;
+	}
+
+	.grade-badge {
+		width: 24px;
+		height: 24px;
+		font-size: 0.7rem;
+	}
+
+	/* Tanári házi feladat */
+	.homework-header h1 {
+		font-size: 1.2rem;
+	}
+
+	.homework-item {
+		padding: 14px;
+	}
+
+	.homework-title {
+		font-size: 1rem;
+	}
+}
+
+/* ==========================================
+   TOUCH DEVICE JAVÍTÁSOK
+   ========================================== */
+@media (hover: none) and (pointer: coarse) {
+	.hamburger-btn:active {
+		opacity: 0.7;
+	}
+
+	.mobile-nav-drawer .mobile-nav-links a:active {
+		background-color: rgba(255, 255, 255, 0.15);
+	}
+
+	.task-card:hover,
+	.message-card:hover,
+	.homework-item:hover,
+	.stat-card:hover {
+		transform: none;
+	}
+
+	.task-card:active {
+		transform: scale(0.98);
+	}
+
+	.message-card:active {
+		transform: scale(0.99);
+	}
+}
+
+/* ==========================================
+   SAFE AREA (notch-os telefonok)
+   ========================================== */
+@supports (padding: env(safe-area-inset-top)) {
+	header {
+		padding-top: calc(15px + env(safe-area-inset-top));
+	}
+
+	.mobile-nav-drawer {
+		padding-top: calc(80px + env(safe-area-inset-top));
+	}
+
+	.mobile-nav-drawer .mobile-nav-logout {
+		padding-bottom: calc(20px + env(safe-area-inset-bottom));
+	}
+}
+
+/* ==========================================
+   LANDSCAPE MÓD JAVÍTÁSOK
+   ========================================== */
+@media (max-width: 768px) and (orientation: landscape) {
+	.mobile-nav-drawer {
+		padding-top: 60px;
+	}
+
+	.mobile-nav-drawer .mobile-nav-links a {
+		padding: 12px 24px;
+	}
+}

@@ -4,6 +4,7 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="stylesheet" href="/css/messages/messages-new.css" />
+		<link rel="stylesheet" href="/css/mobile.css" />
 		<title>Új üzenet</title>
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -67,7 +68,6 @@
 					const users = data.users || [];
 					const select = document.getElementById("recipient");
 
-					// Csak tanárok szűrése
 					users
 						.filter((user) => user.role === "teacher")
 						.forEach((user) => {

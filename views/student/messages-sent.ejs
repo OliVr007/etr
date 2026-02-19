@@ -4,6 +4,7 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="stylesheet" href="/css/messages/messages.css" />
+		<link rel="stylesheet" href="/css/mobile.css" />
 		<title>Elektronikus tanulmányi rendszer</title>
 	</head>
 	<body>
@@ -13,6 +14,13 @@
 					<div class="logo-section">
 						<img src="/icons/icon-128.webp" alt="Iskola logo" />
 					</div>
+					<button class="hamburger-btn" aria-label="Menü">
+						<div class="hamburger-icon">
+							<span></span>
+							<span></span>
+							<span></span>
+						</div>
+					</button>
 					<div class="user-info">
 						<a href="/logout" class="logout-btn">
 							<span>Kijelentkezés</span>
@@ -49,6 +57,24 @@
 			</div>
 		</main>
 
+		<!-- Mobil navigáció -->
+		<div class="mobile-nav-overlay"></div>
+		<div class="mobile-nav-drawer">
+			<nav class="mobile-nav-links">
+				<a href="/"><span class="nav-icon">🏠</span> Áttekintés</a>
+				<a href="/grades"><span class="nav-icon">📊</span> Értékelések</a>
+				<a href="/tasks"><span class="nav-icon">📝</span> Házi feladatok</a>
+				<a href="/messages" class="active"><span class="nav-icon">✉️</span> Üzenetek</a>
+			</nav>
+			<div class="mobile-nav-logout">
+				<a href="/logout">
+					<img src="/icons/logouticon.svg" alt="Kijelentkezés" />
+					Kijelentkezés
+				</a>
+			</div>
+		</div>
+
+		<script src="/js/mobile.js"></script>
 		<script>
 			function escapeHtml(text) {
 				const div = document.createElement("div");

@@ -4,6 +4,7 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="stylesheet" href="/css/grades/grades.css" />
+		<link rel="stylesheet" href="/css/mobile.css" />
 		<title>Értékelések</title>
 	</head>
 	<body>
@@ -13,6 +14,13 @@
 					<div class="logo-section">
 						<img src="/icons/icon-128.webp" alt="Iskola logo" />
 					</div>
+					<button class="hamburger-btn" aria-label="Menü">
+						<div class="hamburger-icon">
+							<span></span>
+							<span></span>
+							<span></span>
+						</div>
+					</button>
 					<div class="user-info">
 						<a href="/logout" class="logout-btn">
 							<span>Kijelentkezés</span>
@@ -34,124 +42,237 @@
 			</div>
 		</nav>
 
+		<%
+		const months = ['Szeptember', 'Október', 'November', 'December', 'Január (I)', 'Félév', 'Január (II)', 'Február', 'Március', 'Április', 'Május', 'Június'];
+
+		function getMonthIndex(date) {
+			const month = new Date(date).getMonth();
+			if (month === 0) return 4;
+			if (month === 1) return 7;
+			if (month === 2) return 8;
+			if (month === 3) return 9;
+			if (month === 4) return 10;
+			if (month === 5) return 11;
+			if (month === 8) return 0;
+			if (month === 9) return 1;
+			if (month === 10) return 2;
+			if (month === 11) return 3;
+			return -1;
+		}
+
+		function calculateAverage(grades) {
+			if (!grades || grades.length === 0) return null;
+			const sum = grades.reduce((acc, g) => acc + parseFloat(g.grade_value), 0);
+			return (sum / grades.length).toFixed(2);
+		}
+
+		function getGradeClass(gradeValue) {
+			const num = parseFloat(gradeValue);
+			if (num === 5) return 'g5';
+			if (num === 4) return 'g4';
+			if (num === 3) return 'g3';
+			if (num === 2) return 'g2';
+			if (num === 1) return 'g1';
+			return '';
+		}
+
+		function getGradeTypeLabel(type) {
+			const map = {
+				dolgozat: 'Dolgozat',
+				felelet: 'Felelet',
+				h_zi: 'Gyakorlati feladat',
+				projekt: 'Projekt'
+			};
+			return map[type] || type;
+		}
+
+		function getAvgClass(avg) {
+			if (avg === null) return '';
+			const num = parseFloat(avg);
+			if (num >= 4.5) return 'avg-excellent';
+			if (num >= 3.5) return 'avg-good';
+			if (num >= 2.5) return 'avg-medium';
+			if (num >= 1.5) return 'avg-poor';
+			return 'avg-fail';
+		}
+		%>
+
 		<div class="grades-table-container">
 			<h2>Értékelések</h2>
 
-			<% const months = ['Szeptember', 'Október', 'November', 'December', 'Január (I)', 'Félév', 'Január (II)', 'Február', 'Március', 'Április', 'Május', 'Június']; %>
+			<!-- ==================== DESKTOP: TÁBLÁZAT ==================== -->
+			<div class="table-wrapper">
+				<table class="grades-table">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>Tantárgy</th>
+							<% months.forEach(month => { %>
+							<th><%= month %></th>
+							<% }); %>
+							<th>Évvége</th>
+							<th>Átlag</th>
+						</tr>
+					</thead>
 
-			<table class="grades-table">
-				<thead>
-					<tr>
-						<th>#</th>
-						<th>Tantárgy</th>
-						<% months.forEach(month => { %>
-						<th><%= month %></th>
+					<tbody>
+						<% if (Object.keys(gradesBySubject).length === 0) { %>
+						<tr>
+							<td colspan="16" style="text-align: center; padding: 2rem">Még nincsenek hozzárendelt tantárgyak</td>
+						</tr>
+						<% } else { %>
+						<% let rowIndex = 1; %>
+						<% Object.keys(gradesBySubject).forEach(subjectName => { %>
+						<%
+						const subjectGrades = gradesBySubject[subjectName];
+						const gradesByMonth = Array(12).fill(null).map(() => []);
+
+						subjectGrades.forEach(grade => {
+							const monthIdx = getMonthIndex(grade.grade_date);
+							if (monthIdx >= 0) {
+								gradesByMonth[monthIdx].push(grade);
+							}
+						});
+
+						const average = calculateAverage(subjectGrades);
+						%>
+
+						<tr class="<%= rowIndex === 1 ? 'first-row' : '' %>">
+							<td><%= rowIndex++ %></td>
+							<td><%= subjectName %></td>
+
+							<% gradesByMonth.forEach((monthGrades, idx) => { %>
+							<td>
+								<% if (monthGrades.length > 0) { %>
+									<% monthGrades.forEach(grade => { %>
+									<span class="grade-cell <%= getGradeClass(grade.grade_value) %>">
+										<%= grade.grade_value %>
+										<div class="grade-tooltip">
+											<div class="tooltip-date"><%= new Date(grade.grade_date).toLocaleDateString('hu-HU') %></div>
+											<div class="tooltip-type"><%= getGradeTypeLabel(grade.grade_type) %></div>
+											<% if (grade.description) { %>
+											<div class="tooltip-desc">Téma: <%= grade.description %></div>
+											<% } %>
+											<div class="tooltip-weight">Súly: <%= (grade.weight || 1) * 100 %>%</div>
+											<div class="tooltip-teacher"><%= grade.users_grades_teacher_idTousers.last_name %> <%= grade.users_grades_teacher_idTousers.first_name %></div>
+										</div>
+									</span>
+									<% }); %>
+								<% } %>
+							</td>
+							<% }); %>
+
+							<td></td>
+							<td><strong><%= average !== null ? average : '-' %></strong></td>
+						</tr>
 						<% }); %>
-						<th>Évvége</th>
-						<th>Átlag</th>
-					</tr>
-				</thead>
+						<% } %>
+					</tbody>
+				</table>
+			</div>
 
-				<tbody>
-					<% if (Object.keys(gradesBySubject).length === 0) { %>
-					<tr>
-						<td colspan="16" style="text-align: center; padding: 2rem">Még nincsenek hozzárendelt tantárgyak</td>
-					</tr>
-					<% } else { %>
-					<%
-					let rowIndex = 1;
+			<!-- ==================== MOBIL: KÁRTYA NÉZET ==================== -->
+			<div class="grades-card-view">
+				<% if (Object.keys(gradesBySubject).length === 0) { %>
+				<div class="grade-subject-card">
+					<div class="grade-subject-header">
+						<span class="grade-subject-name">Még nincsenek hozzárendelt tantárgyak</span>
+					</div>
+				</div>
+				<% } else { %>
+				<% Object.keys(gradesBySubject).forEach((subjectName, subjectIndex) => { %>
+				<%
+				const subjectGrades = gradesBySubject[subjectName];
+				const gradesByMonthMobile = Array(12).fill(null).map(() => []);
 
-					function getMonthIndex(date) {
-						const month = new Date(date).getMonth();
-						// Szeptember = 0, Október = 1, ... Június = 11 (a tanév rendjében)
-						if (month === 0) return 4;   // Január (I)
-						if (month === 1) return 7;   // Február
-						if (month === 2) return 8;   // Március
-						if (month === 3) return 9;   // Április
-						if (month === 4) return 10;  // Május
-						if (month === 5) return 11;  // Június
-						if (month === 8) return 0;   // Szeptember
-						if (month === 9) return 1;   // Október
-						if (month === 10) return 2;  // November
-						if (month === 11) return 3;  // December
-						return -1;
+				subjectGrades.forEach(grade => {
+					const monthIdx = getMonthIndex(grade.grade_date);
+					if (monthIdx >= 0) {
+						gradesByMonthMobile[monthIdx].push(grade);
 					}
+				});
 
-					function calculateAverage(grades) {
-						if (!grades || grades.length === 0) return null;
-						const sum = grades.reduce((acc, g) => acc + parseFloat(g.grade_value), 0);
-						return (sum / grades.length).toFixed(2);
-					}
+				const avgMobile = calculateAverage(subjectGrades);
+				const avgClassMobile = getAvgClass(avgMobile);
+				%>
 
-					function getGradeClass(gradeValue) {
-						const num = parseFloat(gradeValue);
-						if (num === 5) return 'g5';
-						if (num === 4) return 'g4';
-						if (num === 3) return 'g3';
-						if (num === 2) return 'g2';
-						if (num === 1) return 'g1';
-						return '';
-					}
+				<div class="grade-subject-card" data-card-index="<%= subjectIndex %>">
+					<div class="grade-subject-header" onclick="toggleGradeCard(this)">
+						<span class="grade-subject-name"><%= subjectName %></span>
+						<div class="grade-subject-avg">
+							<span class="grade-avg-value <%= avgClassMobile %>"><%= avgMobile !== null ? avgMobile : '-' %></span>
+							<svg class="grade-chevron" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+							</svg>
+						</div>
+					</div>
 
-					function getGradeTypeLabel(type) {
-						const map = {
-							dolgozat: 'Dolgozat',
-							felelet: 'Felelet',
-							h_zi: 'Gyakorlati feladat',
-							projekt: 'Projekt'
-						};
-						return map[type] || type;
-					}
-					%>
-
-					<% Object.keys(gradesBySubject).forEach(subjectName => { %>
-					<%
-					const subjectGrades = gradesBySubject[subjectName];
-					const gradesByMonth = Array(12).fill(null).map(() => []);
-
-					subjectGrades.forEach(grade => {
-						const monthIdx = getMonthIndex(grade.grade_date);
-						if (monthIdx >= 0) {
-							gradesByMonth[monthIdx].push(grade);
-						}
-					});
-
-					const average = calculateAverage(subjectGrades);
-					%>
-
-					<tr class="<%= rowIndex === 1 ? 'first-row' : '' %>">
-						<td><%= rowIndex++ %></td>
-						<td><%= subjectName %></td>
-
-						<% gradesByMonth.forEach((monthGrades, idx) => { %>
-						<td>
-							<% if (monthGrades.length > 0) { %>
-								<% monthGrades.forEach(grade => { %>
-								<span class="grade-cell <%= getGradeClass(grade.grade_value) %>">
-									<%= grade.grade_value %>
-									<div class="grade-tooltip">
-										<div class="tooltip-date"><%= new Date(grade.grade_date).toLocaleDateString('hu-HU') %></div>
-										<div class="tooltip-type"><%= getGradeTypeLabel(grade.grade_type) %></div>
-										<% if (grade.description) { %>
-										<div class="tooltip-desc">Téma: <%= grade.description %></div>
-										<% } %>
-										<div class="tooltip-weight">Súly: <%= (grade.weight || 1) * 100 %>%</div>
-										<div class="tooltip-teacher"><%= grade.users_grades_teacher_idTousers.last_name %> <%= grade.users_grades_teacher_idTousers.first_name %></div>
+					<div class="grade-subject-body">
+						<div class="grade-subject-content">
+							<% let hasAnyGrades = false; %>
+							<% gradesByMonthMobile.forEach((monthGrades, mIdx) => { %>
+								<% if (monthGrades.length > 0) { hasAnyGrades = true; %>
+								<div class="grade-month-group">
+									<div class="grade-month-label"><%= months[mIdx] %></div>
+									<% monthGrades.forEach(grade => { %>
+									<div class="grade-entry">
+										<div class="grade-entry-info">
+											<div class="grade-entry-type"><%= getGradeTypeLabel(grade.grade_type) %></div>
+											<div class="grade-entry-details">
+												<%= new Date(grade.grade_date).toLocaleDateString('hu-HU') %>
+												· Súly: <%= (grade.weight || 1) * 100 %>%
+												<% if (grade.description) { %> · <%= grade.description %><% } %>
+											</div>
+											<div class="grade-entry-details">
+												<%= grade.users_grades_teacher_idTousers.last_name %> <%= grade.users_grades_teacher_idTousers.first_name %>
+											</div>
+										</div>
+										<div class="grade-entry-value <%= getGradeClass(grade.grade_value) %>"><%= grade.grade_value %></div>
 									</div>
-								</span>
-								<% }); %>
-							<% } %>
-						</td>
-						<% }); %>
+									<% }); %>
+								</div>
+								<% } %>
+							<% }); %>
 
-						<td></td>
-						<!-- Évvége -->
-						<td><strong><%= average !== null ? average : '-' %></strong></td>
-					</tr>
-					<% }); %>
-					<% } %>
-				</tbody>
-			</table>
+							<% if (!hasAnyGrades) { %>
+							<div class="grade-empty-card">Még nincs jegy ebből a tantárgyból</div>
+							<% } %>
+
+							<div class="grade-summary-row">
+								<span class="grade-summary-label">Összes jegy: <%= subjectGrades.length %> db</span>
+								<span class="grade-summary-value <%= avgClassMobile %>">Átlag: <%= avgMobile !== null ? avgMobile : '-' %></span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<% }); %>
+				<% } %>
+			</div>
 		</div>
+
+		<!-- Mobil navigáció -->
+		<div class="mobile-nav-overlay"></div>
+		<div class="mobile-nav-drawer">
+			<nav class="mobile-nav-links">
+				<a href="/"><span class="nav-icon">🏠</span> Áttekintés</a>
+				<a href="/grades" class="active"><span class="nav-icon">📊</span> Értékelések</a>
+				<a href="/tasks"><span class="nav-icon">📝</span> Házi feladatok</a>
+				<a href="/messages"><span class="nav-icon">✉️</span> Üzenetek</a>
+			</nav>
+			<div class="mobile-nav-logout">
+				<a href="/logout">
+					<img src="/icons/logouticon.svg" alt="Kijelentkezés" />
+					Kijelentkezés
+				</a>
+			</div>
+		</div>
+
+		<script src="/js/mobile.js"></script>
+		<script>
+			function toggleGradeCard(header) {
+				const card = header.closest('.grade-subject-card');
+				card.classList.toggle('open');
+			}
+		</script>
 	</body>
 </html>
