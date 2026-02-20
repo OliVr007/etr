@@ -677,25 +677,6 @@ body.mobile-nav-open {
 		margin-bottom: 18px;
 	}
 
-	.grading-setup {
-		padding: 16px;
-		border-radius: 10px;
-	}
-
-	.setup-row {
-		flex-direction: column;
-		gap: 12px;
-	}
-
-	.setup-group {
-		min-width: 100%;
-	}
-
-	.setup-group select,
-	.setup-group input {
-		font-size: 0.95rem;
-	}
-
 	.grading-type-tabs {
 		width: 100%;
 		overflow-x: auto;
@@ -708,44 +689,245 @@ body.mobile-nav-open {
 		white-space: nowrap;
 	}
 
+	/* Beállítások panel mobilon */
+	.grading-setup {
+		padding: 14px;
+		margin-bottom: 16px;
+	}
+
+	.setup-row {
+		flex-direction: column !important;
+		gap: 12px;
+	}
+
+	.setup-group {
+		min-width: 100% !important;
+		flex: 1 !important;
+	}
+
+	.setup-group select,
+	.setup-group input {
+		font-size: 0.95rem;
+	}
+
+	/* ==========================================
+	   TANÁRI ÉRTÉKELÉS - PANEL MOBIL FIX
+	   ========================================== */
+	.grading-panel {
+		border-radius: 12px;
+		overflow: visible;
+	}
+
 	.grading-panel-header {
-		padding: 12px 14px;
+		padding: 12px 16px;
 		flex-direction: column;
 		align-items: stretch;
 		gap: 10px;
 	}
 
 	.panel-actions {
-		justify-content: stretch;
+		display: flex;
+		gap: 8px;
 	}
 
 	.panel-actions .btn {
 		flex: 1;
+		text-align: center;
 		justify-content: center;
 		font-size: 0.85rem;
+		padding: 10px;
 	}
 
+	/* Táblázat elrejtése mobilon */
 	.grading-table-wrapper {
-		margin: 0 -16px;
-		padding: 0 16px;
+		display: none !important;
 	}
 
-	.grading-table th,
-	.grading-table td {
-		padding: 10px 6px;
+	/* ==========================================
+	   TANÁRI ÉRTÉKELÉS - KÁRTYA NÉZET
+	   ========================================== */
+	.grading-card-view {
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+		padding: 16px;
+		width: 100%;
+		box-sizing: border-box;
+	}
+
+	.student-grading-card {
+		width: 100%;
+		background: #ffffff;
+		border-radius: 14px;
+		box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
+		border: 1px solid #e2e8f0;
+		overflow: hidden;
+		transition: box-shadow 0.2s;
+	}
+
+	.student-grading-card.has-pending {
+		border-color: #1282a2;
+		box-shadow: 0 2px 14px rgba(18, 130, 162, 0.18);
+	}
+
+	.student-card-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 14px 16px 10px;
+	}
+
+	.student-card-name-row {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		flex: 1;
+	}
+
+	.student-card-index {
+		font-size: 0.8rem;
+		color: #94a3b8;
+		font-weight: 500;
+		min-width: 22px;
+	}
+
+	.student-card-name {
+		font-weight: 600;
+		font-size: 1rem;
+		color: #0a1128;
+	}
+
+	.student-card-avg {
+		font-weight: 700;
+		font-size: 1rem;
+		min-width: 44px;
+		height: 34px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 8px;
+		background: #f1f5f9;
+		color: #64748b;
+		font-size: 0.95rem;
+		flex-shrink: 0;
+	}
+
+	.student-card-avg.avg-excellent {
+		color: #16a34a;
+		background: #dcfce7;
+	}
+	.student-card-avg.avg-good {
+		color: #2563eb;
+		background: #dbeafe;
+	}
+	.student-card-avg.avg-medium {
+		color: #ca8a04;
+		background: #fef9c3;
+	}
+	.student-card-avg.avg-poor {
+		color: #ea580c;
+		background: #ffedd5;
+	}
+	.student-card-avg.avg-fail {
+		color: #dc2626;
+		background: #fee2e2;
+	}
+
+	.student-card-existing-grades {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 5px;
+		padding: 0 16px 10px;
+	}
+
+	.student-card-existing-grades .grade-badge {
+		width: 30px;
+		height: 30px;
 		font-size: 0.85rem;
+		border-radius: 7px;
 	}
 
-	.grade-btn {
-		width: 32px;
-		height: 32px;
+	.student-card-no-grades {
+		padding: 0 16px 10px;
 		font-size: 0.85rem;
+		color: #cbd5e1;
 	}
 
-	.grade-badge {
+	.student-card-grade-row {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 10px 16px 14px;
+		border-top: 1px solid #f1f5f9;
+		background: #fafbfd;
+		width: 100%;
+		box-sizing: border-box;
+	}
+
+	.student-card-grade-buttons {
+		display: flex;
+		gap: 6px;
+		flex: 1;
+		justify-content: flex-end;
+	}
+
+	.student-card-grade-label {
+		font-size: 0.8rem;
+		font-weight: 600;
+		color: #64748b;
+		text-transform: uppercase;
+		letter-spacing: 0.4px;
+	}
+
+	.student-card-grade-buttons .grade-btn {
+		width: 40px;
+		height: 40px;
+		font-size: 1rem;
+		border-radius: 10px;
+	}
+
+	/* Kiválasztott jegy visszajelzés a kártyán */
+	.student-grading-card.has-pending .student-card-grade-row {
+		background: #f0f9ff;
+		border-top-color: #bae6fd;
+	}
+
+	/* Pending badge a fejlécen */
+	.pending-grade-indicator {
+		display: none;
+		align-items: center;
+		justify-content: center;
 		width: 26px;
 		height: 26px;
-		font-size: 0.75rem;
+		border-radius: 6px;
+		font-weight: 700;
+		font-size: 0.9rem;
+		margin-left: 8px;
+	}
+
+	.student-grading-card.has-pending .pending-grade-indicator {
+		display: flex;
+	}
+
+	.pending-grade-indicator.g5 {
+		background: #16a34a;
+		color: white;
+	}
+	.pending-grade-indicator.g4 {
+		background: #2563eb;
+		color: white;
+	}
+	.pending-grade-indicator.g3 {
+		background: #eab308;
+		color: white;
+	}
+	.pending-grade-indicator.g2 {
+		background: #f97316;
+		color: white;
+	}
+	.pending-grade-indicator.g1 {
+		background: #ef4444;
+		color: white;
 	}
 
 	/* ==========================================
@@ -1074,16 +1256,21 @@ body.mobile-nav-open {
 		font-size: 1.2rem;
 	}
 
-	.grade-btn {
-		width: 28px;
-		height: 28px;
-		font-size: 0.8rem;
+	.student-card-grade-buttons .grade-btn {
+		width: 36px;
+		height: 36px;
+		font-size: 0.9rem;
 	}
 
-	.grade-badge {
-		width: 24px;
-		height: 24px;
-		font-size: 0.7rem;
+	.student-card-existing-grades .grade-badge {
+		width: 26px;
+		height: 26px;
+		font-size: 0.75rem;
+	}
+
+	.grading-card-view {
+		padding: 12px;
+		gap: 10px;
 	}
 
 	/* Tanári házi feladat */

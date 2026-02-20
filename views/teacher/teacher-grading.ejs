@@ -107,6 +107,7 @@
 							<tbody id="tableBody"></tbody>
 						</table>
 					</div>
+					<div class="grading-card-view" id="cardView" style="display: none;"></div>
 					<div class="empty-state" id="emptyState">
 						<div class="empty-state-icon">📝</div>
 						<h3>Válasszon foglalkozást</h3>
@@ -243,7 +244,7 @@
 						currentData = data;
 						pendingGrades = {};
 						updateSaveButton();
-						renderTable();
+						renderView();
 					} else {
 						showToast("Hiba az adatok betöltésekor", "error");
 					}
@@ -320,6 +321,107 @@
 				tbody.innerHTML = bodyHtml;
 				tableWrapper.style.display = "";
 				document.getElementById("emptyState").style.display = "none";
+				document.getElementById("cardView").style.display = "none";
+			}
+
+			// === Kártya nézet renderelése (mobil) ===
+			function renderCards() {
+				if (!currentData) return;
+				const { students, gradesByStudent } = currentData;
+				const cardView = document.getElementById("cardView");
+				const tableWrapper = document.getElementById("tableWrapper");
+
+				if (students.length === 0) {
+					document.getElementById("emptyState").style.display = "";
+					document.getElementById("emptyState").innerHTML = '<div class="empty-state-icon">👥</div><h3>Nincsenek diákok</h3>';
+					cardView.style.display = "none";
+					return;
+				}
+
+				let html = "";
+				students.forEach((student, idx) => {
+					const sd = gradesByStudent[student.id];
+					const avg = sd ? sd.average : 0;
+					const avgClass = avg > 0 ? getAvgClass(avg) : "";
+					const grades = sd ? sd.grades : [];
+					const pending = pendingGrades[student.id];
+					const hasPending = pending !== undefined;
+
+					html += `<div class="student-grading-card${hasPending ? " has-pending" : ""}" id="card-${student.id}">
+						<div class="student-card-header">
+							<div class="student-card-name-row">
+								<span class="student-card-index">${idx + 1}.</span>
+								<span class="student-card-name">${escapeHtml(student.name)}</span>
+							</div>
+							<div class="student-card-avg ${avgClass}">${avg > 0 ? avg : "–"}</div>
+						</div>`;
+
+					if (grades.length > 0) {
+						html += `<div class="student-card-existing-grades">`;
+						grades.forEach((g) => {
+							const gClass = "g" + Math.round(g.value);
+							const dateStr = new Date(g.date).toLocaleDateString("hu-HU");
+							const typeLabel = { dolgozat: "Dolg.", felelet: "Fel.", házi: "Házi", projekt: "Proj." }[g.type] || g.type;
+							html += `<div class="grade-badge ${gClass}" onclick="openEditModal(${g.id}, '${escapeHtml(student.name)}', ${g.value}, '${g.type}', '${g.date.toString().split("T")[0]}', ${g.weight}, '${escapeHtml(g.description || "")}')">
+								${g.value}
+								<div class="grade-tooltip">${g.value} · ${typeLabel} · ${dateStr}${g.description ? " · " + escapeHtml(g.description) : ""}${g.weight > 1 ? " · " + g.weight + "x" : ""}</div>
+							</div>`;
+						});
+						html += `</div>`;
+					} else {
+						html += `<div class="student-card-no-grades">Még nincs jegy</div>`;
+					}
+
+					html += `<div class="student-card-grade-row">
+						<span class="student-card-grade-label">Új jegy</span>
+						<div class="student-card-grade-buttons">
+							${[5, 4, 3, 2, 1].map((v) => {
+								const selected = pendingGrades[student.id] == v ? `selected g${v}` : "";
+								return `<button class="grade-btn ${selected}" onclick="selectGradeCard(${student.id}, ${v}, this)">${v}</button>`;
+							}).join("")}
+						</div>
+					</div>
+				</div>`;
+				});
+
+				cardView.innerHTML = html;
+				cardView.style.display = "flex";
+				tableWrapper.style.display = "none";
+				document.getElementById("emptyState").style.display = "none";
+			}
+
+			// === Jegy kiválasztása kártya nézetből ===
+			function selectGradeCard(studentId, value, btn) {
+				if (pendingGrades[studentId] == value) {
+					delete pendingGrades[studentId];
+					btn.classList.remove("selected", "g1", "g2", "g3", "g4", "g5");
+				} else {
+					pendingGrades[studentId] = value;
+					const card = btn.closest(".student-grading-card");
+					card.querySelectorAll(".grade-btn").forEach((b) => b.classList.remove("selected", "g1", "g2", "g3", "g4", "g5"));
+					btn.classList.add("selected", "g" + value);
+				}
+				// Kártya stílus frissítése
+				const card = btn.closest(".student-grading-card");
+				if (pendingGrades[studentId]) {
+					card.classList.add("has-pending");
+				} else {
+					card.classList.remove("has-pending");
+				}
+				updateSaveButton();
+			}
+
+			// === Mobil detektálás és render választás ===
+			function isMobile() {
+				return window.innerWidth <= 768;
+			}
+
+			function renderView() {
+				if (isMobile()) {
+					renderCards();
+				} else {
+					renderTable();
+				}
 			}
 
 			// === Jegy kiválasztása ===
@@ -388,7 +490,7 @@
 			function cancelGrading() {
 				pendingGrades = {};
 				updateSaveButton();
-				if (currentData) renderTable();
+				if (currentData) renderView();
 			}
 
 			// === Szerkesztő modal ===
@@ -483,6 +585,15 @@
 			document.getElementById("editModal").addEventListener("click", function (e) { if (e.target === this) closeEditModal(); });
 			document.getElementById("deleteConfirmModal").addEventListener("click", function (e) { if (e.target === this) closeDeleteModal(); });
 			document.addEventListener("keydown", function (e) { if (e.key === "Escape") { closeEditModal(); closeDeleteModal(); } });
+
+			// Nézet váltás ablak átméretezéskor
+			let resizeTimer;
+			window.addEventListener("resize", function () {
+				clearTimeout(resizeTimer);
+				resizeTimer = setTimeout(function () {
+					if (currentData) renderView();
+				}, 200);
+			});
 		</script>
 	</body>
 </html>
