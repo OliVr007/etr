@@ -85,21 +85,33 @@
 						<div class="carousel-card">
 							<div class="card-header">
 								<h3>Házi feladatok</h3>
-								<div class="card-badge">0 db</div>
+								<div class="card-badge"><%= totalHomework %> db</div>
 							</div>
 							<div class="card-content">
+								<% if (recentHomework.length > 0) { %>
+									<% recentHomework.forEach(hw => { %>
+									<div class="card-item">
+										<div class="item-main">
+											<div class="item-title"><%= hw.homework.subjects?.subject_name || 'Ismeretlen tantárgy' %> - <%= hw.homework.title %></div>
+											<div class="item-date">Határidő: <%= new Date(hw.homework.due_date).toLocaleDateString('hu-HU') %></div>
+										</div>
+										<div class="item-type"><%= hw.status === 'pending' ? 'Beadásra vár' : hw.status === 'submitted' ? 'Ellenőrzés alatt' : 'Elfogadva' %></div>
+									</div>
+									<% }); %>
+								<% } else { %>
 								<div class="card-item">
 									<div class="item-main">
 										<div class="item-title">Még nincs házi feladat</div>
 										<div class="item-date">Hamarosan érkezik</div>
 									</div>
 								</div>
+								<% } %>
 							</div>
 							<div class="card-footer">
 								<a href="/tasks" class="view-all">Összes házi feladat →</a>
 							</div>
 						</div>
-					</div>
+				</div>
 
 					<!-- 3. Legutóbbi üzenetek -->
 					<div class="carousel-slide">
@@ -115,7 +127,7 @@
 										<div class="item-title"><%= message.title %></div>
 										<div class="item-date"><%= new Date(message.created_at).toLocaleDateString('hu-HU') %></div>
 									</div>
-									<div class="item-desc"><%= message.content %></div>
+									<div class="item-date">Feladó: <%= message.users_messages_sender_idTousers.last_name %> <%= message.users_messages_sender_idTousers.first_name %></div>
 								</div>
 								<% }); %> <% } else { %>
 								<div class="card-item">
