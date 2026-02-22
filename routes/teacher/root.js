@@ -66,24 +66,22 @@ async function routeTeacher(req, res) {
 			};
 		});
 
-		// Legutóbbi üzenetek lekérése
 		const recentMessages = await db.messages.findMany({
 			where: {
-				receiver_id: teacherId,
+				receiver_id: req.session.id,
 			},
 			include: {
 				users_messages_sender_idTousers: {
 					select: {
 						first_name: true,
 						last_name: true,
-						role: true,
 					},
 				},
 			},
 			orderBy: {
 				created_at: "desc",
 			},
-			take: 4,
+			take: 3,
 		});
 
 		// Üzenetek formázása
