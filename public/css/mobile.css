@@ -1,11 +1,7 @@
 /* ============================================
    MOBILE.CSS - Közös mobil nézet stílusok
-   Minden oldalhoz hozzá kell adni!
    ============================================ */
 
-/* ==========================================
-   KONZISZTENS MEGJELENÉS MINDEN ESZKÖZÖN
-   ========================================== */
 html {
 	-webkit-text-size-adjust: 100%;
 	-moz-text-size-adjust: 100%;
@@ -32,7 +28,7 @@ button {
 }
 
 /* ==========================================
-   HAMBURGER GOMB
+   HAMBURGER MENÜ
    ========================================== */
 .hamburger-btn {
 	display: none;
@@ -65,7 +61,7 @@ button {
 	transform-origin: center;
 }
 
-/* Hamburger → X animáció */
+/* Hamburger animáció */
 .hamburger-btn.active .hamburger-icon span:nth-child(1) {
 	transform: translateY(10px) rotate(45deg);
 }

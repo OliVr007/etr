@@ -1,27 +1,28 @@
 {
-	"name": "elektronikus-tanulmanyi-rendszer",
-	"version": "1.0.0",
-	"description": "",
-	"license": "ISC",
-	"author": "Varga Olivér, Tóth Balázs",
-	"type": "commonjs",
-	"main": "server.js",
-	"scripts": {
-		"dev": "nodemon .",
-		"test": "echo \"Error: no test specified\" && exit 1"
-	},
-	"dependencies": {
-		"@prisma/client": "^6.15.0",
-		"bcrypt": "^6.0.0",
-		"body-parser": "^2.2.0",
-		"cookie-parser": "^1.4.7",
-		"dotenv": "^17.2.3",
-		"ejs": "^3.1.10",
-		"express": "^5.2.1",
-		"iron-session": "^8.0.4"
-	},
-	"devDependencies": {
-		"nodemon": "^3.1.10",
-		"prisma": "^6.15.0"
-	}
+  "name": "elektronikus-tanulmanyi-rendszer",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "Varga Olivér, Tóth Balázs",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon ."
+  },
+  "dependencies": {
+    "@prisma/client": "^6.15.0",
+    "bcrypt": "^6.0.0",
+    "body-parser": "^2.2.0",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^17.2.3",
+    "ejs": "^3.1.10",
+    "express": "^5.2.1",
+    "iron-session": "^8.0.4"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "@types/node": "^25.3.0",
+    "nodemon": "^3.1.10",
+    "prisma": "^6.15.0"
+  }
 }

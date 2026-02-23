@@ -1,7 +1,14 @@
-const { getSessionByPath } = require("../helpers/sessionHelper");
+const { getSessionByRole } = require("../helpers/sessionHelper");
 
 async function logout(req, res) {
-	await req.session.destroy();
+	const studentSession = await getSessionByRole(req, res, "student");
+	const teacherSession = await getSessionByRole(req, res, "teacher");
+	const adminSession = await getSessionByRole(req, res, "admin");
+
+	await studentSession.destroy();
+	await teacherSession.destroy();
+	await adminSession.destroy();
+
 	return res.redirect("/login");
 }
 

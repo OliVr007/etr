@@ -1,4 +1,3 @@
-// create-admin.js
 // Run this script to create an admin user: node create-admin.js
 
 const { PrismaClient } = require("./generated/prisma");
