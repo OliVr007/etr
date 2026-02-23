@@ -39,7 +39,7 @@ const { messagesNew } = require("./routes/student/messagesNew");
 
 // Teacher routes
 const { routeTeacher } = require("./routes/teacher/root");
-const { studentforClass } = require("./routes/teacher/getStudentForClass");
+const { studentforClass } = require("./routes/teacher/getStudentsForClass");
 const { gradePage, getGradingData, saveGrades, updateGrade, deleteGrade } = require("./routes/teacher/gradingPage");
 const { teacherLegacyRoot } = require("./routes/teacher/legacyRoot");
 const { teacherMessages } = require("./routes/teacher/messages");
