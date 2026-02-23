@@ -39,7 +39,6 @@ const { messagesNew } = require("./routes/student/messagesNew");
 
 // Teacher routes
 const { routeTeacher } = require("./routes/teacher/root");
-const { getStudentsForClass } = require("./routes/api/teacher/getStudentsForClass");
 const { gradePage, getGradingData, saveGrades, updateGrade, deleteGrade } = require("./routes/teacher/gradingPage");
 const { teacherLegacyRoot } = require("./routes/teacher/legacyRoot");
 const { teacherMessages } = require("./routes/teacher/messages");
@@ -129,7 +128,7 @@ app.delete("/api/admin/teacher-subjects/:id", requireAdmin, deleteTeacherSubject
 // TEACHER ROUTES
 // ========================================
 app.get("/teacher", requireTeacher, routeTeacher);
-app.get("/api/teacher/class/:classId/subject/:subjectId/students", requireTeacher, studentforClass);
+app.get("/api/teacher/class/:classId/subject/:subjectId/students", requireTeacher, getStudentsForClass);
 app.get("/teacher/grading", requireTeacher, gradePage);
 app.get("/teacher/messages", requireTeacher, teacherMessages);
 app.get("/teacher/messages/sent", requireTeacher, teacherMessagesSent);
