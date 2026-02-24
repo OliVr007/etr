@@ -403,17 +403,6 @@ nav {
 	border: 7px solid transparent;
 	border-top-color: white;
 }
-.first-row .grade-tooltip {
-	bottom: auto;
-	top: calc(100% + 10px);
-}
-.first-row .grade-tooltip::after {
-	top: auto;
-	bottom: 100%;
-	border-top-color: transparent;
-	border-bottom-color: white;
-}
-
 .grade-cell:hover .grade-tooltip {
 	display: block;
 }
