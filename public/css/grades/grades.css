@@ -361,7 +361,8 @@ nav {
 		background-color: rgba(255, 255, 255, 0.2);
 	}
 }
-/* Grade tooltip */
+
+/* Grade cell */
 .grade-cell {
 	position: relative;
 	display: inline-block;
@@ -376,63 +377,42 @@ nav {
 	z-index: 50;
 }
 
+/* 
+ * A .grade-tooltip-t elrejtjük - a JS floating tooltip veszi át a szerepét.
+ * display:none marad, hogy a JS be tudja olvasni a tartalmát,
+ * de a CSS hover már nem jeleníti meg (JS kezeli position:fixed-del).
+ */
 .grade-tooltip {
-	display: none;
-	position: absolute;
-	bottom: calc(100% + 10px);
-	left: 50%;
-	transform: translateX(-50%);
-	background: white;
-	border-left: 4px solid #1282a2;
-	padding: 12px 16px;
-	border-radius: 8px;
-	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-	white-space: nowrap;
-	z-index: 100;
-	pointer-events: none;
-	min-width: 180px;
-	text-align: left;
+	display: none !important;
 }
 
-.grade-tooltip::after {
-	content: "";
-	position: absolute;
-	top: 100%;
-	left: 50%;
-	transform: translateX(-50%);
-	border: 7px solid transparent;
-	border-top-color: white;
-}
-.grade-cell:hover .grade-tooltip {
-	display: block;
-}
-
-.tooltip-date {
+/* Floating tooltip stílusai - ezt JS hozza létre a body-ban */
+#floating-grade-tooltip .tooltip-date {
 	font-size: 0.85rem;
 	color: #475569;
 	margin-bottom: 6px;
 }
 
-.tooltip-type {
+#floating-grade-tooltip .tooltip-type {
 	font-size: 0.9rem;
 	font-weight: 600;
 	color: #0a1128;
 	margin-bottom: 4px;
 }
 
-.tooltip-desc {
+#floating-grade-tooltip .tooltip-desc {
 	font-size: 0.85rem;
 	color: #475569;
 	margin-bottom: 4px;
 }
 
-.tooltip-weight {
+#floating-grade-tooltip .tooltip-weight {
 	font-size: 0.85rem;
 	color: #475569;
 	margin-bottom: 4px;
 }
 
-.tooltip-teacher {
+#floating-grade-tooltip .tooltip-teacher {
 	font-size: 0.85rem;
 	color: #034078;
 	font-weight: 600;

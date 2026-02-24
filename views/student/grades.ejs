@@ -273,6 +273,68 @@
 				const card = header.closest('.grade-subject-card');
 				card.classList.toggle('open');
 			}
+
+			const floatingTooltip = document.createElement('div');
+			floatingTooltip.id = 'floating-grade-tooltip';
+			floatingTooltip.style.cssText = [
+				'display:none',
+				'position:fixed',
+				'background:white',
+				'border-left:4px solid #1282a2',
+				'padding:12px 16px',
+				'border-radius:8px',
+				'box-shadow:0 4px 20px rgba(0,0,0,0.15)',
+				'white-space:nowrap',
+				'z-index:99999',
+				'pointer-events:none',
+				'min-width:180px',
+				'text-align:left',
+				'font-size:0.875rem',
+				'font-family:Segoe UI,Tahoma,Geneva,Verdana,sans-serif',
+				'transition:opacity 0.18s ease, transform 0.18s ease',
+				'opacity:0',
+				'transform:translateY(4px)'
+			].join(';');
+			document.body.appendChild(floatingTooltip);
+
+			document.querySelectorAll('.grade-cell').forEach(cell => {
+				const inner = cell.querySelector('.grade-tooltip');
+				if (!inner) return;
+
+				cell.addEventListener('mouseenter', () => {
+					floatingTooltip.innerHTML = inner.innerHTML;
+					floatingTooltip.style.display = 'block';
+
+					const rect = cell.getBoundingClientRect();
+					const ttW = floatingTooltip.offsetWidth;
+					const ttH = floatingTooltip.offsetHeight;
+
+					const row = cell.closest('tr');
+					const tbody = row.closest('tbody');
+					const isFirstRow = tbody && tbody.rows[0] === row;
+
+					let left = rect.left + rect.width / 2 - ttW / 2;
+					let top = isFirstRow ? rect.top - ttH - 10 : rect.bottom + 10;
+
+					if (left + ttW > window.innerWidth - 8) left = window.innerWidth - ttW - 8;
+					if (left < 8) left = 8;
+
+					floatingTooltip.style.left = left + 'px';
+					floatingTooltip.style.top = top + 'px';
+					
+					floatingTooltip.style.transform = isFirstRow ? 'translateY(-4px)' : 'translateY(4px)';
+					floatingTooltip.style.opacity = '0';
+					requestAnimationFrame(() => {
+						floatingTooltip.style.opacity = '1';
+						floatingTooltip.style.transform = 'translateY(0)';
+					});
+				});
+
+				cell.addEventListener('mouseleave', () => {
+					floatingTooltip.style.opacity = '0';
+					setTimeout(() => { floatingTooltip.style.display = 'none'; }, 180);
+				});
+			});
 		</script>
 	</body>
 </html>
