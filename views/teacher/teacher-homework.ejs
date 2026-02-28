@@ -227,6 +227,23 @@
 					const resp = await fetch("/api/teacher/homeworks");
 					const data = await resp.json();
 					allHomeworks = data.homeworks || [];
+
+					// Ellenőrzésre váró beadások megszámlálása
+					const submittedCount = allHomeworks.reduce((sum, hw) => {
+						return sum + hw.submissions.filter((s) => s.status === "submitted").length;
+					}, 0);
+
+					// "Ellenőrzésre vár" fül frissítése
+					const submittedTab = document.querySelector(".tab[data-tab='submitted']");
+					const existingBadge = submittedTab.querySelector(".tab-alert");
+					if (existingBadge) existingBadge.remove();
+
+					if (submittedCount > 0) {
+						submittedTab.innerHTML = `Ellenőrzésre vár <span class="tab-alert">${submittedCount}</span>`;
+					} else {
+						submittedTab.textContent = "Ellenőrzésre vár";
+					}
+
 					renderHomeworks();
 				} catch (error) {
 					console.error("Hiba:", error);

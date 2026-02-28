@@ -547,6 +547,17 @@ main.homework-container {
 	opacity: 0.9;
 }
 
+.tab-alert {
+	background-color: #e53e3e;
+	color: white;
+	font-size: 0.72rem;
+	font-weight: 700;
+	padding: 2px 7px;
+	border-radius: 10px;
+	margin-left: 6px;
+	vertical-align: middle;
+}
+
 /* Mobile Styles */
 @media (max-width: 768px) {
 	.container {
