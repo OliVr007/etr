@@ -4,7 +4,7 @@ async function adminSubjects(req, res) {
 
 		const subjects = await db.subjects.findMany({
 			orderBy: { subject_name: "asc" },
-			select: { id: true, subject_code: true, subject_name: true, is_active: true, credits: true, description: true },
+			select: { id: true, subject_code: true, subject_name: true, is_active: true, description: true },
 		});
 
 		const stats = {

@@ -23,13 +23,12 @@ async function getSubject(req, res) {
 async function createSubject(req, res) {
 	try {
 		const db = req.db;
-		const { subject_code, subject_name, credits, description } = req.body;
+		const { subject_code, subject_name, description } = req.body;
 
 		if (!subject_code || !subject_name) {
 			return res.status(400).json({ error: "A tantárgy kódja és neve kötelező" });
 		}
 
-		// Duplikáció ellenőrzés
 		const existing = await db.subjects.findUnique({
 			where: { subject_code },
 		});
@@ -42,7 +41,6 @@ async function createSubject(req, res) {
 			data: {
 				subject_code,
 				subject_name,
-				credits: credits ? parseInt(credits) : 1,
 				description: description || null,
 				is_active: true,
 			},
@@ -60,13 +58,12 @@ async function updateSubject(req, res) {
 	try {
 		const db = req.db;
 		const subjectId = parseInt(req.params.id);
-		const { subject_code, subject_name, credits, description, is_active } = req.body;
+		const { subject_code, subject_name, description, is_active } = req.body;
 
 		if (!subject_code || !subject_name) {
 			return res.status(400).json({ error: "A tantárgy kódja és neve kötelező" });
 		}
 
-		// Duplikáció ellenőrzés (saját ID kizárva)
 		const existing = await db.subjects.findFirst({
 			where: {
 				subject_code,
@@ -83,7 +80,6 @@ async function updateSubject(req, res) {
 			data: {
 				subject_code,
 				subject_name,
-				credits: credits ? parseInt(credits) : 1,
 				description: description || null,
 				is_active: is_active !== undefined ? is_active === true || is_active === "true" : true,
 			},

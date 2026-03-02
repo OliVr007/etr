@@ -64,7 +64,7 @@
                         <thead>
                             <tr>
                                 <th>ID</th><th>Kód</th><th>Tantárgy neve</th>
-                                <th>Kredit</th><th>Státusz</th><th>Leírás</th><th>Műveletek</th>
+                                <th>Státusz</th><th>Leírás</th><th>Műveletek</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -73,7 +73,6 @@
                                 <td><%= sub.id %></td>
                                 <td><code><%= sub.subject_code %></code></td>
                                 <td><%= sub.subject_name %></td>
-                                <td><%= sub.credits || 1 %></td>
                                 <td>
                                     <span class="status-badge <%= sub.is_active ? 'active' : 'inactive' %>">
                                         <%= sub.is_active ? 'Aktív' : 'Inaktív' %>
@@ -112,10 +111,6 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label>Kredit</label>
-                    <input type="number" id="add_subject_credits" name="credits" value="1" min="1" max="10" />
-                </div>
-                <div class="form-group">
                     <label>Leírás</label>
                     <textarea id="add_subject_description" name="description" rows="3" placeholder="Opcionális leírás..."></textarea>
                 </div>
@@ -146,18 +141,12 @@
                         <input type="text" id="edit_subject_name" name="subject_name" required />
                     </div>
                 </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Kredit</label>
-                        <input type="number" id="edit_subject_credits" name="credits" min="1" max="10" />
-                    </div>
-                    <div class="form-group">
-                        <label>Státusz</label>
-                        <select id="edit_subject_active" name="is_active">
-                            <option value="true">Aktív</option>
-                            <option value="false">Inaktív</option>
-                        </select>
-                    </div>
+                <div class="form-group">
+                    <label>Státusz</label>
+                    <select id="edit_subject_active" name="is_active">
+                        <option value="true">Aktív</option>
+                        <option value="false">Inaktív</option>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label>Leírás</label>
@@ -188,7 +177,6 @@
             document.getElementById("edit_subject_id").value = sub.id;
             document.getElementById("edit_subject_code").value = sub.subject_code;
             document.getElementById("edit_subject_name").value = sub.subject_name;
-            document.getElementById("edit_subject_credits").value = sub.credits || 1;
             document.getElementById("edit_subject_active").value = sub.is_active ? "true" : "false";
             document.getElementById("edit_subject_description").value = sub.description || "";
             document.getElementById("editSubjectModal").style.display = "flex";
