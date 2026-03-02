@@ -20,6 +20,12 @@ async function adminClasses(req, res) {
 			select: { id: true, first_name: true, last_name: true },
 		});
 
+		// Foglalt osztályfőnök ID-k összegyűjtése
+		const assignedTeacherIds = classes.filter((c) => c.class_teacher_id !== null).map((c) => c.class_teacher_id);
+
+		// Szabad tanárok (nincs még osztályuk)
+		const freeTeachers = teachers.filter((t) => !assignedTeacherIds.includes(t.id));
+
 		const stats = {
 			totalUsers: await db.users.count(),
 			totalClasses: await db.classes.count(),
@@ -27,7 +33,7 @@ async function adminClasses(req, res) {
 			totalAssignments: await db.teacher_subjects.count(),
 		};
 
-		res.render("admin/admin-classes", { classes, teachers, stats });
+		res.render("admin/admin-classes", { classes, teachers, freeTeachers, stats });
 	} catch (error) {
 		console.error("Hiba:", error);
 		res.status(500).send("Hiba történt");

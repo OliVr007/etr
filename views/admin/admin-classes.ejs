@@ -106,9 +106,10 @@
                 </div>
                 <div class="form-group">
                     <label>Osztályfőnök</label>
+                    <!-- Csak szabad tanárok jelennek meg -->
                     <select id="add_class_teacher_id" name="class_teacher_id">
                         <option value="">Nincs megadva</option>
-                        <% teachers.forEach(t => { %>
+                        <% freeTeachers.forEach(t => { %>
                         <option value="<%= t.id %>"><%= t.last_name %> <%= t.first_name %></option>
                         <% }); %>
                     </select>
@@ -144,12 +145,8 @@
                 </div>
                 <div class="form-group">
                     <label>Osztályfőnök</label>
-                    <select id="edit_class_teacher_id" name="class_teacher_id">
-                        <option value="">Nincs megadva</option>
-                        <% teachers.forEach(t => { %>
-                        <option value="<%= t.id %>"><%= t.last_name %> <%= t.first_name %></option>
-                        <% }); %>
-                    </select>
+                    <!-- JS tölti fel dinamikusan: szabad tanárok + az osztály jelenlegi osztályfőnöke -->
+                    <select id="edit_class_teacher_id" name="class_teacher_id"></select>
                 </div>
                 <div class="form-group">
                     <label>Terem</label>
@@ -164,6 +161,10 @@
     </div>
 
     <script>
+        // Szerver adatok JS-be injektálva
+        const allTeachers = <%- JSON.stringify(teachers) %>;
+        const allClasses = <%- JSON.stringify(classes.map(c => ({ id: c.id, class_teacher_id: c.class_teacher_id }))) %>;
+
         function closeModal(modalId) {
             document.getElementById(modalId).style.display = "none";
             const form = document.getElementById(modalId).querySelector('form');
@@ -172,18 +173,41 @@
         window.onclick = (e) => {
             document.querySelectorAll('.modal').forEach(m => { if (e.target === m) closeModal(m.id); });
         };
-        function openAddClassModal() { document.getElementById("addClassModal").style.display = "flex"; }
+
+        function openAddClassModal() {
+            document.getElementById("addClassModal").style.display = "flex";
+        }
+
         async function openEditClassModal(classId) {
             const response = await fetch('/api/admin/classes/' + classId);
             const cls = await response.json();
             if (!response.ok) return alert("Hiba történt az osztály betöltésekor");
+
             document.getElementById("edit_class_id").value = cls.id;
             document.getElementById("edit_class_name").value = cls.class_name;
             document.getElementById("edit_academic_year").value = cls.academic_year;
-            document.getElementById("edit_class_teacher_id").value = cls.class_teacher_id || "";
             document.getElementById("edit_room_number").value = cls.room_number || "";
+
+            // Dropdown feltöltése: szabad tanárok + az osztály jelenlegi osztályfőnöke
+            const select = document.getElementById("edit_class_teacher_id");
+            select.innerHTML = '<option value="">Nincs megadva</option>';
+
+            allTeachers.forEach(t => {
+                const isAssignedElsewhere = allClasses.some(
+                    c => c.class_teacher_id === t.id && c.id !== classId
+                );
+                if (!isAssignedElsewhere) {
+                    const opt = document.createElement("option");
+                    opt.value = t.id;
+                    opt.textContent = t.last_name + " " + t.first_name;
+                    if (cls.class_teacher_id === t.id) opt.selected = true;
+                    select.appendChild(opt);
+                }
+            });
+
             document.getElementById("editClassModal").style.display = "flex";
         }
+
         async function addClass(event) {
             event.preventDefault();
             const res = await fetch("/api/admin/classes", {
@@ -194,6 +218,7 @@
             if (res.ok) { alert("Osztály sikeresen létrehozva!"); closeModal('addClassModal'); location.reload(); }
             else alert(result.error || "Hiba történt");
         }
+
         async function updateClass(event) {
             event.preventDefault();
             const classId = document.getElementById("edit_class_id").value;
@@ -205,6 +230,7 @@
             if (res.ok) { alert("Osztály sikeresen frissítve!"); closeModal('editClassModal'); location.reload(); }
             else alert(result.error || "Hiba történt");
         }
+
         async function deleteClass(classId, className) {
             if (!confirm('Biztosan törölni szeretnéd: ' + className + '?')) return;
             const res = await fetch('/api/admin/classes/' + classId, { method: "DELETE" });
