@@ -13,7 +13,7 @@ async function updateUser(req, res) {
 		}
 
 		// Ha diák és nincs osztály megadva, hiba
-		if (role === 'student' && !class_id) {
+		if (role === "student" && !class_id) {
 			return res.status(400).json({ error: "Diák felhasználóhoz kötelező osztályt megadni" });
 		}
 
@@ -50,7 +50,7 @@ async function updateUser(req, res) {
 		});
 
 		// Ha diák, akkor az osztályba tartozást is frissítjük
-		if (role === 'student' && class_id) {
+		if (role === "student" && class_id) {
 			// Előző aktív osztályba tartozás inaktiválása
 			await db.student_classes.updateMany({
 				where: {
@@ -80,13 +80,12 @@ async function updateUser(req, res) {
 					data: {
 						student_id: userId,
 						class_id: parseInt(class_id),
-						academic_year: "2024/2025",
 						enrollment_date: new Date(),
 						is_active: true,
 					},
 				});
 			}
-		} else if (role !== 'student') {
+		} else if (role !== "student") {
 			// Ha már nem diák, inaktiváljuk az összes osztályba tartozást
 			await db.student_classes.updateMany({
 				where: {
