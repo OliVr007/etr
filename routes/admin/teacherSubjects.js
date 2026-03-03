@@ -8,6 +8,16 @@ async function createTeacherSubject(req, res) {
 			return res.status(400).json({ error: "Minden mező kitöltése kötelező" });
 		}
 
+		// Inaktív tantárgy ellenőrzés
+		const subject = await db.subjects.findUnique({
+			where: { id: parseInt(subject_id) },
+			select: { is_active: true },
+		});
+
+		if (!subject || !subject.is_active) {
+			return res.status(400).json({ error: "Ez a tantárgy inaktív, nem rendelhető hozzá tanárhoz vagy osztályhoz." });
+		}
+
 		// Duplikáció ellenőrzés
 		const existing = await db.teacher_subjects.findFirst({
 			where: {
@@ -47,6 +57,16 @@ async function updateTeacherSubject(req, res) {
 
 		if (!teacher_id || !subject_id || !class_id || !academic_year) {
 			return res.status(400).json({ error: "Minden mező kitöltése kötelező" });
+		}
+
+		// Inaktív tantárgy ellenőrzés
+		const subject = await db.subjects.findUnique({
+			where: { id: parseInt(subject_id) },
+			select: { is_active: true },
+		});
+
+		if (!subject || !subject.is_active) {
+			return res.status(400).json({ error: "Ez a tantárgy inaktív, nem rendelhető hozzá tanárhoz vagy osztályhoz." });
 		}
 
 		// Duplikáció ellenőrzés (saját ID kizárva)
