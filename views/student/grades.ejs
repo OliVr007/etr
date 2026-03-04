@@ -43,22 +43,23 @@
 		</nav>
 
 		<%
-		const months = ['Szeptember', 'Október', 'November', 'December', 'Január (I)', 'Félév', 'Január (II)', 'Február', 'Március', 'Április', 'Május', 'Június'];
+		const months = ['Szeptember', 'Október', 'November', 'December', 'Január', 'Február', 'Március', 'Április', 'Május', 'Június'];
 
 		function getMonthIndex(date) {
 			const month = new Date(date).getMonth();
-			if (month === 0) return 4;
-			if (month === 1) return 7;
-			if (month === 2) return 8;
-			if (month === 3) return 9;
-			if (month === 4) return 10;
-			if (month === 5) return 11;
-			if (month === 8) return 0;
-			if (month === 9) return 1;
-			if (month === 10) return 2;
-			if (month === 11) return 3;
+			if (month === 0) return 4;  // Január → index 4
+			if (month === 1) return 5;  // Február → index 5
+			if (month === 2) return 6;  // Március → index 6
+			if (month === 3) return 7;  // Április → index 7
+			if (month === 4) return 8;  // Május → index 8
+			if (month === 5) return 9;  // Június → index 9
+			if (month === 8) return 0;  // Szeptember → index 0
+			if (month === 9) return 1;  // Október → index 1
+			if (month === 10) return 2; // November → index 2
+			if (month === 11) return 3; // December → index 3
 			return -1;
 		}
+
 
 		function calculateAverage(grades) {
 			if (!grades || grades.length === 0) return null;
@@ -110,7 +111,6 @@
 							<% months.forEach(month => { %>
 							<th><%= month %></th>
 							<% }); %>
-							<th>Évvége</th>
 							<th>Átlag</th>
 						</tr>
 					</thead>
@@ -118,14 +118,14 @@
 					<tbody>
 						<% if (Object.keys(gradesBySubject).length === 0) { %>
 						<tr>
-							<td colspan="16" style="text-align: center; padding: 2rem">Még nincsenek hozzárendelt tantárgyak</td>
+							<td colspan="13" style="text-align: center; padding: 2rem">Még nincsenek hozzárendelt tantárgyak</td>
 						</tr>
 						<% } else { %>
 						<% let rowIndex = 1; %>
 						<% Object.keys(gradesBySubject).forEach(subjectName => { %>
 						<%
 						const subjectGrades = gradesBySubject[subjectName];
-						const gradesByMonth = Array(12).fill(null).map(() => []);
+						const gradesByMonth = Array(10).fill(null).map(() => []);
 
 						subjectGrades.forEach(grade => {
 							const monthIdx = getMonthIndex(grade.grade_date);
@@ -162,7 +162,6 @@
 							</td>
 							<% }); %>
 
-							<td></td>
 							<td><strong><%= average !== null ? average : '-' %></strong></td>
 						</tr>
 						<% }); %>
@@ -183,7 +182,8 @@
 				<% Object.keys(gradesBySubject).forEach((subjectName, subjectIndex) => { %>
 				<%
 				const subjectGrades = gradesBySubject[subjectName];
-				const gradesByMonthMobile = Array(12).fill(null).map(() => []);
+				const gradesByMonthMobile = Array(10).fill(null).map(() => []);
+
 
 				subjectGrades.forEach(grade => {
 					const monthIdx = getMonthIndex(grade.grade_date);
