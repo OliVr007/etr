@@ -166,12 +166,17 @@ async function saveGrades(req, res) {
 		const created = [];
 
 		for (const grade of grades) {
-			if (!grade.student_id || !grade.subject_id || grade.grade_value === undefined || grade.grade_value === null || grade.grade_value === "") {
+			// ✅ JAVÍTVA: grade_date ellenőrzése hozzáadva
+			if (!grade.student_id || !grade.subject_id || grade.grade_value === undefined || grade.grade_value === null || grade.grade_value === "" || !grade.grade_date) {
 				continue;
 			}
 
 			const gradeValue = parseFloat(grade.grade_value);
 			if (isNaN(gradeValue) || gradeValue < 1 || gradeValue > 5) continue;
+
+			// ✅ JAVÍTVA: Invalid Date ellenőrzése mentés előtt
+			const gradeDate = new Date(grade.grade_date);
+			if (isNaN(gradeDate.getTime())) continue;
 
 			const newGrade = await db.grades.create({
 				data: {
@@ -181,7 +186,7 @@ async function saveGrades(req, res) {
 					grade_value: gradeValue,
 					grade_type: mapGradeType(grade.grade_type),
 					description: grade.description || null,
-					grade_date: new Date(grade.grade_date),
+					grade_date: gradeDate,
 					is_final: grade.is_final || false,
 					weight: parseInt(grade.weight) || 1,
 				},
@@ -203,6 +208,15 @@ async function updateGrade(req, res) {
 		const gradeId = parseInt(req.params.gradeId);
 		const { grade_value, grade_type, description, grade_date, weight } = req.body;
 
+		// ✅ JAVÍTVA: grade_date validáció hozzáadva
+		if (!grade_date) {
+			return res.status(400).json({ success: false, error: "A dátum megadása kötelező" });
+		}
+		const gradeDate = new Date(grade_date);
+		if (isNaN(gradeDate.getTime())) {
+			return res.status(400).json({ success: false, error: "Érvénytelen dátum formátum" });
+		}
+
 		const existingGrade = await db.grades.findUnique({ where: { id: gradeId } });
 
 		if (!existingGrade) return res.status(404).json({ success: false, error: "Értékelés nem található" });
@@ -214,7 +228,7 @@ async function updateGrade(req, res) {
 				grade_value: parseFloat(grade_value),
 				grade_type: mapGradeType(grade_type),
 				description: description || null,
-				grade_date: new Date(grade_date),
+				grade_date: gradeDate,
 				weight: parseInt(weight) || 1,
 			},
 		});

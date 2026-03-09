@@ -17,6 +17,12 @@ async function updateUser(req, res) {
 			return res.status(400).json({ error: "Diák felhasználóhoz kötelező osztályt megadni" });
 		}
 
+		// Lekérjük a meglévő felhasználót, hogy megőrizzük az emailt ha nem adtak meg újat
+		const currentUser = await db.users.findUnique({ where: { id: userId } });
+		if (!currentUser) {
+			return res.status(404).json({ error: "Felhasználó nem található" });
+		}
+
 		// Ellenőrizzük, hogy a felhasználónév foglalt-e (kivéve a saját felhasználónevet)
 		const existingUser = await db.users.findFirst({
 			where: {
@@ -29,12 +35,27 @@ async function updateUser(req, res) {
 			return res.status(400).json({ error: "Ez a felhasználónév már foglalt" });
 		}
 
+		// Email egyediség ellenőrzése (ha adtak meg új emailt)
+		const trimmedEmail = email && email.trim() !== "" ? email.trim() : null;
+		if (trimmedEmail) {
+			const existingEmail = await db.users.findFirst({
+				where: {
+					email: trimmedEmail,
+					NOT: { id: userId },
+				},
+			});
+			if (existingEmail) {
+				return res.status(400).json({ error: "Ez az e-mail cím már foglalt" });
+			}
+		}
+
 		// Frissítendő adatok összeállítása
 		const updateData = {
 			username: username,
 			first_name: first_name,
 			last_name: last_name,
-			email: email || null,
+			// Ha üres az email mező, megőrizzük a régit
+			email: trimmedEmail ?? currentUser.email,
 			role: role,
 		};
 
