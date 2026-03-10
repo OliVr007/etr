@@ -19,7 +19,7 @@ async function loginPost(req, res) {
 		return res.redirect(`/login?error=${encodeURIComponent(errorMessage)}`);
 	}
 
-	// FONTOS: szerepkör alapján kérjük le a megfelelő session-t
+	// szerepkör alapján kérjük le a megfelelő session-t
 	const session = await getSessionByRole(req, res, data.role);
 
 	session.id = data.id;
