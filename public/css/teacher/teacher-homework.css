@@ -43,7 +43,7 @@ body::-webkit-scrollbar {
 	width: 100%;
 }
 
-/* Header styles */
+/* Header */
 header {
 	background: linear-gradient(135deg, #0a1128 0%, #001f54 100%);
 	color: #fefcfb;
@@ -107,7 +107,7 @@ header {
 	filter: brightness(0) invert(1);
 }
 
-/* Navigation */
+/* Navigáció */
 nav {
 	background: linear-gradient(135deg, #034078 0%, #001f54 100%);
 	padding: 0;
@@ -157,14 +157,12 @@ nav {
 	border-radius: 2px;
 }
 
-/* Main content */
 main.homework-container {
 	padding: 30px 20px;
 	flex: 1;
 	max-width: 900px;
 }
 
-/* Homework Header */
 .homework-header {
 	display: flex;
 	justify-content: space-between;
@@ -198,7 +196,6 @@ main.homework-container {
 	box-shadow: 0 4px 12px rgba(18, 130, 162, 0.4);
 }
 
-/* Tabs */
 .homework-tabs {
 	display: flex;
 	gap: 0;
@@ -230,14 +227,12 @@ main.homework-container {
 	font-weight: 600;
 }
 
-/* Homework List */
 .homework-list {
 	display: flex;
 	flex-direction: column;
 	gap: 16px;
 }
 
-/* Homework Item */
 .homework-item {
 	background: white;
 	border-radius: 12px;
@@ -379,7 +374,6 @@ main.homework-container {
 	transform: rotate(180deg);
 }
 
-/* Actions */
 .homework-actions {
 	display: flex;
 	gap: 12px;
@@ -414,7 +408,6 @@ main.homework-container {
 	height: 18px;
 }
 
-/* Empty state */
 .homework-empty {
 	text-align: center;
 	padding: 60px 20px;
@@ -443,7 +436,6 @@ main.homework-container {
 	color: #94a3b8;
 }
 
-/* Modal */
 .modal {
 	display: none;
 	position: fixed;
@@ -558,7 +550,7 @@ main.homework-container {
 	vertical-align: middle;
 }
 
-/* Mobile Styles */
+/* Mobil nézet */
 @media (max-width: 768px) {
 	.container {
 		padding: 0 15px;

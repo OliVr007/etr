@@ -1,4 +1,4 @@
-// Diákok lekérése egy adott osztályhoz és tantárgyhoz (API endpoint)
+// Diákok lekérése egy adott osztályhoz és tantárgyhoz
 async function studentforClass(req, res) {
 	try {
 		const db = req.db;
@@ -22,10 +22,9 @@ async function studentforClass(req, res) {
 			},
 		});
 
-		// Jegyek és hiányzások lekérése minden diákhoz
+		// Jegyek lekérése minden diákhoz
 		const studentsWithData = await Promise.all(
 			students.map(async (student) => {
-				// Jegyek lekérése ehhez a tantárgyhoz
 				const grades = await db.grades.findMany({
 					where: {
 						student_id: student.student_id,
@@ -63,10 +62,10 @@ async function studentforClass(req, res) {
 						? {
 								value: lastGrade.grade_value,
 								date: lastGrade.grade_date,
-						  }
+							}
 						: null,
 				};
-			})
+			}),
 		);
 
 		res.json(studentsWithData);

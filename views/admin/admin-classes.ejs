@@ -161,7 +161,6 @@
     </div>
 
     <script>
-        // Szerver adatok JS-be injektálva
         const allTeachers = <%- JSON.stringify(teachers) %>;
         const allClasses = <%- JSON.stringify(classes.map(c => ({ id: c.id, class_teacher_id: c.class_teacher_id }))) %>;
 

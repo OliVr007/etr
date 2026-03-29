@@ -1,6 +1,4 @@
-/* ============================================
-   MOBILE.CSS - Közös mobil nézet stílusok
-   ============================================ */
+/* Közös mobilnézet */
 
 html {
 	-webkit-text-size-adjust: 100%;
@@ -27,9 +25,6 @@ button {
 	font-size: 16px;
 }
 
-/* ==========================================
-   HAMBURGER MENÜ
-   ========================================== */
 .hamburger-btn {
 	display: none;
 	background: none;
@@ -61,7 +56,6 @@ button {
 	transform-origin: center;
 }
 
-/* Hamburger animáció */
 .hamburger-btn.active .hamburger-icon span:nth-child(1) {
 	transform: translateY(10px) rotate(45deg);
 }
@@ -75,9 +69,6 @@ button {
 	transform: translateY(-10px) rotate(-45deg);
 }
 
-/* ==========================================
-   MOBIL NAVIGÁCIÓ OVERLAY
-   ========================================== */
 .mobile-nav-overlay {
 	display: none;
 	position: fixed;
@@ -97,9 +88,6 @@ button {
 	opacity: 1;
 }
 
-/* ==========================================
-   MOBIL NAVIGÁCIÓ DRAWER
-   ========================================== */
 .mobile-nav-drawer {
 	display: none;
 	position: fixed;
@@ -187,27 +175,17 @@ button {
 	filter: brightness(0) saturate(100%) invert(52%) sepia(79%) saturate(1641%) hue-rotate(326deg) brightness(101%) contrast(101%);
 }
 
-/* ==========================================
-   BODY SCROLL LOCK
-   ========================================== */
 body.mobile-nav-open {
 	overflow: hidden;
 	position: fixed;
 	width: 100%;
 }
 
-/* ==========================================
-   JEGYEK - KÁRTYA NÉZET (alapból rejtett)
-   ========================================== */
 .grades-card-view {
 	display: none;
 }
 
-/* ==========================================
-   768px BREAKPOINT - Tablet & Mobile
-   ========================================== */
 @media (max-width: 768px) {
-	/* Header layout fix */
 	.header-content {
 		display: flex;
 		justify-content: space-between;
@@ -221,18 +199,15 @@ body.mobile-nav-open {
 		aspect-ratio: auto;
 	}
 
-	/* Hamburger megjelenítése, jobbra igazítás */
 	.hamburger-btn {
 		display: flex;
 		margin-left: auto;
 	}
 
-	/* Drawer engedélyezése */
 	.mobile-nav-drawer {
 		display: block;
 	}
 
-	/* Overlay csak active állapotban */
 	.mobile-nav-overlay {
 		display: none;
 	}
@@ -242,7 +217,6 @@ body.mobile-nav-open {
 		opacity: 1;
 	}
 
-	/* Eredeti nav elrejtése */
 	body > nav,
 	header + nav {
 		display: none !important;
@@ -253,21 +227,16 @@ body.mobile-nav-open {
 		flex-direction: column;
 	}
 
-	/* User info elrejtése mobilon */
 	.user-info span,
 	.logout-btn span,
 	.logout-btn {
 		display: none;
 	}
 
-	/* Container padding */
 	.container {
 		padding: 0 16px;
 	}
 
-	/* ==========================================
-	   DIÁK FŐOLDAL (student/index)
-	   ========================================== */
 	.welcome-section {
 		padding: 20px 16px;
 		margin-bottom: 20px;
@@ -340,9 +309,6 @@ body.mobile-nav-open {
 		font-size: 1rem;
 	}
 
-	/* ==========================================
-	   JEGYEK OLDAL - KÁRTYA NÉZET
-	   ========================================== */
 	.grades-table-container {
 		margin: 16px auto;
 		padding: 12px;
@@ -564,9 +530,6 @@ body.mobile-nav-open {
 		font-size: 1.1rem;
 	}
 
-	/* ==========================================
-	   FELADATOK OLDAL (tasks)
-	   ========================================== */
 	main {
 		padding: 20px 0;
 	}
@@ -605,9 +568,6 @@ body.mobile-nav-open {
 		justify-content: center;
 	}
 
-	/* ==========================================
-	   ÜZENETEK OLDAL (messages)
-	   ========================================== */
 	.messages-container {
 		padding: 20px 0;
 	}
@@ -665,9 +625,6 @@ body.mobile-nav-open {
 		font-size: 0.85rem;
 	}
 
-	/* ==========================================
-	   TANÁRI ÉRTÉKELÉS (teacher/grading)
-	   ========================================== */
 	.grading-page-title {
 		font-size: 1.4rem;
 		margin-bottom: 18px;
@@ -685,7 +642,6 @@ body.mobile-nav-open {
 		white-space: nowrap;
 	}
 
-	/* Beállítások panel mobilon */
 	.grading-setup {
 		padding: 14px;
 		margin-bottom: 16px;
@@ -706,9 +662,6 @@ body.mobile-nav-open {
 		font-size: 0.95rem;
 	}
 
-	/* ==========================================
-	   TANÁRI ÉRTÉKELÉS - PANEL MOBIL FIX
-	   ========================================== */
 	.grading-panel {
 		border-radius: 12px;
 		overflow: visible;
@@ -734,14 +687,10 @@ body.mobile-nav-open {
 		padding: 10px;
 	}
 
-	/* Táblázat elrejtése mobilon */
 	.grading-table-wrapper {
 		display: none !important;
 	}
 
-	/* ==========================================
-	   TANÁRI ÉRTÉKELÉS - KÁRTYA NÉZET
-	   ========================================== */
 	.grading-card-view {
 		display: flex;
 		flex-direction: column;
@@ -882,13 +831,11 @@ body.mobile-nav-open {
 		border-radius: 10px;
 	}
 
-	/* Kiválasztott jegy visszajelzés a kártyán */
 	.student-grading-card.has-pending .student-card-grade-row {
 		background: #f0f9ff;
 		border-top-color: #bae6fd;
 	}
 
-	/* Pending badge a fejlécen */
 	.pending-grade-indicator {
 		display: none;
 		align-items: center;
@@ -926,9 +873,6 @@ body.mobile-nav-open {
 		color: white;
 	}
 
-	/* ==========================================
-	   TANÁRI HÁZI FELADAT (teacher/homework)
-	   ========================================== */
 	.homework-header {
 		flex-direction: column;
 		align-items: stretch;
@@ -971,7 +915,6 @@ body.mobile-nav-open {
 		font-size: 1.05rem;
 	}
 
-	/* Házi feladat modal */
 	.modal {
 		padding: 10px;
 	}
@@ -1002,9 +945,6 @@ body.mobile-nav-open {
 		padding: 12px 14px;
 	}
 
-	/* ==========================================
-	   ADMIN OLDALAK
-	   ========================================== */
 	.stats-grid {
 		grid-template-columns: repeat(2, 1fr);
 		gap: 12px;
@@ -1094,9 +1034,6 @@ body.mobile-nav-open {
 		justify-content: center;
 	}
 
-	/* ==========================================
-	   ÚJ ÜZENET OLDAL (messages/new)
-	   ========================================== */
 	.new-message-wrapper {
 		padding: 16px;
 		margin: 16px auto;
@@ -1114,9 +1051,6 @@ body.mobile-nav-open {
 		padding: 0;
 	}
 
-	/* ==========================================
-	   TOAST ÜZENETEK
-	   ========================================== */
 	.toast {
 		top: 10px;
 		right: 10px;
@@ -1126,9 +1060,6 @@ body.mobile-nav-open {
 	}
 }
 
-/* ==========================================
-   480px BREAKPOINT - Kis mobil
-   ========================================== */
 @media (max-width: 480px) {
 	.container {
 		padding: 0 12px;
@@ -1178,7 +1109,6 @@ body.mobile-nav-open {
 		margin-bottom: 25px;
 	}
 
-	/* Jegyek */
 	.grades-table-container {
 		padding: 8px;
 	}
@@ -1187,7 +1117,6 @@ body.mobile-nav-open {
 		font-size: 1.3rem;
 	}
 
-	/* Feladatok */
 	.tasks-container h1 {
 		font-size: 1.3rem;
 	}
@@ -1200,7 +1129,6 @@ body.mobile-nav-open {
 		font-size: 1rem;
 	}
 
-	/* Üzenetek */
 	.messages-header h1 {
 		font-size: 1.3rem;
 	}
@@ -1210,7 +1138,6 @@ body.mobile-nav-open {
 		font-size: 0.85rem;
 	}
 
-	/* Admin */
 	.stats-grid {
 		grid-template-columns: 1fr;
 		gap: 10px;
@@ -1247,7 +1174,6 @@ body.mobile-nav-open {
 		padding: 8px 6px;
 	}
 
-	/* Tanári értékelés */
 	.grading-page-title {
 		font-size: 1.2rem;
 	}
@@ -1283,9 +1209,6 @@ body.mobile-nav-open {
 	}
 }
 
-/* ==========================================
-   TOUCH DEVICE JAVÍTÁSOK
-   ========================================== */
 @media (hover: none) and (pointer: coarse) {
 	.hamburger-btn:active {
 		opacity: 0.7;
@@ -1311,9 +1234,6 @@ body.mobile-nav-open {
 	}
 }
 
-/* ==========================================
-   SAFE AREA (notch-os telefonok)
-   ========================================== */
 @supports (padding: env(safe-area-inset-top)) {
 	header {
 		padding-top: calc(15px + env(safe-area-inset-top));
@@ -1328,9 +1248,6 @@ body.mobile-nav-open {
 	}
 }
 
-/* ==========================================
-   LANDSCAPE MÓD JAVÍTÁSOK
-   ========================================== */
 @media (max-width: 768px) and (orientation: landscape) {
 	.mobile-nav-drawer {
 		padding-top: 60px;

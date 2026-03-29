@@ -18,7 +18,7 @@ async function adminAssignments(req, res) {
 		});
 
 		const subjects = await db.subjects.findMany({
-			where: { is_active: true }, // csak aktív tantárgyak a dropdownban
+			where: { is_active: true },
 			orderBy: { subject_name: "asc" },
 			select: { id: true, subject_code: true, subject_name: true },
 		});

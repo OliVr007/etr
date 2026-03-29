@@ -1,4 +1,3 @@
-/* Reset & Base */
 * {
 	margin: 0;
 	padding: 0;
@@ -25,7 +24,7 @@ body {
 	padding: 0 20px;
 }
 
-/* Header - megegyezik a tanári/diák oldalakkal */
+/* Header  */
 header {
 	background: linear-gradient(135deg, #0a1128 0%, #001f54 100%);
 	color: #fefcfb;
@@ -94,7 +93,6 @@ header {
 	transform: scale(1.1);
 }
 
-/* Stats Section */
 main {
 	padding: 30px 0;
 }
@@ -161,7 +159,7 @@ main {
 	font-weight: 500;
 }
 
-/* ==================== TAB NAVIGÁCIÓ ==================== */
+/* Navigáció */
 .tab-nav {
 	display: flex;
 	gap: 0;
@@ -419,7 +417,6 @@ code {
 	font-weight: 600;
 }
 
-/* ==================== MODÁLOK ==================== */
 .modal {
 	display: none;
 	position: fixed;
@@ -538,7 +535,6 @@ form {
 	flex-wrap: wrap;
 }
 
-/* ==================== RESZPONZÍV ==================== */
 @media (max-width: 1024px) {
 	.stats-grid {
 		grid-template-columns: repeat(2, 1fr);

@@ -90,7 +90,7 @@ header {
 	filter: brightness(0) invert(1);
 }
 
-/* Navigation */
+/* Navigáció */
 nav {
 	background: linear-gradient(135deg, #034078 0%, #001f54 100%);
 	padding: 0;
@@ -154,7 +154,6 @@ main {
 	font-weight: 600;
 }
 
-/* Task list */
 .task-list {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -201,7 +200,7 @@ main {
 	margin-top: 10px;
 }
 
-/* Buttons */
+/* Gombok */
 .done-btn,
 .delete-btn {
 	padding: 10px 16px;
@@ -251,7 +250,6 @@ main {
 	filter: brightness(0) invert(1);
 }
 
-/* Status colors */
 .task-card.pending {
 	border-left: 6px solid #1282a2;
 }
@@ -282,7 +280,6 @@ main {
 	text-decoration: underline;
 }
 
-/* Modal */
 .modal-overlay {
 	display: none;
 	position: fixed;
@@ -346,7 +343,7 @@ main {
 	margin-top: auto;
 }
 
-/* Mobile */
+/* Mobil nézet */
 @media (max-width: 768px) {
 	.container {
 		padding: 0 15px;

@@ -1,10 +1,10 @@
-// Jegyek oldal - tantárgyak szerint csoportosítva
+// Jegyek oldal
 async function studentGrades(req, res) {
 	try {
 		const db = req.db;
 		const studentId = req.session.id;
 
-		// 1. Lekérjük a diák osztályát
+		// Lekérjük a diák osztályát
 		const studentClass = await db.student_classes.findFirst({
 			where: {
 				student_id: studentId,
@@ -22,7 +22,7 @@ async function studentGrades(req, res) {
 			});
 		}
 
-		// 2. Lekérjük az osztályhoz hozzárendelt tantárgyakat (ABC sorrendben)
+		// Lekérjük az osztályhoz hozzárendelt tantárgyakat (ABC sorrendben)
 		const assignedSubjects = await db.teacher_subjects.findMany({
 			where: {
 				class_id: studentClass.class_id,
@@ -42,7 +42,7 @@ async function studentGrades(req, res) {
 			},
 		});
 
-		// 3. Egyedi tantárgyak kiszűrése (egy tantárgy csak egyszer szerepeljen)
+		// Egyedi tantárgyak kiszűrése (egy tantárgy csak egyszer szerepeljen)
 		const uniqueSubjects = [];
 		const seenSubjectIds = new Set();
 
@@ -59,7 +59,7 @@ async function studentGrades(req, res) {
 		// ABC sorrendbe rendezés
 		uniqueSubjects.sort((a, b) => a.name.localeCompare(b.name, "hu"));
 
-		// 4. Jegyek lekérése a diáknak
+		// Jegyek lekérése a diáknak
 		const grades = await db.grades.findMany({
 			where: { student_id: studentId },
 			include: {
@@ -75,18 +75,14 @@ async function studentGrades(req, res) {
 		});
 
 		// 5. Jegyek csoportosítása tantárgyak szerint
-		// Minden hozzárendelt tantárgy megjelenik, akkor is ha nincs jegy
 		const gradesBySubject = {};
 
-		// Először minden hozzárendelt tantárgyat hozzáadunk (üres tömbbel)
 		uniqueSubjects.forEach((subject) => {
 			gradesBySubject[subject.name] = [];
 		});
 
-		// Majd hozzáadjuk a meglévő jegyeket
 		grades.forEach((grade) => {
 			const subjectName = grade.subjects.subject_name;
-			// Csak akkor adjuk hozzá, ha ez egy hozzárendelt tantárgy
 			if (gradesBySubject.hasOwnProperty(subjectName)) {
 				gradesBySubject[subjectName].push(grade);
 			}

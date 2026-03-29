@@ -1,4 +1,4 @@
-// Diák főoldal - áttekintés
+// Diák főoldal
 async function studentIndex(req, res) {
 	try {
 		const db = req.db;

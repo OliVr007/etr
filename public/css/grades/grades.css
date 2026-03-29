@@ -20,7 +20,7 @@ body {
 	padding: 0 20px;
 }
 
-/* Header styles */
+/* Header  */
 header {
 	background: linear-gradient(135deg, #0a1128 0%, #001f54 100%);
 	color: #fefcfb;
@@ -83,7 +83,7 @@ header {
 	filter: brightness(0) invert(1);
 }
 
-/* Navigation */
+/* Navigáció */
 nav {
 	background: linear-gradient(135deg, #034078 0%, #001f54 100%);
 	padding: 0;
@@ -196,7 +196,7 @@ nav {
 	background: #c4dcf7;
 }
 
-/* Grade colors */
+/* Jegyek színei */
 .g5 {
 	color: #1e8e3e;
 	font-weight: 700;
@@ -227,7 +227,7 @@ nav {
 	text-align: left;
 }
 
-/* Mobile Styles */
+/* Mobil nézet */
 @media (max-width: 768px) {
 	.container {
 		padding: 0 15px;
@@ -343,7 +343,6 @@ nav {
 	}
 }
 
-/* Touch device improvements */
 @media (hover: none) and (pointer: coarse) {
 	.nav-menu a:hover {
 		transform: none;
@@ -377,16 +376,10 @@ nav {
 	z-index: 50;
 }
 
-/* 
- * A .grade-tooltip-t elrejtjük - a JS floating tooltip veszi át a szerepét.
- * display:none marad, hogy a JS be tudja olvasni a tartalmát,
- * de a CSS hover már nem jeleníti meg (JS kezeli position:fixed-del).
- */
 .grade-tooltip {
 	display: none !important;
 }
 
-/* Floating tooltip stílusai - ezt JS hozza létre a body-ban */
 #floating-grade-tooltip .tooltip-date {
 	font-size: 0.85rem;
 	color: #475569;

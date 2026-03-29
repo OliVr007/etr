@@ -43,7 +43,7 @@ body::-webkit-scrollbar {
 	width: 100%;
 }
 
-/* Header styles */
+/* Header */
 header {
 	background: linear-gradient(135deg, #0a1128 0%, #001f54 100%);
 	color: #fefcfb;
@@ -107,7 +107,7 @@ header {
 	filter: brightness(0) invert(1);
 }
 
-/* Navigation */
+/* Navigáció */
 nav {
 	background: linear-gradient(135deg, #034078 0%, #001f54 100%);
 	padding: 0;
@@ -229,10 +229,6 @@ nav {
 	transform: translateY(-2px);
 	box-shadow: 0 4px 12px rgba(18, 130, 162, 0.3);
 }
-
-/* ============================================
-   ÜZENETEK LISTA - ÚJ DIZÁJN
-   ============================================ */
 
 .messages-list {
 	display: block;
@@ -404,7 +400,6 @@ nav {
 	transform: rotate(180deg);
 }
 
-/* Üres állapot */
 .messages-empty {
 	text-align: center;
 	padding: 80px 20px;
@@ -441,10 +436,7 @@ nav {
 	color: #94a3b8;
 }
 
-/* ============================================
-   MOBIL RESZPONZÍV
-   ============================================ */
-
+/* Mobil nézet */
 @media (max-width: 768px) {
 	.container {
 		padding: 0 15px;
@@ -628,7 +620,6 @@ nav {
 	}
 }
 
-/* Touch device improvements */
 @media (hover: none) and (pointer: coarse) {
 	.nav-menu a:hover {
 		transform: none;

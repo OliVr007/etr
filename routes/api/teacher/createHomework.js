@@ -4,7 +4,6 @@ async function createHomework(req, res) {
 	try {
 		const { class_id, student_id, subject_id, title, description, due_date } = req.body;
 
-		// Validáció
 		if (!subject_id || !title || !description || !due_date) {
 			return res.status(400).json({ error: "Hiányzó mezők" });
 		}
@@ -13,7 +12,7 @@ async function createHomework(req, res) {
 			return res.status(400).json({ error: "Válassz osztályt vagy diákot" });
 		}
 
-		// Házi feladat létrehozása relációkkal
+		// Házi feladat létrehozása
 		const homeworkData = {
 			users: {
 				connect: { id: req.session.id },
@@ -37,7 +36,6 @@ async function createHomework(req, res) {
 			data: homeworkData,
 		});
 
-		// Submission rekordok létrehozása a diákoknak
 		if (class_id) {
 			const students = await req.db.student_classes.findMany({
 				where: { class_id: parseInt(class_id), is_active: true },

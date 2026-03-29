@@ -20,7 +20,7 @@ async function getReceivedMessages(req, res) {
 			},
 		});
 
-		// Formázás a frontend számára
+		// Formázás
 		const formattedMessages = messages.map((msg) => ({
 			id: msg.id,
 			title: msg.title,

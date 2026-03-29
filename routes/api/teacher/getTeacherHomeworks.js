@@ -5,8 +5,8 @@ async function getTeacherHomeworks(req, res) {
 		const homeworks = await req.db.homework.findMany({
 			where: { teacher_id: req.session.id },
 			include: {
-				subjects: true, // JAVÍTVA: subjects tábla hozzáadva
-				classes: true, // JAVÍTVA: classes is include-olva, hogy ne kelljen külön lekérni
+				subjects: true,
+				classes: true,
 				submissions: {
 					include: {
 						users: { select: { first_name: true, last_name: true } },
@@ -18,12 +18,12 @@ async function getTeacherHomeworks(req, res) {
 
 		const formatted = homeworks.map((hw) => ({
 			id: hw.id,
-			subject: hw.subjects?.subject_name || "N/A", // JAVÍTVA: hw.subject helyett hw.subjects?.subject_name
+			subject: hw.subjects?.subject_name || "N/A",
 			title: hw.title,
 			description: hw.description,
 			due_date: hw.due_date,
 			created_at: hw.created_at,
-			class_name: hw.classes?.class_name || null, // JAVÍTVA: már include-olva van, nem kell külön lekérni
+			class_name: hw.classes?.class_name || null,
 			submissions: hw.submissions.map((sub) => ({
 				id: sub.id,
 				student_id: sub.student_id,

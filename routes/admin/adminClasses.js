@@ -20,10 +20,8 @@ async function adminClasses(req, res) {
 			select: { id: true, first_name: true, last_name: true },
 		});
 
-		// Foglalt osztályfőnök ID-k összegyűjtése
 		const assignedTeacherIds = classes.filter((c) => c.class_teacher_id !== null).map((c) => c.class_teacher_id);
 
-		// Szabad tanárok (nincs még osztályuk)
 		const freeTeachers = teachers.filter((t) => !assignedTeacherIds.includes(t.id));
 
 		const stats = {

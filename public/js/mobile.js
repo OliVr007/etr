@@ -1,8 +1,3 @@
-/* ============================================
-   MOBILE.JS - Hamburger menü és mobil navigáció
-   Minden oldalhoz hozzá kell adni!
-   ============================================ */
-
 document.addEventListener("DOMContentLoaded", function () {
 	const hamburgerBtn = document.querySelector(".hamburger-btn");
 	const mobileNavOverlay = document.querySelector(".mobile-nav-overlay");
@@ -38,23 +33,19 @@ document.addEventListener("DOMContentLoaded", function () {
 		}
 	}
 
-	// Hamburger gomb kattintás
 	hamburgerBtn.addEventListener("click", function (e) {
 		e.stopPropagation();
 		toggleMobileNav();
 	});
 
-	// Overlay kattintás → bezárás
 	mobileNavOverlay.addEventListener("click", closeMobileNav);
 
-	// ESC billentyű → bezárás
 	document.addEventListener("keydown", function (e) {
 		if (e.key === "Escape" && mobileNavDrawer.classList.contains("active")) {
 			closeMobileNav();
 		}
 	});
 
-	// Swipe to close (jobbról balra húzás a draweren)
 	let touchStartX = 0;
 	let touchStartY = 0;
 
@@ -64,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			touchStartX = e.touches[0].clientX;
 			touchStartY = e.touches[0].clientY;
 		},
-		{ passive: true }
+		{ passive: true },
 	);
 
 	mobileNavDrawer.addEventListener(
@@ -75,15 +66,13 @@ document.addEventListener("DOMContentLoaded", function () {
 			const deltaX = touchEndX - touchStartX;
 			const deltaY = Math.abs(touchEndY - touchStartY);
 
-			// Ha jobbra húzták (>80px) és nem volt nagy vertikális mozgás
 			if (deltaX > 80 && deltaY < 100) {
 				closeMobileNav();
 			}
 		},
-		{ passive: true }
+		{ passive: true },
 	);
 
-	// Ablak átméretezés → bezárás ha desktop méret
 	window.addEventListener("resize", function () {
 		if (window.innerWidth > 768 && mobileNavDrawer.classList.contains("active")) {
 			closeMobileNav();

@@ -8,7 +8,7 @@ async function getStudentHomeworks(req, res) {
 				homework: {
 					include: {
 						users: { select: { first_name: true, last_name: true } },
-						subjects: true, // JAVÍTVA: subjects tábla hozzáadva
+						subjects: true,
 					},
 				},
 			},
@@ -18,7 +18,7 @@ async function getStudentHomeworks(req, res) {
 		const formatted = submissions.map((sub) => ({
 			id: sub.id,
 			homework_id: sub.homework_id,
-			subject: sub.homework.subjects?.subject_name || "N/A", // JAVÍTVA: subjects.subject_name használata
+			subject: sub.homework.subjects?.subject_name || "N/A",
 			title: sub.homework.title,
 			description: sub.homework.description,
 			due_date: sub.homework.due_date,

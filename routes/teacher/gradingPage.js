@@ -1,4 +1,3 @@
-// Enum mapping helper - frontend érték → Prisma enum kulcs
 function mapGradeType(type) {
 	const map = {
 		dolgozat: "dolgozat",
@@ -9,7 +8,6 @@ function mapGradeType(type) {
 	return map[type] || "felelet";
 }
 
-// Prisma enum kulcs → frontend érték (megjelenítéshez)
 function reverseGradeType(type) {
 	const map = {
 		dolgozat: "dolgozat",
@@ -26,7 +24,6 @@ async function gradePage(req, res) {
 		const db = req.db;
 		const teacherId = req.session.id;
 
-		// Csak teacher_subjects táblából kérdezünk le
 		const teacherClasses = await db.teacher_subjects.findMany({
 			where: { teacher_id: teacherId },
 			include: { classes: true, subjects: true },
@@ -75,7 +72,6 @@ async function getGradingData(req, res) {
 		const classId = parseInt(req.params.classId);
 		const subjectId = parseInt(req.params.subjectId);
 
-		// JAVÍTVA: nem kérünk academic_year-t, csak a szükséges mezőket
 		const studentClasses = await db.student_classes.findMany({
 			where: { class_id: classId, is_active: true },
 			select: {
@@ -166,7 +162,6 @@ async function saveGrades(req, res) {
 		const created = [];
 
 		for (const grade of grades) {
-			// ✅ JAVÍTVA: grade_date ellenőrzése hozzáadva
 			if (!grade.student_id || !grade.subject_id || grade.grade_value === undefined || grade.grade_value === null || grade.grade_value === "" || !grade.grade_date) {
 				continue;
 			}
@@ -174,7 +169,6 @@ async function saveGrades(req, res) {
 			const gradeValue = parseFloat(grade.grade_value);
 			if (isNaN(gradeValue) || gradeValue < 1 || gradeValue > 5) continue;
 
-			// ✅ JAVÍTVA: Invalid Date ellenőrzése mentés előtt
 			const gradeDate = new Date(grade.grade_date);
 			if (isNaN(gradeDate.getTime())) continue;
 
@@ -208,7 +202,6 @@ async function updateGrade(req, res) {
 		const gradeId = parseInt(req.params.gradeId);
 		const { grade_value, grade_type, description, grade_date, weight } = req.body;
 
-		// ✅ JAVÍTVA: grade_date validáció hozzáadva
 		if (!grade_date) {
 			return res.status(400).json({ success: false, error: "A dátum megadása kötelező" });
 		}

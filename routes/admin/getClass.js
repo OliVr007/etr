@@ -1,4 +1,4 @@
-// Osztály lekérése (egyedi)
+// Osztály lekérése
 async function getClass(req, res) {
 	try {
 		const db = req.db;

@@ -4,7 +4,6 @@ async function acceptHomework(req, res) {
 	try {
 		const { submission_id } = req.params;
 
-		// FIX: előbb ellenőrizzük hogy létezik-e
 		const existing = await req.db.homework_submissions.findUnique({
 			where: { id: parseInt(submission_id) },
 		});

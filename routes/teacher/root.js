@@ -43,7 +43,7 @@ async function routeTeacher(req, res) {
 			},
 			include: {
 				classes: true,
-				subjects: true, // JAVÍTVA: subjects tábla hozzáadva
+				subjects: true,
 			},
 			orderBy: {
 				created_at: "desc",

@@ -12,22 +12,19 @@ class InfiniteCarousel {
 		this.autoPlayInterval = null;
 		this.isAnimating = false;
 
-		// Klónozzuk a kártyákat a végtelen hatás érdekében
 		this.setupInfiniteCards();
 		this.init();
 	}
 
 	setupInfiniteCards() {
-		// Klónozzuk az első és utolsó kártyákat
 		const firstClone = this.cards[0].cloneNode(true);
 		const lastClone = this.cards[this.cards.length - 1].cloneNode(true);
 
 		this.track.appendChild(firstClone);
 		this.track.insertBefore(lastClone, this.track.firstChild);
 
-		// Frissítjük a kártyák listáját
 		this.cards = Array.from(this.track.querySelectorAll(".carousel-card"));
-		this.currentIndex = 1; // Kezdjük az első eredeti kártyánál
+		this.currentIndex = 1;
 	}
 
 	getVisibleCardsCount() {
@@ -51,7 +48,6 @@ class InfiniteCarousel {
 		this.prevBtn.addEventListener("click", () => this.prev());
 		this.nextBtn.addEventListener("click", () => this.next());
 
-		// Touch események
 		let startX = 0;
 		let endX = 0;
 
@@ -66,7 +62,6 @@ class InfiniteCarousel {
 			this.startAutoPlay();
 		});
 
-		// Egérgörgő navigáció
 		this.track.addEventListener("wheel", (e) => {
 			e.preventDefault();
 			if (e.deltaY > 0) {
@@ -76,7 +71,6 @@ class InfiniteCarousel {
 			}
 		});
 
-		// Auto-play szüneteltetése hover alatt
 		this.container.addEventListener("mouseenter", () => this.stopAutoPlay());
 		this.container.addEventListener("mouseleave", () => this.startAutoPlay());
 	}
@@ -102,7 +96,6 @@ class InfiniteCarousel {
 
 		this.updateCarousel();
 
-		// Végtelen loop ellenőrzés
 		if (this.currentIndex === 0) {
 			setTimeout(() => {
 				this.track.style.transition = "none";
@@ -127,7 +120,6 @@ class InfiniteCarousel {
 
 		this.updateCarousel();
 
-		// Végtelen loop ellenőrzés
 		if (this.currentIndex === this.cards.length - 1) {
 			setTimeout(() => {
 				this.track.style.transition = "none";
@@ -148,7 +140,6 @@ class InfiniteCarousel {
 		const translateX = -this.currentIndex * this.cardWidth;
 		this.track.style.transform = `translateX(${translateX}px)`;
 
-		// Aktív kártya stílus frissítése
 		this.cards.forEach((card, index) => {
 			const isActive = index === this.currentIndex;
 			card.classList.toggle("active", isActive);
@@ -159,7 +150,7 @@ class InfiniteCarousel {
 		this.stopAutoPlay();
 		this.autoPlayInterval = setInterval(() => {
 			this.next();
-		}, 4000); // 4 másodpercenként vált
+		}, 4000);
 	}
 
 	stopAutoPlay() {
@@ -170,14 +161,12 @@ class InfiniteCarousel {
 	}
 }
 
-// Carousel inicializálása
 document.addEventListener("DOMContentLoaded", () => {
 	const carouselContainer = document.querySelector(".carousel-container");
 	if (carouselContainer) {
 		new InfiniteCarousel(carouselContainer);
 	}
 
-	// Kártya kattintási események
 	const cards = document.querySelectorAll(".carousel-card");
 	cards.forEach((card) => {
 		card.addEventListener("click", (e) => {

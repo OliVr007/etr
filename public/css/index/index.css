@@ -20,7 +20,7 @@ body {
 	padding: 0 20px;
 }
 
-/* Header styles */
+/* Header  */
 header {
 	background: linear-gradient(135deg, #0a1128 0%, #001f54 100%);
 	color: #fefcfb;
@@ -84,7 +84,7 @@ header {
 	filter: brightness(0) invert(1);
 }
 
-/* Navigation */
+/* Navigáció */
 nav {
 	background: linear-gradient(135deg, #034078 0%, #001f54 100%);
 	padding: 0;
@@ -136,7 +136,6 @@ nav {
 	border-radius: 2px;
 }
 
-/* Main content */
 main {
 	padding: 40px 0;
 	flex: 1;
@@ -165,7 +164,7 @@ main {
 	font-weight: 500;
 }
 
-/* Carousel styles */
+/* Carousel stílusok */
 .carousel-container {
 	position: relative;
 	max-width: 1000px;
@@ -284,7 +283,7 @@ main {
 	color: #1282a2;
 }
 
-/* Card elements */
+/* Kártya elmek */
 .card-item {
 	padding: 16px 0;
 	border-bottom: 1px solid #f1f5f9;
@@ -406,7 +405,7 @@ main {
 	transform: scale(1.2);
 }
 
-/* Mobile Styles */
+/* Mobil nézet */
 @media (max-width: 768px) {
 	.container {
 		padding: 0 15px;
@@ -580,7 +579,6 @@ main {
 	}
 }
 
-/* Touch device improvements */
 @media (hover: none) and (pointer: coarse) {
 	.nav-menu a:hover {
 		transform: none;

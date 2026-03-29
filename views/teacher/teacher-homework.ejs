@@ -228,12 +228,10 @@
 					const data = await resp.json();
 					allHomeworks = data.homeworks || [];
 
-					// Ellenőrzésre váró beadások megszámlálása
 					const submittedCount = allHomeworks.reduce((sum, hw) => {
 						return sum + hw.submissions.filter((s) => s.status === "submitted").length;
 					}, 0);
 
-					// "Ellenőrzésre vár" fül frissítése
 					const submittedTab = document.querySelector(".tab[data-tab='submitted']");
 					const existingBadge = submittedTab.querySelector(".tab-alert");
 					if (existingBadge) existingBadge.remove();
@@ -278,7 +276,6 @@
 						const subjectName = hw.subject || "Ismeretlen tantárgy";
 						itemIndex++;
 
-						// Ha van class_name → osztályos feladat, Ha nincs → egyéni feladat
 						const recipientHtml = hw.class_name
 							? `<div class="homework-recipient">
 									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
