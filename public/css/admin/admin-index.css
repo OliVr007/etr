@@ -214,7 +214,6 @@ main {
 	display: block;
 }
 
-/* Content Section */
 .content-section {
 	background: white;
 	border-radius: 0 0 16px 16px;
@@ -237,7 +236,7 @@ main {
 	color: #001f54;
 }
 
-/* Buttons */
+/* Gombok */
 .btn-primary {
 	background-color: #034078;
 	color: #fefcfb;
@@ -306,7 +305,7 @@ main {
 	background: rgba(230, 57, 70, 0.1);
 }
 
-/* Table */
+/* Táblázat */
 .table-container {
 	overflow-x: auto;
 }
@@ -362,7 +361,6 @@ main {
 	gap: 5px;
 }
 
-/* Badges */
 .role-badge {
 	display: inline-block;
 	padding: 6px 12px;

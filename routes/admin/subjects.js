@@ -98,14 +98,27 @@ async function deleteSubject(req, res) {
 		const db = req.db;
 		const subjectId = parseInt(req.params.id);
 
-		await db.subjects.delete({
-			where: { id: subjectId },
+		await db.$transaction(async (tx) => {
+			await tx.homework.deleteMany({
+				where: { subject_id: subjectId },
+			});
+
+			await tx.subjects.delete({
+				where: { id: subjectId },
+			});
 		});
 
 		res.json({ success: true });
 	} catch (error) {
 		console.error("Hiba a tantárgy törlésekor:", error);
-		res.status(500).json({ error: "Hiba történt a tantárgy törlésekor. Lehet, hogy van hozzá kapcsolódó adat." });
+
+		if (error.code === "P2003") {
+			return res.status(400).json({
+				error: "A tantárgy nem törölhető, mert más adatok hivatkoznak rá.",
+			});
+		}
+
+		res.status(500).json({ error: "Hiba történt a tantárgy törlésekor." });
 	}
 }
 
