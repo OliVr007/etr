@@ -1,10 +1,6 @@
 const { test, expect } = require("@playwright/test");
 
-// ================================================
 // HOZZÁFÉRÉS-VÉDELEM TESZTEK
-// Ellenőrzi, hogy bejelentkezés nélkül
-// nem érhetők el a védett oldalak
-// ================================================
 
 test.describe("Védett oldalak – bejelentkezés nélkül", () => {
 	// Diák oldalak

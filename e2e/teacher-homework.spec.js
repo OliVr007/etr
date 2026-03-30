@@ -47,7 +47,7 @@ test.describe("Tanár – Házi feladat létrehozás API", () => {
 			const res = await fetch("/api/teacher/homework", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ title: "Hiányos feladat" }), // subject_id, description, due_date hiányzik
+				body: JSON.stringify({ title: "Hiányos feladat" }),
 			});
 			return res.status;
 		});
@@ -57,7 +57,6 @@ test.describe("Tanár – Házi feladat létrehozás API", () => {
 	test("osztály és diák nélkül nem hozható létre házi feladat", async ({ page }) => {
 		await page.goto("/teacher");
 		const result = await page.evaluate(async () => {
-			// Először lekérjük az elérhető tantárgyakat
 			const classRes = await fetch("/api/teacher/classes");
 			const classData = await classRes.json();
 			const classes = classData.classes || [];
@@ -76,7 +75,6 @@ test.describe("Tanár – Házi feladat létrehozás API", () => {
 					title: "Teszt feladat",
 					description: "Leírás",
 					due_date: "2025-12-31",
-					// class_id és student_id is hiányzik!
 				}),
 			});
 			return { status: res.status };

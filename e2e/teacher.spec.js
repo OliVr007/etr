@@ -34,8 +34,6 @@ test.describe("Tanár – Navigáció", () => {
 	});
 
 	test("tanári navigáció látható", async ({ page }) => {
-		// FIX: több link van ugyanarra az URL-re (nav + carousel kártyák + mobil nav)
-		// csak a fő nav-ban lévő linkeket vizsgáljuk
 		await expect(page.locator("nav ul a[href='/teacher/grading']")).toBeVisible();
 		await expect(page.locator("nav ul a[href='/teacher/homework']")).toBeVisible();
 		await expect(page.locator("nav ul a[href='/teacher/messages']")).toBeVisible();
@@ -89,7 +87,6 @@ test.describe("Tanár – Kijelentkezés", () => {
 	test("kijelentkezés után a tanári oldal nem érhető el", async ({ page }) => {
 		await loginAsTeacher(page);
 		await page.goto("/logout");
-		// FIX: várjuk meg hogy a logout teljesen lefusson
 		await page.waitForURL(/\/login/);
 		await page.goto("/teacher");
 		await expect(page).toHaveURL(/\/login/);

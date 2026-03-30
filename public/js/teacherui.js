@@ -1,3 +1,5 @@
+// Ez a fájl inaktív
+
 class InfiniteCarousel {
 	constructor(container) {
 		this.container = container;

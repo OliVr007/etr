@@ -91,7 +91,6 @@ test.describe("Diák – Üzenet olvasottnak jelölés API", () => {
 			const data = await res.json();
 			const messages = data.messages || [];
 
-			// Keresünk olvasatlan üzenetet
 			const unread = messages.find((m) => !m.is_read);
 			if (!unread) return { skipped: true, reason: "no_unread_messages" };
 

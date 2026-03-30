@@ -32,7 +32,6 @@ test.describe("Diák – Navigáció", () => {
 
 	test("főoldal betölt", async ({ page }) => {
 		await page.goto("/");
-		// FIX: több nav elem van (mobil + desktop), az első nav-ot vizsgáljuk
 		await expect(page.locator("nav").first()).toBeVisible();
 		await expect(page.locator("a[href='/grades']").first()).toBeVisible();
 		await expect(page.locator("a[href='/tasks']").first()).toBeVisible();
@@ -74,7 +73,6 @@ test.describe("Diák – Jogosultság", () => {
 
 	test("diák nem érheti el az admin oldalt (403)", async ({ page }) => {
 		const response = await page.goto("/admin");
-		// Vagy 403-at kap, vagy visszairányítja
 		const url = page.url();
 		const status = response?.status();
 		expect(status === 403 || url.includes("/login") || url.includes("/admin") === false).toBeTruthy();
@@ -98,7 +96,6 @@ test.describe("Diák – Kijelentkezés", () => {
 	test("kijelentkezés után nem érhető el a főoldal", async ({ page }) => {
 		await loginAsStudent(page);
 		await page.goto("/logout");
-		// FIX: várjuk meg hogy a logout teljesen lefusson
 		await page.waitForURL(/\/login/);
 		await page.goto("/");
 		await expect(page).toHaveURL(/\/login/);

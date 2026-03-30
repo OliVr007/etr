@@ -27,7 +27,6 @@ test.describe("Tanár – Jegybeírás UI", () => {
 	test("osztály és tantárgy választó megjelenik", async ({ page }) => {
 		await page.goto("/teacher/grading");
 		await page.waitForTimeout(1000);
-		// A grading oldalon van osztály/tantárgy választó
 		const selects = await page.locator("select").count();
 		expect(selects).toBeGreaterThanOrEqual(1);
 	});
@@ -53,7 +52,6 @@ test.describe("Tanár – Jegybeírás API", () => {
 		await page.goto("/teacher");
 
 		const result = await page.evaluate(async () => {
-			// Először lekérjük az osztályokat
 			const classRes = await fetch("/api/teacher/classes");
 			const classData = await classRes.json();
 			const classes = classData.classes || [];
@@ -61,7 +59,6 @@ test.describe("Tanár – Jegybeírás API", () => {
 
 			const classId = classes[0].id;
 
-			// Lekérjük a tantárgyakat
 			const subjectRes = await fetch(`/api/teacher/class/${classId}/subjects`);
 			const subjectData = await subjectRes.json();
 			const subjects = subjectData.subjects || [];
@@ -69,7 +66,6 @@ test.describe("Tanár – Jegybeírás API", () => {
 
 			const subjectId = subjects[0].id;
 
-			// Lekérjük a diákokat
 			const studentRes = await fetch(`/api/teacher/class/${classId}/students`);
 			const studentData = await studentRes.json();
 			const students = studentData.students || [];
@@ -151,7 +147,7 @@ test.describe("Tanár – Jegybeírás API", () => {
 						{
 							student_id: students[0].id,
 							subject_id: subjects[0].id,
-							grade_value: 9, // Érvénytelen!
+							grade_value: 9,
 							grade_type: "felelet",
 							grade_date: new Date().toISOString().split("T")[0],
 							weight: 1,
@@ -160,12 +156,10 @@ test.describe("Tanár – Jegybeírás API", () => {
 				}),
 			});
 			const data = await res.json();
-			// A 9-es értéket az API kiszűri, count = 0 lesz
 			return { status: res.status, count: data.count };
 		});
 
 		if (result.skipped) return;
-		// Az API 200-at ad de 0 jegyet ment (kiszűri az érvénytelen értéket)
 		expect(result.count).toBe(0);
 	});
 });

@@ -23,7 +23,6 @@ test.describe("Bejelentkezési oldal", () => {
 		await page.fill("#username", "nemletezik");
 		await page.fill("#password", "rosszjelszo");
 		await page.click("button[type='submit']");
-		// A szerver ?error= query paraméterrel irányít vissza
 		await expect(page).toHaveURL(/\/login/);
 		await expect(page.locator(".error-message")).toBeVisible();
 	});
@@ -31,15 +30,11 @@ test.describe("Bejelentkezési oldal", () => {
 	test("üres mezőkkel nem lehet bejelentkezni", async ({ page }) => {
 		await page.goto("/login");
 		await page.click("button[type='submit']");
-		// A required attribútum miatt az oldal nem küldi el a formot
 		await expect(page).toHaveURL("/login");
 	});
 });
 
-// ================================================
 // KIJELENTKEZÉS TESZT
-// ================================================
-
 test.describe("Kijelentkezés", () => {
 	test("/logout átirányít a login oldalra", async ({ page }) => {
 		await page.goto("/logout");

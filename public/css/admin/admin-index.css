@@ -697,7 +697,6 @@ form {
 	}
 }
 
-/* Touch device improvements */
 @media (hover: none) and (pointer: coarse) {
 	.btn-primary:hover,
 	.btn-secondary:hover,

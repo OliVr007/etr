@@ -106,7 +106,6 @@
                 </div>
                 <div class="form-group">
                     <label>Osztályfőnök</label>
-                    <!-- Csak szabad tanárok jelennek meg -->
                     <select id="add_class_teacher_id" name="class_teacher_id">
                         <option value="">Nincs megadva</option>
                         <% freeTeachers.forEach(t => { %>
@@ -145,7 +144,6 @@
                 </div>
                 <div class="form-group">
                     <label>Osztályfőnök</label>
-                    <!-- JS tölti fel dinamikusan: szabad tanárok + az osztály jelenlegi osztályfőnöke -->
                     <select id="edit_class_teacher_id" name="class_teacher_id"></select>
                 </div>
                 <div class="form-group">
@@ -187,7 +185,7 @@
             document.getElementById("edit_academic_year").value = cls.academic_year;
             document.getElementById("edit_room_number").value = cls.room_number || "";
 
-            // Dropdown feltöltése: szabad tanárok + az osztály jelenlegi osztályfőnöke
+            // Dropdown feltöltése
             const select = document.getElementById("edit_class_teacher_id");
             select.innerHTML = '<option value="">Nincs megadva</option>';
 

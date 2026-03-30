@@ -111,13 +111,12 @@ test.describe("Diák – Házi feladat API", () => {
 
 		const status = await freshPage.evaluate(async () => {
 			const res = await fetch("/api/student/homeworks", {
-				redirect: "manual", // Ne kövesse az átirányítást!
+				redirect: "manual",
 			});
-			// manual redirect esetén 0-t ad opaque response-ra, vagy 302-t
 			return res.status === 0 ? 302 : res.status;
 		});
 
 		await context.close();
-		expect(status).toBe(401); // redirect = nincs bejelentkezve
+		expect(status).toBe(401);
 	});
 });

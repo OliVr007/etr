@@ -171,7 +171,7 @@
 			</div>
 		</div>
 
-		<!-- Törlés megerősítő -->
+		<!-- Törlés megerősítése -->
 		<div class="modal-overlay" id="deleteConfirmModal">
 			<div class="modal" style="max-width: 400px;">
 				<div class="modal-header" style="background: linear-gradient(135deg, #ef4444, #dc2626);">
@@ -216,7 +216,7 @@
 
 			document.getElementById("gradeDate").value = new Date().toISOString().split("T")[0];
 
-			// === Adatok betöltése ===
+			// Adatok betöltése
 			async function loadGradingData() {
 				const sel = document.getElementById("occupation");
 				if (!sel.value) {
@@ -251,7 +251,7 @@
 				document.getElementById("loadingSpinner").style.display = "none";
 			}
 
-			// === Tábla renderelése ===
+			// Tábla renderelése
 			function renderTable() {
 				if (!currentData) return;
 				const { students, gradesByStudent } = currentData;
@@ -321,7 +321,7 @@
 				document.getElementById("cardView").style.display = "none";
 			}
 
-			// === Kártya nézet renderelése (mobil) ===
+			// Kártya nézet renderelése (mobil)
 			function renderCards() {
 				if (!currentData) return;
 				const { students, gradesByStudent } = currentData;
@@ -387,7 +387,7 @@
 				document.getElementById("emptyState").style.display = "none";
 			}
 
-			// === Jegy kiválasztása kártya nézetből ===
+			// Jegy kiválasztása kártya nézetből
 			function selectGradeCard(studentId, value, btn) {
 				if (pendingGrades[studentId] == value) {
 					delete pendingGrades[studentId];
@@ -408,7 +408,7 @@
 				updateSaveButton();
 			}
 
-			// === Mobil detektálás és render választás ===
+			// Mobil detektálás és render választás
 			function isMobile() {
 				return window.innerWidth <= 768;
 			}
@@ -421,7 +421,7 @@
 				}
 			}
 
-			// === Jegy kiválasztása ===
+			// Jegy kiválasztása
 			function selectGrade(studentId, value, btn) {
 				if (pendingGrades[studentId] == value) {
 					delete pendingGrades[studentId];
@@ -439,7 +439,7 @@
 				document.getElementById("saveBtn").disabled = Object.keys(pendingGrades).length === 0;
 			}
 
-			// === Mentés ===
+			// Mentés
 			async function saveAllGrades() {
 				const gradeDate = document.getElementById("gradeDate").value;
 				const gradeMode = document.getElementById("gradeMode").value;
@@ -490,7 +490,7 @@
 				if (currentData) renderView();
 			}
 
-			// === Szerkesztő modal ===
+			// Szerkesztő modal
 			function openEditModal(gradeId, studentName, value, type, date, weight, description) {
 				document.getElementById("editGradeId").value = gradeId;
 				document.getElementById("editStudentName").value = studentName;
@@ -527,7 +527,7 @@
 				} catch (err) { showToast("Hálózati hiba", "error"); }
 			}
 
-			// === Törlés ===
+			// Törlés 
 			function deleteGradeFromModal() {
 				deleteGradeId = document.getElementById("editGradeId").value;
 				closeEditModal();
@@ -552,7 +552,7 @@
 				} catch (err) { showToast("Hálózati hiba", "error"); }
 			}
 
-			// === Segédfüggvények ===
+			// Segédfüggvények
 			function getAvgClass(avg) {
 				if (avg >= 4.5) return "avg-excellent";
 				if (avg >= 3.5) return "avg-good";

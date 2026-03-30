@@ -10,12 +10,9 @@ async function loginAsAdmin(page) {
 	await page.waitForURL(/\/admin/);
 }
 
-// Egyedi teszt felhasználónév generálása, hogy ne ütközzön
 const TEST_USERNAME = `playwright_test_${Date.now()}`;
 
-// ================================================
 // ADMIN – FELHASZNÁLÓ KEZELÉS UI
-// ================================================
 
 test.describe("Admin – Felhasználó kezelés UI", () => {
 	test.beforeEach(async ({ page }) => {
@@ -54,9 +51,7 @@ test.describe("Admin – Felhasználó kezelés UI", () => {
 	});
 });
 
-// ================================================
 // ADMIN – FELHASZNÁLÓ LÉTREHOZÁS API
-// ================================================
 
 test.describe("Admin – Felhasználó létrehozás és törlés API", () => {
 	test.beforeEach(async ({ page }) => {
@@ -111,7 +106,6 @@ test.describe("Admin – Felhasználó létrehozás és törlés API", () => {
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({
 					username: "hianyos_user",
-					// password és role hiányzik
 					first_name: "Teszt",
 				}),
 			});
@@ -127,7 +121,7 @@ test.describe("Admin – Felhasználó létrehozás és törlés API", () => {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({
-					username: adminUsername, // már létezik
+					username: adminUsername,
 					password: "teszt1234",
 					first_name: "Dupla",
 					last_name: "Teszt",
@@ -143,7 +137,6 @@ test.describe("Admin – Felhasználó létrehozás és törlés API", () => {
 	test("saját admin fiók nem törölhető", async ({ page }) => {
 		await page.goto("/admin");
 		const result = await page.evaluate(async () => {
-			// Lekérjük saját ID-t a táblázatból
 			const rows = document.querySelectorAll("table.data-table tbody tr");
 			let adminId = null;
 			for (const row of rows) {

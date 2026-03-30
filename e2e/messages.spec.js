@@ -38,17 +38,14 @@ test.describe("Diák – Üzenet küldés UI", () => {
 
 	test("a címzett lista betölt (API hívás)", async ({ page }) => {
 		await page.goto("/messages/new");
-		// Várjuk meg hogy a JS betöltse a felhasználókat
 		await page.waitForTimeout(1000);
 		const options = await page.locator("#recipient option").count();
-		// Legalább az üres opció + 1 user
 		expect(options).toBeGreaterThan(1);
 	});
 
 	test("üres formot nem lehet elküldeni", async ({ page }) => {
 		await page.goto("/messages/new");
 		await page.waitForTimeout(500);
-		// Tárgy és tartalom nélkül a required attribútum megakadályozza
 		const url = page.url();
 		await expect(page).toHaveURL(url);
 	});
@@ -92,7 +89,7 @@ test.describe("Diák – Üzenet küldés API", () => {
 			const res = await fetch("/api/messages/send", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ title: "Csak cím" }), // receiver_id és content hiányzik
+				body: JSON.stringify({ title: "Csak cím" }),
 			});
 			return res.status;
 		});

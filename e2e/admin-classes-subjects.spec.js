@@ -13,9 +13,7 @@ async function loginAsAdmin(page) {
 const TEST_CLASS = { class_name: `PW${Date.now().toString().slice(-5)}`, academic_year: "2024/2025" };
 const TEST_SUBJECT = { subject_code: `PW${Date.now().toString().slice(-4)}`, subject_name: `Playwright Tantárgy ${Date.now()}` };
 
-// ================================================
 // ADMIN – OSZTÁLY KEZELÉS
-// ================================================
 
 test.describe("Admin – Osztály kezelés UI", () => {
 	test.beforeEach(async ({ page }) => {
@@ -150,9 +148,7 @@ test.describe("Admin – Osztály CRUD API", () => {
 	});
 });
 
-// ================================================
 // ADMIN – TANTÁRGY KEZELÉS
-// ================================================
 
 test.describe("Admin – Tantárgy kezelés UI", () => {
 	test.beforeEach(async ({ page }) => {
@@ -242,9 +238,7 @@ test.describe("Admin – Tantárgy CRUD API", () => {
 	});
 });
 
-// ================================================
 // ADMIN – HOZZÁRENDELÉS KEZELÉS
-// ================================================
 
 test.describe("Admin – Hozzárendelések UI", () => {
 	test.beforeEach(async ({ page }) => {

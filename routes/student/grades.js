@@ -74,7 +74,7 @@ async function studentGrades(req, res) {
 			orderBy: [{ grade_date: "asc" }],
 		});
 
-		// 5. Jegyek csoportosítása tantárgyak szerint
+		// Jegyek csoportosítása tantárgyak szerint
 		const gradesBySubject = {};
 
 		uniqueSubjects.forEach((subject) => {
