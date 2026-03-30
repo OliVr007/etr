@@ -69,7 +69,7 @@ async function updateTeacherSubject(req, res) {
 			return res.status(400).json({ error: "Ez a tantárgy inaktív, nem rendelhető hozzá tanárhoz vagy osztályhoz." });
 		}
 
-		// Duplikáció ellenőrzés (saját ID kizárva)
+		// Duplikáció ellenőrzés
 		const existing = await db.teacher_subjects.findFirst({
 			where: {
 				teacher_id: parseInt(teacher_id),

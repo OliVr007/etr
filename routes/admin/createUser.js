@@ -40,7 +40,7 @@ async function createUser(req, res) {
 			},
 		});
 
-		// Ha diák, akkor osztályba is beírjuk
+		// Ha diák akkor osztályhoz rendeljük
 		if (role === "student" && class_id) {
 			await db.student_classes.create({
 				data: {

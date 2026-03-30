@@ -9,7 +9,7 @@ async function updateClass(req, res) {
 			return res.status(400).json({ error: "Az osztály neve és a tanév megadása kötelező" });
 		}
 
-		// Duplikáció ellenőrzés (saját ID kizárva)
+		// Duplikáció ellenőrzés
 		const existing = await db.classes.findFirst({
 			where: {
 				class_name,
