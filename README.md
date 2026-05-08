@@ -104,8 +104,8 @@ classes ──< timetable
 
 ### Előfeltételek
 
-- Node.js **≥ 18**
-- MySQL adatbázis
+- Node.js
+- MariaDB (MySQL) adatbázis
 - npm
 
 ### 1. Repository klónozása
